@@ -204,20 +204,87 @@ public class CameraBehaviour : MonoBehaviour
         if (Input.GetKey(KeyCode.E)) keyInput += 1f;
         if (Input.GetKey(KeyCode.Q)) keyInput -= 1f;
 
-        // If any zoom input is present, cancel reset and apply zoom.
-        if (Mathf.Abs(scroll) > 0.0001f || Mathf.Abs(keyInput) > 0.0001f)
+        // Compute requested new Z
+        float deltaZ = scroll * zoomSpeed + keyInput * zoomSpeed * Time.deltaTime;
+        if (Mathf.Abs(deltaZ) < 0.00001f)
+            return; // no zoom input
+
+        float newZ = Mathf.Clamp(manualOffset.z + deltaZ, minZOffset, maxZOffset);
+
+        // If no actual change, nothing to do.
+        if (Mathf.Approximately(newZ, manualOffset.z))
+            return;
+
+        // Cancel reset when zooming
+        if (isResetting) isResetting = false;
+
+        Camera cam = Camera.main;
+        if (cam == null)
         {
-            if (isResetting) isResetting = false;
-
-            // Mouse scroll is instantaneous, key input is continuous so scale by Time.deltaTime.
-            manualOffset.z += scroll * zoomSpeed + keyInput * zoomSpeed * Time.deltaTime;
-
-            // Clamp Z offset
-            manualOffset.z = Mathf.Clamp(manualOffset.z, minZOffset, maxZOffset);
-
+            // Fallback: just change z if no main camera available
+            manualOffset.z = newZ;
             isManual = true;
             ApplyBoundsAndPushToTransposer();
+            return;
         }
+
+        // Compute plane Z to keep stable under cursor. Use follow's Z if available, otherwise 0.
+        float planeZ = (vcam != null && vcam.Follow != null) ? vcam.Follow.position.z : 0f;
+
+        // Ray from current camera through mouse
+        Ray rayBefore = cam.ScreenPointToRay(Input.mousePosition);
+
+        // If ray direction nearly parallel with plane, skip focusing and just change z
+        if (Mathf.Abs(rayBefore.direction.z) < 1e-5f)
+        {
+            manualOffset.z = newZ;
+            isManual = true;
+            ApplyBoundsAndPushToTransposer();
+            return;
+        }
+
+        // Intersection with the plane (world point under cursor before zoom)
+        float tBefore = (planeZ - rayBefore.origin.z) / rayBefore.direction.z;
+        Vector3 worldBefore = rayBefore.GetPoint(tBefore);
+
+        // Compute where camera WOULD be after changing z (world space).
+        Vector3 camPosBefore = cam.transform.position;
+        // Correct Z change only
+        Vector3 camPosAfter = camPosBefore + new Vector3(0f, 0f, 0f) + ( (new Vector3(0,0,newZ) - new Vector3(0,0,manualOffset.z)) );
+       
+        Vector3 followPos = (vcam != null && vcam.Follow != null) ? vcam.Follow.position : Vector3.zero;
+        Vector3 camPosBeforeExpected = followPos + manualOffset;
+        Vector3 camPosAfterExpected = followPos + new Vector3(manualOffset.x, manualOffset.y, newZ);
+
+        // Use expected positions if they differ significantly from current camera transform
+        if ((camPosBeforeExpected - camPosBefore).sqrMagnitude < 0.01f)
+            camPosBefore = camPosBeforeExpected;
+        camPosAfter = camPosAfterExpected;
+
+        // Ray from hypothetical new camera position with same direction (camera rotation unchanged by our zoom)
+        Ray rayAfter = new Ray(camPosAfter, rayBefore.direction);
+
+        // If rayAfter.direction.z is nearly zero, skip focus
+        if (Mathf.Abs(rayAfter.direction.z) < 1e-5f)
+        {
+            manualOffset.z = newZ;
+            isManual = true;
+            ApplyBoundsAndPushToTransposer();
+            return;
+        }
+
+        float tAfter = (planeZ - rayAfter.origin.z) / rayAfter.direction.z;
+        Vector3 worldAfter = rayAfter.GetPoint(tAfter);
+
+        // Delta to apply so the world point under cursor stays fixed
+        Vector3 deltaWorld = worldBefore - worldAfter;
+
+        manualOffset.x += deltaWorld.x;
+        manualOffset.y += deltaWorld.y;
+        manualOffset.z = newZ;
+
+        isManual = true;
+        ApplyBoundsAndPushToTransposer();
     }
 
     // Ensures manualOffset respects mapBounds (for x/y) and updates the transposer.
