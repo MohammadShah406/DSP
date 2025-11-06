@@ -5,7 +5,11 @@ public class CameraBehaviour : MonoBehaviour
 {
     [Header("References")]
     public CinemachineVirtualCamera vcam;
-    public Transform defaultTarget; 
+    public Transform focussedTarget;
+    public Transform defaultTarget;
+
+    [Header("Selection")]
+    public string characterTag = "Character"; // tag used to mark selectable characters
 
     [Header("Movement Settings")]
     public float moveSpeed = 10f;
@@ -16,9 +20,9 @@ public class CameraBehaviour : MonoBehaviour
     public float resetSmoothTime = 0.5f; // time it takes to reset when pressing space
 
     [Header("Zoom Settings")]
-    public float zoomSpeed = 20f;      
-    public float minZOffset = -25f;    
-    public float maxZOffset = -5f;     
+    public float zoomSpeed = 20f;
+    public float minZOffset = -25f;
+    public float maxZOffset = -5f;
 
     [Header("Map Bounds (world space)")]
     public Rect mapBounds = new Rect(-50, -10, 100, 20); // x, y, width, height
@@ -59,6 +63,8 @@ public class CameraBehaviour : MonoBehaviour
 
     private void Update()
     {
+
+        SelectCharacter();
         HandleDrag();
         HandleEdgeScroll();
         HandleReset();
@@ -72,6 +78,66 @@ public class CameraBehaviour : MonoBehaviour
 
         if (isResetting)
             SmoothResetMotion();
+    }
+
+    private void SelectCharacter()
+    {
+        // Left click to select character
+        if (Input.GetMouseButtonDown(0))
+        {
+            Camera cam = Camera.main;
+            if (cam == null) return;
+
+            // Try 3D physics
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 1000f))
+            {
+                if (IsCharacter(hit.collider.gameObject))
+                {
+                    focussedTarget = hit.collider.transform;
+                    isManual = false; // hand control back to follow
+                    return;
+                }
+            }
+
+            // If no 3D hit, try 2D physics (Not sure if we are going to use 2d colliders or not)
+
+            //Vector3 worldPoint = cam.ScreenToWorldPoint(Input.mousePosition);
+            //Vector2 worldPoint2D = new Vector2(worldPoint.x, worldPoint.y);
+            //RaycastHit2D hit2D = Physics2D.Raycast(worldPoint2D, Vector2.zero);
+            //if (hit2D.collider != null)
+            //{
+            //    if (IsCharacter(hit2D.collider.gameObject))
+            //    {
+            //        focussedTarget = hit2D.collider.transform;
+            //        vcam.Follow = focussedTarget;
+            //        isManual = false;
+            //        return;
+            //    }
+            //}
+        }
+
+        // Escape to reset focus to default target
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            focussedTarget = null;
+            //vcam.Follow = defaultTarget;
+            isManual = true;
+        }
+    }
+
+    // Simple check: object is a character if it has the configured tag
+    private bool IsCharacter(GameObject go)
+    {
+        if (go == null) return false;
+
+        if (!string.IsNullOrEmpty(characterTag))
+        {
+            // Safe tag check; user must ensure tag exists
+            if (go.CompareTag(characterTag)) return true;
+        }
+        return false;
     }
 
     private void HandleEdgeScroll()
@@ -123,6 +189,16 @@ public class CameraBehaviour : MonoBehaviour
             {
                 // ignore reset request
                 return;
+            }
+
+            if(focussedTarget == null)
+            {
+                // If no focussed target, reset to default target
+                vcam.Follow = defaultTarget;
+            }
+            else
+            {
+                vcam.Follow = focussedTarget;
             }
 
             isManual = false;
@@ -250,8 +326,8 @@ public class CameraBehaviour : MonoBehaviour
         // Compute where camera WOULD be after changing z (world space).
         Vector3 camPosBefore = cam.transform.position;
         // Correct Z change only
-        Vector3 camPosAfter = camPosBefore + new Vector3(0f, 0f, 0f) + ( (new Vector3(0,0,newZ) - new Vector3(0,0,manualOffset.z)) );
-       
+        Vector3 camPosAfter = camPosBefore + new Vector3(0f, 0f, 0f) + ((new Vector3(0, 0, newZ) - new Vector3(0, 0, manualOffset.z)));
+
         Vector3 followPos = (vcam != null && vcam.Follow != null) ? vcam.Follow.position : Vector3.zero;
         Vector3 camPosBeforeExpected = followPos + manualOffset;
         Vector3 camPosAfterExpected = followPos + new Vector3(manualOffset.x, manualOffset.y, newZ);
