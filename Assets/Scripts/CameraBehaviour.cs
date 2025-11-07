@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class CameraBehaviour : MonoBehaviour
 {
@@ -9,15 +11,17 @@ public class CameraBehaviour : MonoBehaviour
     public Transform defaultTarget;
 
     [Header("Selection")]
-    public string characterTag = "Character"; // tag used to mark selectable characters
+    public string characterTag = "Character";
+    [Tooltip("Tags considered valid movement surfaces when clicking (only X used).")]
+    public string[] movementSurfaceTags = { "Ground", "Wall" };
 
     [Header("Movement Settings")]
     public float moveSpeed = 10f;
-    public float edgeSize = 20f; // pixels from edge before moving
+    public float edgeSize = 20f;
     public bool allowEdgeScroll = true;
     public float defaultZOffset = -10f;
     public float dragSensitivity = 0.01f;
-    public float resetSmoothTime = 0.5f; // time it takes to reset when pressing space
+    public float resetSmoothTime = 0.5f;
 
     [Header("Zoom Settings")]
     public float zoomSpeed = 20f;
@@ -25,9 +29,13 @@ public class CameraBehaviour : MonoBehaviour
     public float maxZOffset = -5f;
 
     [Header("Map Bounds (world space)")]
-    public Rect mapBounds = new Rect(-50, -10, 100, 20); // x, y, width, height
+    public Rect mapBounds = new Rect(-50, -10, 100, 20);
     public bool drawBoundsGizmo = true;
     public Color boundsGizmoColor = Color.green;
+
+    [Header("Rotation Lock")]
+    [Tooltip("If true the virtual camera never rotates (agent / target rotation ignored).")]
+    public bool lockCameraRotation = true;
 
     private CinemachineTransposer transposer;
     private Vector3 manualOffset;
@@ -37,6 +45,14 @@ public class CameraBehaviour : MonoBehaviour
     private bool isDragging = false;
     private Vector3 resetVelocity;
     private bool isResetting = false;
+    private bool resetZoom = false;
+
+    // Highlighting state
+    private Transform lastHighlightedTarget;
+    private readonly Dictionary<Renderer, Color[]> _originalColors = new Dictionary<Renderer, Color[]>();
+
+    // Cached initial rotation
+    private Quaternion lockedRotation;
 
     private void Start()
     {
@@ -54,88 +70,122 @@ public class CameraBehaviour : MonoBehaviour
         if (defaultTarget != null)
             vcam.Follow = defaultTarget;
 
-        // Ensure the camera starts at the correct Z distance
         Vector3 startOffset = transposer.m_FollowOffset;
         startOffset.z = defaultZOffset;
         transposer.m_FollowOffset = startOffset;
         manualOffset = startOffset;
+
+        // Ensure binding mode does not inherit target rotation (prevents camera yaw when agent rotates)
+        transposer.m_BindingMode = CinemachineTransposer.BindingMode.WorldSpace;
+
+        // Cache initial rotation for locking
+        if (vcam != null)
+            lockedRotation = vcam.transform.rotation;
     }
 
     private void Update()
     {
 
+
         SelectCharacter();
+        HighlightSelectedTarget();
         HandleDrag();
         HandleEdgeScroll();
         HandleReset();
         HandleZoom();
 
-        // If player starts moving while resetting, cancel the reset.
         if (isResetting && (Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.01f || Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.01f))
-        {
             isResetting = false;
-        }
 
         if (isResetting)
             SmoothResetMotion();
     }
 
+    private void LateUpdate()
+    {
+        // After Cinemachine pipeline runs, force rotation back
+        if (lockCameraRotation && vcam != null)
+            vcam.transform.rotation = lockedRotation;
+    }
+
     private void SelectCharacter()
     {
-        // Left click to select character
         if (Input.GetMouseButtonDown(0))
         {
             Camera cam = Camera.main;
             if (cam == null) return;
 
-            // Try 3D physics
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 1000f))
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit[] hits = Physics.RaycastAll(ray, 2000f);
+            Debug.DrawRay(ray.origin, ray.direction * 50f, Color.red, 4f);
+
+            foreach (var hit in hits)
             {
-                if (IsCharacter(hit.collider.gameObject))
+                Debug.Log($"Hit: {hit.collider.gameObject.name} at {hit.point}");
+                GameObject clicked = hit.collider.gameObject;
+
+                if (IsCharacter(clicked))
                 {
                     focussedTarget = hit.collider.transform;
-                    isManual = false; // hand control back to follow
+                    vcam.Follow = focussedTarget;
+                    ActivateReset();
+                    isManual = false;
+                    return; // Stop after first character hit
+                }
+
+                if (focussedTarget != null && IsMovementSurface(clicked))
+                {
+                    var mover = focussedTarget.GetComponent<CharacterMovement>();
+                    if (mover != null)
+                    {
+                        mover.SetTarget(hit.point, runFlag: Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
+                    }
                     return;
                 }
             }
-
-            // If no 3D hit, try 2D physics (Not sure if we are going to use 2d colliders or not)
-
-            //Vector3 worldPoint = cam.ScreenToWorldPoint(Input.mousePosition);
-            //Vector2 worldPoint2D = new Vector2(worldPoint.x, worldPoint.y);
-            //RaycastHit2D hit2D = Physics2D.Raycast(worldPoint2D, Vector2.zero);
-            //if (hit2D.collider != null)
-            //{
-            //    if (IsCharacter(hit2D.collider.gameObject))
-            //    {
-            //        focussedTarget = hit2D.collider.transform;
-            //        vcam.Follow = focussedTarget;
-            //        isManual = false;
-            //        return;
-            //    }
-            //}
         }
 
-        // Escape to reset focus to default target
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            if (focussedTarget != null)
+            {
+                var mover = focussedTarget.GetComponent<CharacterMovement>();
+                if (mover != null) mover.ClearTarget();
+            }
+
+            MoveDefaultTarget();
+            vcam.Follow = defaultTarget;
+            
+            
             focussedTarget = null;
-            //vcam.Follow = defaultTarget;
             isManual = true;
+
+
+            manualOffset = new Vector3(0, 0, manualOffset.z);
+            transposer.m_FollowOffset = manualOffset;
         }
     }
 
-    // Simple check: object is a character if it has the configured tag
+    private void MoveDefaultTarget()
+    {
+        defaultTarget.position = focussedTarget.position;
+    }
+
     private bool IsCharacter(GameObject go)
     {
         if (go == null) return false;
+        if (!string.IsNullOrEmpty(characterTag) && go.CompareTag(characterTag))
+            return true;
+        return false;
+    }
 
-        if (!string.IsNullOrEmpty(characterTag))
+    private bool IsMovementSurface(GameObject go)
+    {
+        if (go == null || movementSurfaceTags == null) return false;
+        foreach (var tag in movementSurfaceTags)
         {
-            // Safe tag check; user must ensure tag exists
-            if (go.CompareTag(characterTag)) return true;
+            if (!string.IsNullOrEmpty(tag) && go.CompareTag(tag))
+                return true;
         }
         return false;
     }
@@ -146,34 +196,26 @@ public class CameraBehaviour : MonoBehaviour
             return;
 
         Vector3 move = Vector3.zero;
-
         Vector2 mousePos = Input.mousePosition;
         float screenWidth = Screen.width;
         float screenHeight = Screen.height;
 
-        // Edge detection
         if (mousePos.x <= edgeSize) move.x = -1;
         else if (mousePos.x >= screenWidth - edgeSize) move.x = 1;
 
         if (mousePos.y <= edgeSize) move.y = -1;
         else if (mousePos.y >= screenHeight - edgeSize) move.y = 1;
 
-        // WASD movement
         move.x += Input.GetAxisRaw("Horizontal");
         move.y += Input.GetAxisRaw("Vertical");
 
         if (move.sqrMagnitude > 0.01f)
         {
-            // Cancel any ongoing reset when user provides movement input
             if (isResetting) isResetting = false;
 
             isManual = true;
-            // move in world units relative to follow target (we treat manualOffset as offset from follow/world origin)
             manualOffset += move.normalized * moveSpeed * Time.deltaTime;
-
-            // Keep Z offset (respect current zoom) and clamp it
             manualOffset.z = Mathf.Clamp(manualOffset.z, minZOffset, maxZOffset);
-
             ApplyBoundsAndPushToTransposer();
         }
     }
@@ -182,36 +224,42 @@ public class CameraBehaviour : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            // Don't start reset if the user is dragging or has active WASD input
-            if (isDragging ||
+            resetZoom = true;
+            ActivateReset();
+        }
+    }
+
+    private void ActivateReset()
+    {
+        if (isDragging ||
                 Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.01f ||
                 Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.01f)
-            {
-                // ignore reset request
-                return;
-            }
+            return;
 
-            if(focussedTarget == null)
-            {
-                // If no focussed target, reset to default target
-                vcam.Follow = defaultTarget;
-            }
-            else
-            {
-                vcam.Follow = focussedTarget;
-            }
+        if (focussedTarget == null)
+            vcam.Follow = defaultTarget;
+        else
+            vcam.Follow = focussedTarget;
 
-            isManual = false;
-            isResetting = true;
-            resetVelocity = Vector3.zero;
-        }
+        isManual = false;
+        isResetting = true;
+        resetVelocity = Vector3.zero;
     }
 
     private void SmoothResetMotion()
     {
-        Vector3 targetOffset = new Vector3(0, 0, defaultZOffset);
+        Vector3 targetOffset = new Vector3(0, 0, 0);
+        if (resetZoom == true)
+        {
+            resetZoom = false;
+            targetOffset = new Vector3(0, 0, defaultZOffset);
+        }
+        else
+        {
+            targetOffset = new Vector3(0, 0, manualOffset.z);
+        }
 
-        // Smoothly move offset back
+
         manualOffset = Vector3.SmoothDamp(
             manualOffset,
             targetOffset,
@@ -221,7 +269,6 @@ public class CameraBehaviour : MonoBehaviour
 
         transposer.m_FollowOffset = manualOffset;
 
-        // stop when close enough
         if (Vector3.Distance(manualOffset, targetOffset) < 0.01f)
         {
             manualOffset = targetOffset;
@@ -230,37 +277,30 @@ public class CameraBehaviour : MonoBehaviour
         }
     }
 
+
+
     private void HandleDrag()
     {
         if (Input.GetMouseButtonDown(1))
         {
-            // starting a drag cancels any reset in progress
             if (isResetting) isResetting = false;
-
             isDragging = true;
             lastMousePos = Input.mousePosition;
         }
 
         if (Input.GetMouseButtonUp(1))
-        {
             isDragging = false;
-        }
 
         if (isDragging)
         {
             Vector3 mouseDelta = Input.mousePosition - lastMousePos;
-
             Vector3 dragMove = new Vector3(-mouseDelta.x, -mouseDelta.y, 0) * dragSensitivity;
 
-            // Cancel reset if user actively drags
             if (isResetting) isResetting = false;
 
             isManual = true;
             manualOffset += dragMove;
-
-            // Keep Z offset (respect current zoom) and clamp it
             manualOffset.z = Mathf.Clamp(manualOffset.z, minZOffset, maxZOffset);
-
             ApplyBoundsAndPushToTransposer();
 
             lastMousePos = Input.mousePosition;
@@ -272,45 +312,33 @@ public class CameraBehaviour : MonoBehaviour
         if (transposer == null)
             return;
 
-        // Mouse wheel input
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-
-        // Q/E key input: E = zoom in (closer), Q = zoom out (farther)
         float keyInput = 0f;
         if (Input.GetKey(KeyCode.E)) keyInput += 1f;
         if (Input.GetKey(KeyCode.Q)) keyInput -= 1f;
 
-        // Compute requested new Z
         float deltaZ = scroll * zoomSpeed + keyInput * zoomSpeed * Time.deltaTime;
         if (Mathf.Abs(deltaZ) < 0.00001f)
-            return; // no zoom input
+            return;
 
         float newZ = Mathf.Clamp(manualOffset.z + deltaZ, minZOffset, maxZOffset);
-
-        // If no actual change, nothing to do.
         if (Mathf.Approximately(newZ, manualOffset.z))
             return;
 
-        // Cancel reset when zooming
         if (isResetting) isResetting = false;
 
         Camera cam = Camera.main;
         if (cam == null)
         {
-            // Fallback: just change z if no main camera available
             manualOffset.z = newZ;
             isManual = true;
             ApplyBoundsAndPushToTransposer();
             return;
         }
 
-        // Compute plane Z to keep stable under cursor. Use follow's Z if available, otherwise 0.
         float planeZ = (vcam != null && vcam.Follow != null) ? vcam.Follow.position.z : 0f;
-
-        // Ray from current camera through mouse
         Ray rayBefore = cam.ScreenPointToRay(Input.mousePosition);
 
-        // If ray direction nearly parallel with plane, skip focusing and just change z
         if (Mathf.Abs(rayBefore.direction.z) < 1e-5f)
         {
             manualOffset.z = newZ;
@@ -319,28 +347,18 @@ public class CameraBehaviour : MonoBehaviour
             return;
         }
 
-        // Intersection with the plane (world point under cursor before zoom)
         float tBefore = (planeZ - rayBefore.origin.z) / rayBefore.direction.z;
         Vector3 worldBefore = rayBefore.GetPoint(tBefore);
 
-        // Compute where camera WOULD be after changing z (world space).
         Vector3 camPosBefore = cam.transform.position;
-        // Correct Z change only
-        Vector3 camPosAfter = camPosBefore + new Vector3(0f, 0f, 0f) + ((new Vector3(0, 0, newZ) - new Vector3(0, 0, manualOffset.z)));
-
         Vector3 followPos = (vcam != null && vcam.Follow != null) ? vcam.Follow.position : Vector3.zero;
         Vector3 camPosBeforeExpected = followPos + manualOffset;
         Vector3 camPosAfterExpected = followPos + new Vector3(manualOffset.x, manualOffset.y, newZ);
-
-        // Use expected positions if they differ significantly from current camera transform
         if ((camPosBeforeExpected - camPosBefore).sqrMagnitude < 0.01f)
             camPosBefore = camPosBeforeExpected;
-        camPosAfter = camPosAfterExpected;
+        Vector3 camPosAfter = camPosAfterExpected;
 
-        // Ray from hypothetical new camera position with same direction (camera rotation unchanged by our zoom)
         Ray rayAfter = new Ray(camPosAfter, rayBefore.direction);
-
-        // If rayAfter.direction.z is nearly zero, skip focus
         if (Mathf.Abs(rayAfter.direction.z) < 1e-5f)
         {
             manualOffset.z = newZ;
@@ -351,8 +369,6 @@ public class CameraBehaviour : MonoBehaviour
 
         float tAfter = (planeZ - rayAfter.origin.z) / rayAfter.direction.z;
         Vector3 worldAfter = rayAfter.GetPoint(tAfter);
-
-        // Delta to apply so the world point under cursor stays fixed
         Vector3 deltaWorld = worldBefore - worldAfter;
 
         manualOffset.x += deltaWorld.x;
@@ -363,38 +379,29 @@ public class CameraBehaviour : MonoBehaviour
         ApplyBoundsAndPushToTransposer();
     }
 
-    // Ensures manualOffset respects mapBounds (for x/y) and updates the transposer.
     private void ApplyBoundsAndPushToTransposer()
     {
         Vector3 followPos = (vcam != null && vcam.Follow != null) ? vcam.Follow.position : Vector3.zero;
         Vector3 worldPos = (vcam != null && vcam.Follow != null) ? followPos + manualOffset : manualOffset;
 
-        // Clamp X/Y to mapBounds
         float clampedX = Mathf.Clamp(worldPos.x, mapBounds.xMin, mapBounds.xMax);
         float clampedY = Mathf.Clamp(worldPos.y, mapBounds.yMin, mapBounds.yMax);
-
         Vector3 clampedWorldPos = new Vector3(clampedX, clampedY, worldPos.z);
 
-        // Recompute manualOffset relative to follow (or as world pos if no follow)
         if (vcam != null && vcam.Follow != null)
             manualOffset = clampedWorldPos - followPos;
         else
             manualOffset = clampedWorldPos;
 
-        // Ensure Z is clamped
         manualOffset.z = Mathf.Clamp(manualOffset.z, minZOffset, maxZOffset);
-
         transposer.m_FollowOffset = manualOffset;
     }
 
     private void OnDrawGizmos()
     {
-        if (!drawBoundsGizmo)
-            return;
+        if (!drawBoundsGizmo) return;
 
         Gizmos.color = boundsGizmoColor;
-
-        // Draw rectangle in world XY plane at Z = 0
         Vector3 bl = new Vector3(mapBounds.xMin, mapBounds.yMin, 0f);
         Vector3 br = new Vector3(mapBounds.xMax, mapBounds.yMin, 0f);
         Vector3 tl = new Vector3(mapBounds.xMin, mapBounds.yMax, 0f);
@@ -411,6 +418,83 @@ public class CameraBehaviour : MonoBehaviour
             Vector3 camWorldPos = followPos + manualOffset;
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(new Vector3(camWorldPos.x, camWorldPos.y, 0f), 0.5f);
+        }
+    }
+
+    public void HighlightSelectedTarget()
+    {
+        // If we had a highlighted target and focus cleared or changed, restore its colors
+        if (lastHighlightedTarget != null && (focussedTarget == null || lastHighlightedTarget != focussedTarget))
+        {
+            RestoreColors(lastHighlightedTarget);
+            lastHighlightedTarget = null;
+        }
+
+        // Nothing to highlight
+        if (focussedTarget == null)
+            return;
+
+        // Already highlighted
+        if (lastHighlightedTarget == focussedTarget)
+            return;
+
+        // Apply green highlight to new focussed target
+        ApplyGreen(focussedTarget);
+        lastHighlightedTarget = focussedTarget;
+    }
+
+    private void ApplyGreen(Transform target)
+    {
+        if (target == null) return;
+
+        var renderers = target.GetComponentsInChildren<Renderer>(true);
+        foreach (var r in renderers)
+        {
+            // Cache original colors once per renderer
+            if (!_originalColors.ContainsKey(r))
+            {
+                var mats = r.materials; // uses instantiated material instances for safe color edits
+                var colors = new Color[mats.Length];
+                for (int i = 0; i < mats.Length; i++)
+                {
+                    var m = mats[i];
+                    colors[i] = (m != null && m.HasProperty("_Color")) ? m.color : Color.white;
+                }
+                _originalColors[r] = colors;
+            }
+
+            // Set to green
+            var highlightMats = r.materials;
+            for (int i = 0; i < highlightMats.Length; i++)
+            {
+                var m = highlightMats[i];
+                if (m != null && m.HasProperty("_Color"))
+                    m.color = Color.green;
+            }
+        }
+    }
+
+    private void RestoreColors(Transform target)
+    {
+        if (target == null) return;
+
+        var renderers = target.GetComponentsInChildren<Renderer>(true);
+        foreach (var r in renderers)
+        {
+            if (_originalColors.TryGetValue(r, out var colors))
+            {
+                var mats = r.materials;
+                int count = Mathf.Min(mats.Length, colors.Length);
+                for (int i = 0; i < count; i++)
+                {
+                    var m = mats[i];
+                    if (m != null && m.HasProperty("_Color"))
+                        m.color = colors[i];
+                }
+
+                // Cleanup cached entry for this renderer
+                _originalColors.Remove(r);
+            }
         }
     }
 }
