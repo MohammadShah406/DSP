@@ -119,6 +119,9 @@ public class CameraBehaviour : MonoBehaviour
             RaycastHit[] hits = Physics.RaycastAll(ray, 2000f);
             Debug.DrawRay(ray.origin, ray.direction * 50f, Color.red, 4f);
 
+            // Sort hits by distance (optional, Physics.RaycastAll does not guarantee order)
+System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
             foreach (var hit in hits)
             {
                 Debug.Log($"Hit: {hit.collider.gameObject.name} at {hit.point}");
@@ -149,8 +152,9 @@ public class CameraBehaviour : MonoBehaviour
         {
             if (focussedTarget != null)
             {
-                var mover = focussedTarget.GetComponent<CharacterMovement>();
-                if (mover != null) mover.ClearTarget();
+                //for future use if we want to clear movement target on defocus
+                //var mover = focussedTarget.GetComponent<CharacterMovement>();
+                //if (mover != null) mover.ClearTarget();
             }
 
             MoveDefaultTarget();
