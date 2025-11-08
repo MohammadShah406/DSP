@@ -37,6 +37,12 @@ public class CameraBehaviour : MonoBehaviour
     [Tooltip("If true the virtual camera never rotates (agent / target rotation ignored).")]
     public bool lockCameraRotation = true;
 
+    [Header("Click Settings")]
+    [Tooltip("Max time between two LMB clicks to count as a double-click (run).")]
+    public float doubleClickTime = 0.3f;
+    [Tooltip("Max cursor movement (in pixels) between clicks to still count as a double-click.")]
+    public float doubleClickMaxPixels = 12f;
+
     private CinemachineTransposer transposer;
     private Vector3 manualOffset;
     private bool isManual = false;
@@ -53,6 +59,10 @@ public class CameraBehaviour : MonoBehaviour
 
     // Cached initial rotation
     private Quaternion lockedRotation;
+
+    // Double-click tracking
+    private float _lastLmbTime = -1f;
+    private Vector2 _lastLmbScreenPos;
 
     private void Start()
     {
@@ -86,7 +96,7 @@ public class CameraBehaviour : MonoBehaviour
     private void Update()
     {
 
-
+        FollowOrNot();
         SelectCharacter();
         HighlightSelectedTarget();
         HandleDrag();
@@ -112,6 +122,20 @@ public class CameraBehaviour : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            
+
+            // Determine if this click is a double-click (for run) before processing raycasts
+            bool isDoubleClick = false;
+            float dt = Time.time - _lastLmbTime;
+            if (dt >= 0f && dt <= doubleClickTime)
+            {
+                float pixelDist = (new Vector2(Input.mousePosition.x, Input.mousePosition.y) - _lastLmbScreenPos).magnitude;
+                if (pixelDist <= doubleClickMaxPixels)
+                    isDoubleClick = true;
+            }
+            _lastLmbTime = Time.time;
+            _lastLmbScreenPos = Input.mousePosition;
+
             Camera cam = Camera.main;
             if (cam == null) return;
 
@@ -120,7 +144,7 @@ public class CameraBehaviour : MonoBehaviour
             Debug.DrawRay(ray.origin, ray.direction * 50f, Color.red, 4f);
 
             // Sort hits by distance (optional, Physics.RaycastAll does not guarantee order)
-System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+            System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
             foreach (var hit in hits)
             {
@@ -129,11 +153,26 @@ System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
                 if (IsCharacter(clicked))
                 {
+                    if(isManual == false)
+                    {
+                        MoveDefaultTarget();
+                        isManual = false;
+                    }
+                    
+
+
                     focussedTarget = hit.collider.transform;
-                    vcam.Follow = focussedTarget;
-                    ActivateReset();
-                    isManual = false;
-                    return; // Stop after first character hit
+
+
+                    if (isDoubleClick)
+                    {
+                        resetZoom = true;
+                        ActivateReset();
+                    }
+
+
+
+                     return; // Stop after first character hit
                 }
 
                 if (focussedTarget != null && IsMovementSurface(clicked))
@@ -141,7 +180,8 @@ System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
                     var mover = focussedTarget.GetComponent<CharacterMovement>();
                     if (mover != null)
                     {
-                        mover.SetTarget(hit.point, runFlag: Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
+                        // Single-click = walk, double-click = run
+                        mover.SetTarget(hit.point, runFlag: isDoubleClick);
                     }
                     return;
                 }
@@ -158,11 +198,12 @@ System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
             }
 
             MoveDefaultTarget();
-            vcam.Follow = defaultTarget;
+            
             
             
             focussedTarget = null;
             isManual = true;
+            ActivateReset();
 
 
             manualOffset = new Vector3(0, 0, manualOffset.z);
@@ -172,7 +213,11 @@ System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
     private void MoveDefaultTarget()
     {
-        defaultTarget.position = focussedTarget.position;
+        if (focussedTarget != null)
+        {
+            defaultTarget.position = focussedTarget.position;
+        }
+        
     }
 
     private bool IsCharacter(GameObject go)
@@ -218,6 +263,7 @@ System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
             if (isResetting) isResetting = false;
 
             isManual = true;
+            ActivateReset();
             manualOffset += move.normalized * moveSpeed * Time.deltaTime;
             manualOffset.z = Mathf.Clamp(manualOffset.z, minZOffset, maxZOffset);
             ApplyBoundsAndPushToTransposer();
@@ -303,6 +349,7 @@ System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
             if (isResetting) isResetting = false;
 
             isManual = true;
+            ActivateReset();
             manualOffset += dragMove;
             manualOffset.z = Mathf.Clamp(manualOffset.z, minZOffset, maxZOffset);
             ApplyBoundsAndPushToTransposer();
@@ -336,6 +383,7 @@ System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
         {
             manualOffset.z = newZ;
             isManual = true;
+            ActivateReset();
             ApplyBoundsAndPushToTransposer();
             return;
         }
@@ -347,6 +395,7 @@ System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
         {
             manualOffset.z = newZ;
             isManual = true;
+            ActivateReset();
             ApplyBoundsAndPushToTransposer();
             return;
         }
@@ -367,6 +416,7 @@ System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
         {
             manualOffset.z = newZ;
             isManual = true;
+            ActivateReset();
             ApplyBoundsAndPushToTransposer();
             return;
         }
@@ -380,6 +430,7 @@ System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
         manualOffset.z = newZ;
 
         isManual = true;
+        ActivateReset();
         ApplyBoundsAndPushToTransposer();
     }
 
@@ -499,6 +550,19 @@ System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
                 // Cleanup cached entry for this renderer
                 _originalColors.Remove(r);
             }
+        }
+    }
+
+    private void FollowOrNot()
+    {
+        if (isManual)
+            vcam.Follow = defaultTarget;
+        else
+        {
+            if (focussedTarget != null)
+                vcam.Follow = focussedTarget;
+            else
+                vcam.Follow = defaultTarget;
         }
     }
 }

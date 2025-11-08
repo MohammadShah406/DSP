@@ -307,7 +307,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useNavMeshAgent: 1
   walkSpeed: 3
-  runSpeed: 3
+  runSpeed: 6
   stopDistance: 0.05
   drawTargetGizmo: 1
   lockZAxis: 1
@@ -4021,7 +4021,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useNavMeshAgent: 1
   walkSpeed: 3
-  runSpeed: 3
+  runSpeed: 6
   stopDistance: 0.05
   drawTargetGizmo: 1
   lockZAxis: 1
