@@ -94,7 +94,7 @@ public class CharacterMovement : MonoBehaviour
         if (useNavMeshAgent && _agent != null)
         {
             NavMeshHit hit;
-            // Sample navmesh (keeping locked Z)
+            // Sample navmesh (Locked Z)
             if (NavMesh.SamplePosition(worldPos, out hit, 2f, NavMesh.AllAreas))
             {
                 Vector3 navPos = hit.position;
@@ -142,7 +142,6 @@ public class CharacterMovement : MonoBehaviour
 
         if (_agent.isOnOffMeshLink)
         {
-            // Simple instantaneous off-mesh traverse; stairs normally don't need this.
             _agent.CompleteOffMeshLink();
         }
     }
