@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class CameraBehaviour : MonoBehaviour
 {
     [Header("References")]
+    [SerializeField] private Camera _mainCamera;
     public CinemachineVirtualCamera vcam;
     public Transform focussedTarget;
     public Transform defaultTarget;
@@ -38,7 +39,7 @@ public class CameraBehaviour : MonoBehaviour
     public bool lockCameraRotation = true;
 
     [Header("Click Settings")]
-    [Tooltip("Max time between two LMB clicks to count as a double-click (run).")]
+    [Tooltip("Max time between two LMB clicks to count as a double-click (run / follow).")]
     public float doubleClickTime = 0.3f;
     [Tooltip("Max cursor movement (in pixels) between clicks to still count as a double-click.")]
     public float doubleClickMaxPixels = 12f;
@@ -63,6 +64,15 @@ public class CameraBehaviour : MonoBehaviour
     // Double-click tracking
     private float _lastLmbTime = -1f;
     private Vector2 _lastLmbScreenPos;
+    private Transform _lastClickedCharacter;
+
+    // Follow state (decoupled from manual pan state)
+    private bool isFollowing = false;
+
+    private void Awake()
+    {
+        _mainCamera = Camera.main;
+    }
 
     private void Start()
     {
@@ -95,13 +105,11 @@ public class CameraBehaviour : MonoBehaviour
 
     private void Update()
     {
-
         FollowOrNot();
         SelectCharacter();
         HighlightSelectedTarget();
         HandleDrag();
         HandleEdgeScroll();
-        HandleReset();
         HandleZoom();
 
         if (isResetting && (Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.01f || Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.01f))
@@ -122,110 +130,139 @@ public class CameraBehaviour : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            
-
-            // Determine if this click is a double-click (for run) before processing raycasts
             bool isDoubleClick = false;
             float dt = Time.time - _lastLmbTime;
-            if (dt >= 0f && dt <= doubleClickTime)
-            {
-                float pixelDist = (new Vector2(Input.mousePosition.x, Input.mousePosition.y) - _lastLmbScreenPos).magnitude;
-                if (pixelDist <= doubleClickMaxPixels)
-                    isDoubleClick = true;
-            }
+            float pixelDist = (new Vector2(Input.mousePosition.x, Input.mousePosition.y) - _lastLmbScreenPos).magnitude;
+
             _lastLmbTime = Time.time;
             _lastLmbScreenPos = Input.mousePosition;
 
             Camera cam = Camera.main;
             if (cam == null) return;
 
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit[] hits = Physics.RaycastAll(ray, 2000f);
-            Debug.DrawRay(ray.origin, ray.direction * 50f, Color.red, 4f);
-
-            // Sort hits by distance (optional, Physics.RaycastAll does not guarantee order)
             System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+            Transform clickedCharacter = null;
+            RaycastHit? movementSurfaceHit = null;
 
             foreach (var hit in hits)
             {
-                Debug.Log($"Hit: {hit.collider.gameObject.name} at {hit.point}");
                 GameObject clicked = hit.collider.gameObject;
 
                 if (IsCharacter(clicked))
                 {
-                    if(isManual == false)
-                    {
-                        MoveDefaultTarget();
-                        isManual = false;
-                    }
-                    
-
-
-                    focussedTarget = hit.collider.transform;
-
-
-                    if (isDoubleClick)
-                    {
-                        resetZoom = true;
-                        ActivateReset();
-                    }
-
-
-
-                     return; // Stop after first character hit
+                    clickedCharacter = hit.collider.transform;
+                    break; 
                 }
 
-                if (focussedTarget != null && IsMovementSurface(clicked))
+                if (IsMovementSurface(clicked))
                 {
-                    var mover = focussedTarget.GetComponent<CharacterMovement>();
-                    if (mover != null)
-                    {
-                        // Single-click = walk, double-click = run
-                        mover.SetTarget(hit.point, runFlag: isDoubleClick);
-                    }
-                    return;
+                    movementSurfaceHit = hit;
+                    // keep searching in case a nearer character exists; break later if none
                 }
             }
+
+            // Determine double click ONLY if same character and within thresholds
+            if (clickedCharacter != null &&
+                _lastClickedCharacter == clickedCharacter &&
+                dt >= 0f && dt <= doubleClickTime &&
+                pixelDist <= doubleClickMaxPixels)
+            {
+                isDoubleClick = true;
+            }
+
+            if (clickedCharacter != null)
+            {
+                SetFocussed(clickedCharacter.gameObject);
+                _lastClickedCharacter = clickedCharacter;
+
+                if (isDoubleClick)
+                {
+                    StartFollowing(resetZoom: true);
+                }
+                else
+                {
+                    // Single-click: select only, do NOT follow yet.
+                    StopFollowing(keepSelection: true);
+                }
+                return;
+            }
+
+            // Issue movement command if we have a focussed character
+            if (focussedTarget != null && movementSurfaceHit.HasValue)
+            {
+                var mover = focussedTarget.GetComponent<CharacterMovement>();
+                if (mover != null)
+                {
+                    mover.SetTarget(movementSurfaceHit.Value.point, runFlag: isDoubleClick);
+                }
+
+                return;
+            }
+
+            _lastClickedCharacter = null;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (focussedTarget != null)
+                StartFollowing(resetZoom: true);
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (focussedTarget != null)
-            {
-                //for future use if we want to clear movement target on defocus
-                //var mover = focussedTarget.GetComponent<CharacterMovement>();
-                //if (mover != null) mover.ClearTarget();
-            }
-
-            MoveDefaultTarget();
-            
-            
-            
-            focussedTarget = null;
+            ResetFocussed();
+            StopFollowing(keepSelection: false);
             isManual = true;
             ActivateReset();
-
-
             manualOffset = new Vector3(0, 0, manualOffset.z);
             transposer.m_FollowOffset = manualOffset;
         }
     }
 
+    private void StartFollowing(bool resetZoom)
+    {
+        if (focussedTarget == null)
+            return;
+
+        this.resetZoom = resetZoom;
+        isFollowing = true;
+        isManual = false;
+        ActivateReset();
+    }
+
+    private void StopFollowing(bool keepSelection)
+    {
+        isFollowing = false;
+        if (!keepSelection)
+            ResetFocussed();
+    }
+
     private void MoveDefaultTarget()
     {
-        if (focussedTarget != null)
+        if (focussedTarget == null || isManual)
+        {
+            if (_mainCamera != null && defaultTarget != null)
+            {
+                Vector3 camForward = _mainCamera.transform.forward;
+                Vector3 camPos = _mainCamera.transform.position;
+                float planeZ = defaultTarget.position.z;
+                float t = Mathf.Abs(camForward.z) > 1e-5f ? (planeZ - camPos.z) / camForward.z : 0f;
+                Vector3 worldPos = camPos + camForward * t;
+                defaultTarget.position = worldPos;
+            }
+        }
+        else
         {
             defaultTarget.position = focussedTarget.position;
         }
-        
     }
 
     private bool IsCharacter(GameObject go)
     {
-        if (go == null) return false;
-        if (!string.IsNullOrEmpty(characterTag) && go.CompareTag(characterTag))
-            return true;
-        return false;
+        return go != null && !string.IsNullOrEmpty(characterTag) && go.CompareTag(characterTag);
     }
 
     private bool IsMovementSurface(GameObject go)
@@ -261,45 +298,38 @@ public class CameraBehaviour : MonoBehaviour
         if (move.sqrMagnitude > 0.01f)
         {
             if (isResetting) isResetting = false;
-
             isManual = true;
-            ActivateReset();
             manualOffset += move.normalized * moveSpeed * Time.deltaTime;
             manualOffset.z = Mathf.Clamp(manualOffset.z, minZOffset, maxZOffset);
             ApplyBoundsAndPushToTransposer();
         }
     }
 
-    private void HandleReset()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            resetZoom = true;
-            ActivateReset();
-        }
-    }
-
     private void ActivateReset()
     {
         if (isDragging ||
-                Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.01f ||
-                Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.01f)
+            Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.01f ||
+            Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.01f)
             return;
 
-        if (focussedTarget == null)
+        if (!isFollowing || focussedTarget == null)
+        {
+            MoveDefaultTarget();
             vcam.Follow = defaultTarget;
+        }
         else
+        {
             vcam.Follow = focussedTarget;
+        }
 
-        isManual = false;
         isResetting = true;
         resetVelocity = Vector3.zero;
     }
 
     private void SmoothResetMotion()
     {
-        Vector3 targetOffset = new Vector3(0, 0, 0);
-        if (resetZoom == true)
+        Vector3 targetOffset;
+        if (resetZoom)
         {
             resetZoom = false;
             targetOffset = new Vector3(0, 0, defaultZOffset);
@@ -308,7 +338,6 @@ public class CameraBehaviour : MonoBehaviour
         {
             targetOffset = new Vector3(0, 0, manualOffset.z);
         }
-
 
         manualOffset = Vector3.SmoothDamp(
             manualOffset,
@@ -326,8 +355,6 @@ public class CameraBehaviour : MonoBehaviour
             isResetting = false;
         }
     }
-
-
 
     private void HandleDrag()
     {
@@ -349,7 +376,6 @@ public class CameraBehaviour : MonoBehaviour
             if (isResetting) isResetting = false;
 
             isManual = true;
-            ActivateReset();
             manualOffset += dragMove;
             manualOffset.z = Mathf.Clamp(manualOffset.z, minZOffset, maxZOffset);
             ApplyBoundsAndPushToTransposer();
@@ -383,7 +409,6 @@ public class CameraBehaviour : MonoBehaviour
         {
             manualOffset.z = newZ;
             isManual = true;
-            ActivateReset();
             ApplyBoundsAndPushToTransposer();
             return;
         }
@@ -395,7 +420,6 @@ public class CameraBehaviour : MonoBehaviour
         {
             manualOffset.z = newZ;
             isManual = true;
-            ActivateReset();
             ApplyBoundsAndPushToTransposer();
             return;
         }
@@ -403,20 +427,14 @@ public class CameraBehaviour : MonoBehaviour
         float tBefore = (planeZ - rayBefore.origin.z) / rayBefore.direction.z;
         Vector3 worldBefore = rayBefore.GetPoint(tBefore);
 
-        Vector3 camPosBefore = cam.transform.position;
         Vector3 followPos = (vcam != null && vcam.Follow != null) ? vcam.Follow.position : Vector3.zero;
-        Vector3 camPosBeforeExpected = followPos + manualOffset;
         Vector3 camPosAfterExpected = followPos + new Vector3(manualOffset.x, manualOffset.y, newZ);
-        if ((camPosBeforeExpected - camPosBefore).sqrMagnitude < 0.01f)
-            camPosBefore = camPosBeforeExpected;
-        Vector3 camPosAfter = camPosAfterExpected;
 
-        Ray rayAfter = new Ray(camPosAfter, rayBefore.direction);
+        Ray rayAfter = new Ray(camPosAfterExpected, rayBefore.direction);
         if (Mathf.Abs(rayAfter.direction.z) < 1e-5f)
         {
             manualOffset.z = newZ;
             isManual = true;
-            ActivateReset();
             ApplyBoundsAndPushToTransposer();
             return;
         }
@@ -430,7 +448,6 @@ public class CameraBehaviour : MonoBehaviour
         manualOffset.z = newZ;
 
         isManual = true;
-        ActivateReset();
         ApplyBoundsAndPushToTransposer();
     }
 
@@ -508,7 +525,7 @@ public class CameraBehaviour : MonoBehaviour
             // Cache original colors once per renderer
             if (!_originalColors.ContainsKey(r))
             {
-                var mats = r.materials; // uses instantiated material instances for safe color edits
+                var mats = r.materials; 
                 var colors = new Color[mats.Length];
                 for (int i = 0; i < mats.Length; i++)
                 {
@@ -518,7 +535,6 @@ public class CameraBehaviour : MonoBehaviour
                 _originalColors[r] = colors;
             }
 
-            // Set to green
             var highlightMats = r.materials;
             for (int i = 0; i < highlightMats.Length; i++)
             {
@@ -555,14 +571,37 @@ public class CameraBehaviour : MonoBehaviour
 
     private void FollowOrNot()
     {
-        if (isManual)
-            vcam.Follow = defaultTarget;
+        // Only follow when explicitly enabled
+        if (isFollowing && focussedTarget != null && !isManual && !isResetting)
+            vcam.Follow = focussedTarget;
         else
+            vcam.Follow = defaultTarget;
+    }
+
+    private void SetFocussed(GameObject go)
+    {
+        if (go == null) return;
+
+        if (focussedTarget != null && focussedTarget != go.transform)
         {
-            if (focussedTarget != null)
-                vcam.Follow = focussedTarget;
-            else
-                vcam.Follow = defaultTarget;
+            var prevOc = focussedTarget.GetComponent<OutlineController>();
+            if (prevOc != null) prevOc.SetSelected(false);
         }
+
+        focussedTarget = go.transform;
+
+        var oc = focussedTarget.GetComponent<OutlineController>();
+        if (oc != null) oc.SetSelected(true);
+    }
+
+    private void ResetFocussed()
+    {
+        if (focussedTarget != null)
+        {
+            var oc = focussedTarget.GetComponent<OutlineController>();
+            if (oc != null) oc.SetSelected(false);
+        }
+        focussedTarget = null;
+        _lastClickedCharacter = null;
     }
 }
