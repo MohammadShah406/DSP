@@ -179,7 +179,7 @@ public class CharacterMovement : MonoBehaviour
         transform.position = p;
 
         // Ensure agent or rigidbody doesn't accumulate Z velocity
-        if (_rb != null)
+        if (_rb != null && !_rb.isKinematic)
         {
             Vector3 v = _rb.linearVelocity;
             v.z = 0f;

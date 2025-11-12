@@ -8,7 +8,7 @@ public class TimeManager : MonoBehaviour
     [Header("Clock")]
     [SerializeField] private int minutes = 0;
     [SerializeField] private int hours = 8;
-    [SerializeField] private int days = 1;
+    [SerializeField] public int days = 1;
     public TimePeriod currentTimePeriod = TimePeriod.Morning;
 
     [Tooltip("In-game minutes per real-time second.")]
@@ -26,7 +26,8 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private bool autoPauseAtEndOfActiveHours = true;
     [SerializeField] private bool wrapToStartOnExceed = true;
 
-    [Header("Lighting (Day/Night)")]
+
+    [Header("Lighting (Day/Night) If SkyBox Manager is not present")]
     [SerializeField] private Light sun;
     [SerializeField, Range(0f, 2f)] private float maxSunIntensity = 1.2f;
     [SerializeField, GradientUsage(true)] private Gradient sunColorOverDay;
@@ -101,6 +102,8 @@ public class TimeManager : MonoBehaviour
             }
         }
 
+        CheckForPendingLoad();
+
         ClampTime();
         ApplyActiveHourClamp(true);
         UpdateLighting();
@@ -140,6 +143,18 @@ public class TimeManager : MonoBehaviour
         }
 
         UpdateLighting();
+    }
+
+    private void CheckForPendingLoad()
+    {
+        // Apply pending time if available
+        if (PendingGameLoad.day.HasValue && PendingGameLoad.timeOfDay.HasValue)
+        {
+            SetTime(PendingGameLoad.day.Value, PendingGameLoad.timeOfDay.Value);
+
+            PendingGameLoad.day = null;
+            PendingGameLoad.timeOfDay = null;
+        }
     }
 
     private void IncrementMinute()
@@ -230,6 +245,11 @@ public class TimeManager : MonoBehaviour
 
     private void UpdateLighting()
     {
+        if (SkyboxManager.Instance != null)
+        {
+            return; // Let SkyboxManager handle lighting if it exists
+        }
+
         float t = TimeOfDay;
 
         if (sun != null)
@@ -267,6 +287,18 @@ public class TimeManager : MonoBehaviour
         minutes = Mathf.Clamp(m, 0, 59);
         if (d.HasValue) days = Mathf.Max(0, d.Value);
 
+        ApplyActiveHourClamp(false);
+        UpdateLighting();
+    }
+
+    public void SetTime(int d, float timeOfDay)
+    {
+        days = Mathf.Max(0, d);
+        float totalMinutes = Mathf.Clamp01(timeOfDay) * 24f * 60f;
+        int h = Mathf.FloorToInt(totalMinutes / 60f);
+        int m = Mathf.FloorToInt(totalMinutes % 60f);
+        hours = h;
+        minutes = m;
         ApplyActiveHourClamp(false);
         UpdateLighting();
     }
