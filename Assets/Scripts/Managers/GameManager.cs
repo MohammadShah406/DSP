@@ -42,7 +42,6 @@ public class GameManager : MonoBehaviour
         if(Input.GetKey(KeyCode.F2))
         {
             TrySave();
-            Application.Quit();
         }
     }
 

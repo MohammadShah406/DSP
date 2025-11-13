@@ -1,7 +1,8 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.TextCore.Text;
 
 public class CameraBehaviour : MonoBehaviour
 {
@@ -111,6 +112,15 @@ public class CameraBehaviour : MonoBehaviour
         HandleDrag();
         HandleEdgeScroll();
         HandleZoom();
+        //
+        if (Input.GetKeyDown(KeyCode.V))
+            HandleCharacterScrollSelection(1);
+
+        else if (Input.GetKeyDown(KeyCode.C))
+            HandleCharacterScrollSelection(-1);
+
+
+
 
         if (isResetting && (Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.01f || Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.01f))
             isResetting = false;
@@ -178,9 +188,9 @@ public class CameraBehaviour : MonoBehaviour
                 SetFocussed(clickedCharacter.gameObject);
                 _lastClickedCharacter = clickedCharacter;
 
-                if (isDoubleClick)
+                if (isDoubleClick || isManual == false)
                 {
-                    StartFollowing(resetZoom: true);
+                    StartFollowing(resetZoom: false);
                 }
                 else
                 {
@@ -231,6 +241,7 @@ public class CameraBehaviour : MonoBehaviour
         isFollowing = true;
         isManual = false;
         ActivateReset();
+        RecenterInstantly();
     }
 
     private void StopFollowing(bool keepSelection)
@@ -389,66 +400,27 @@ public class CameraBehaviour : MonoBehaviour
         if (transposer == null)
             return;
 
+        // Combine scroll wheel and keys
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         float keyInput = 0f;
         if (Input.GetKey(KeyCode.E)) keyInput += 1f;
         if (Input.GetKey(KeyCode.Q)) keyInput -= 1f;
 
-        float deltaZ = scroll * zoomSpeed + keyInput * zoomSpeed * Time.deltaTime;
-        if (Mathf.Abs(deltaZ) < 0.00001f)
-            return;
+        float deltaZ = (scroll + keyInput * Time.deltaTime) * zoomSpeed;
 
-        float newZ = Mathf.Clamp(manualOffset.z + deltaZ, minZOffset, maxZOffset);
-        if (Mathf.Approximately(newZ, manualOffset.z))
+        if (Mathf.Abs(deltaZ) < 0.0001f)
             return;
 
         if (isResetting) isResetting = false;
 
-        Camera cam = Camera.main;
-        if (cam == null)
-        {
-            manualOffset.z = newZ;
+        // Adjust zoom normally along the Z offset
+        manualOffset.z = Mathf.Clamp(manualOffset.z + deltaZ, minZOffset, maxZOffset);
+
+        // Only mark manual if not following a character
+        if (!isFollowing)
             isManual = true;
-            ApplyBoundsAndPushToTransposer();
-            return;
-        }
 
-        float planeZ = (vcam != null && vcam.Follow != null) ? vcam.Follow.position.z : 0f;
-        Ray rayBefore = cam.ScreenPointToRay(Input.mousePosition);
-
-        if (Mathf.Abs(rayBefore.direction.z) < 1e-5f)
-        {
-            manualOffset.z = newZ;
-            isManual = true;
-            ApplyBoundsAndPushToTransposer();
-            return;
-        }
-
-        float tBefore = (planeZ - rayBefore.origin.z) / rayBefore.direction.z;
-        Vector3 worldBefore = rayBefore.GetPoint(tBefore);
-
-        Vector3 followPos = (vcam != null && vcam.Follow != null) ? vcam.Follow.position : Vector3.zero;
-        Vector3 camPosAfterExpected = followPos + new Vector3(manualOffset.x, manualOffset.y, newZ);
-
-        Ray rayAfter = new Ray(camPosAfterExpected, rayBefore.direction);
-        if (Mathf.Abs(rayAfter.direction.z) < 1e-5f)
-        {
-            manualOffset.z = newZ;
-            isManual = true;
-            ApplyBoundsAndPushToTransposer();
-            return;
-        }
-
-        float tAfter = (planeZ - rayAfter.origin.z) / rayAfter.direction.z;
-        Vector3 worldAfter = rayAfter.GetPoint(tAfter);
-        Vector3 deltaWorld = worldBefore - worldAfter;
-
-        manualOffset.x += deltaWorld.x;
-        manualOffset.y += deltaWorld.y;
-        manualOffset.z = newZ;
-
-        isManual = true;
-        ApplyBoundsAndPushToTransposer();
+        transposer.m_FollowOffset = manualOffset;
     }
 
     private void ApplyBoundsAndPushToTransposer()
@@ -571,8 +543,7 @@ public class CameraBehaviour : MonoBehaviour
 
     private void FollowOrNot()
     {
-        // Only follow when explicitly enabled
-        if (isFollowing && focussedTarget != null && !isManual && !isResetting)
+        if (isFollowing && focussedTarget != null)
             vcam.Follow = focussedTarget;
         else
             vcam.Follow = defaultTarget;
@@ -603,5 +574,64 @@ public class CameraBehaviour : MonoBehaviour
         }
         focussedTarget = null;
         _lastClickedCharacter = null;
+    }
+
+    private void HandleCharacterScrollSelection(int next)
+    {
+        if (GameManager.Instance == null || GameManager.Instance.characters.Count == 0)
+            return;
+
+        var characters = GameManager.Instance.characters;
+        if (characters.Count == 0) return;
+
+        // Determine current index
+        int currentIndex = -1;
+        if (focussedTarget != null)
+        {
+            currentIndex = characters.FindIndex(c => c != null && c.transform == focussedTarget);
+            
+        }
+
+        int nextIndex;
+
+        if (currentIndex == -1)
+        {
+            // If nothing is focused, start from first character
+            nextIndex = 0;
+        }
+        else
+        {
+            nextIndex = (currentIndex + next) % characters.Count;
+            if (nextIndex < 0)
+                nextIndex += characters.Count; // wrap properly
+        }
+
+        // Select the next character
+        GameObject nextCharacter = characters[nextIndex];
+        if (nextCharacter == null)
+            return;
+
+       
+
+        SetFocussed(nextCharacter);
+        isManual = false;
+        
+    }
+
+    private void RecenterInstantly()
+    {
+        if (vcam == null || transposer == null)
+            return;
+
+        Vector3 targetPos = (focussedTarget != null) ? focussedTarget.position : defaultTarget.position;
+        Vector3 followOffset = new Vector3(0, 0, manualOffset.z);
+
+        // Align instantly
+        manualOffset = followOffset;
+        transposer.m_FollowOffset = followOffset;
+        vcam.Follow = focussedTarget != null ? focussedTarget : defaultTarget;
+
+        // Ensure reset/transition flags are cleared
+        isResetting = false;
     }
 }
