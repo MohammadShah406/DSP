@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3130600318360675906}
   - component: {fileID: 2920201283214627677}
   - component: {fileID: 7272946121163597279}
+  - component: {fileID: 4791414136799898887}
   m_Layer: 6
   m_Name: NPC_PlaceHolder
   m_TagString: Character
@@ -203,3 +204,20 @@ MonoBehaviour:
   defaultOutlineWidth: 0.1
   disabledOutlineWidth: 0
   outlineEnabled: 0
+--- !u!114 &4791414136799898887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409135670434808628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2384e867b7d2d6a4fa24711d41b9eb6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterName: Bashir
+  health: 100
+  maxHealth: 100
+  stamina: 0
+  maxStamina: 100
