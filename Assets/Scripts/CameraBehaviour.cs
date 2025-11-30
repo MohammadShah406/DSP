@@ -107,16 +107,16 @@ public class CameraBehaviour : MonoBehaviour
     private void Update()
     {
         FollowOrNot();
-        SelectCharacter();
+        HandleClick();
         HighlightSelectedTarget();
         HandleDrag();
         HandleEdgeScroll();
         HandleZoom();
         //
-        if (Input.GetKeyDown(KeyCode.V))
+        if (InputManager.Instance.NextCharacterInput)
             HandleCharacterScrollSelection(1);
 
-        else if (Input.GetKeyDown(KeyCode.C))
+        else if (InputManager.Instance.PreviousCharacterInput)
             HandleCharacterScrollSelection(-1);
 
 
@@ -136,9 +136,9 @@ public class CameraBehaviour : MonoBehaviour
             vcam.transform.rotation = lockedRotation;
     }
 
-    private void SelectCharacter()
+    private void HandleClick()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (InputManager.Instance.SelectInput)
         {
             bool isDoubleClick = false;
             float dt = Time.time - _lastLmbTime;
@@ -215,13 +215,13 @@ public class CameraBehaviour : MonoBehaviour
             _lastClickedCharacter = null;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (InputManager.Instance.ResetInput)
         {
             if (focussedTarget != null)
                 StartFollowing(resetZoom: true);
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (InputManager.Instance.DeselectInput)
         {
             ResetFocussed();
             StopFollowing(keepSelection: false);
@@ -369,31 +369,26 @@ public class CameraBehaviour : MonoBehaviour
 
     private void HandleDrag()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (InputManager.Instance.DragInput)
         {
-            if (isResetting) isResetting = false;
             isDragging = true;
-            lastMousePos = Input.mousePosition;
         }
-
-        if (Input.GetMouseButtonUp(1))
+        else
+        {
             isDragging = false;
+        }
 
         if (isDragging)
         {
-            Vector3 mouseDelta = Input.mousePosition - lastMousePos;
-            Vector3 dragMove = new Vector3(-mouseDelta.x, -mouseDelta.y, 0) * dragSensitivity;
+            Vector2 delta = InputManager.Instance.DragDeltaInput;
+            Vector3 dragMove = new Vector3(-delta.x, -delta.y, 0) * dragSensitivity;
 
-            if (isResetting) isResetting = false;
-
-            isManual = true;
             manualOffset += dragMove;
             manualOffset.z = Mathf.Clamp(manualOffset.z, minZOffset, maxZOffset);
             ApplyBoundsAndPushToTransposer();
-
-            lastMousePos = Input.mousePosition;
         }
     }
+
 
     private void HandleZoom()
     {
@@ -402,9 +397,7 @@ public class CameraBehaviour : MonoBehaviour
 
         // Combine scroll wheel and keys
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        float keyInput = 0f;
-        if (Input.GetKey(KeyCode.E)) keyInput += 1f;
-        if (Input.GetKey(KeyCode.Q)) keyInput -= 1f;
+        float keyInput = InputManager.Instance.ZoomInput;
 
         float deltaZ = (scroll + keyInput * Time.deltaTime) * zoomSpeed;
 
