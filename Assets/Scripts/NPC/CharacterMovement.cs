@@ -31,6 +31,9 @@ public class CharacterMovement : MonoBehaviour
     private bool _hasTarget;
     private float _initialZ;
 
+    [Header("Runtime State (Read Only)")]
+    [SerializeField] private Interactable currentInteractable;
+
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -81,7 +84,7 @@ public class CharacterMovement : MonoBehaviour
     }
 
     // External call to set movement target (full world pos, Z will be locked).
-    public void SetTarget(Vector3 worldPos, bool runFlag = false)
+    public void SetTarget(Vector3 worldPos, bool runFlag = false, Interactable interactable = null)
     {
         run = runFlag;
 
@@ -90,6 +93,8 @@ public class CharacterMovement : MonoBehaviour
 
         targetLocation = worldPos;
         _hasTarget = true;
+
+        currentInteractable = interactable;
 
         if (useNavMeshAgent && _agent != null)
         {
@@ -134,10 +139,22 @@ public class CharacterMovement : MonoBehaviour
             return;
         }
 
+        // When agent is close enough
         if (_agent.remainingDistance <= Mathf.Max(_agent.stoppingDistance, stopDistance))
         {
+            if (currentInteractable != null)
+            {
+                currentInteractable.OnInteract();
+                currentInteractable = null; // reset
+            }
+
             ClearTarget();
             return;
+        }
+
+        if (_agent.isOnOffMeshLink)
+        {
+            _agent.CompleteOffMeshLink();
         }
 
         if (_agent.isOnOffMeshLink)

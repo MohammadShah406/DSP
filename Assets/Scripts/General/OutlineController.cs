@@ -21,6 +21,10 @@ public class OutlineController : MonoBehaviour
     [Tooltip("Width applied when disabling.")]
     [SerializeField] private float disabledOutlineWidth = 0f;
 
+    [Header("Hover Settings")]
+    [Tooltip("If true, outline will be enabled on mouse hover.")]
+    [SerializeField] private bool enableOnHover = true;
+
     [Header("Runtime State (Read Only)")]
     [SerializeField] private bool outlineEnabled;
 
@@ -33,7 +37,7 @@ public class OutlineController : MonoBehaviour
     private bool _hasColor;
     private bool _hasWidth;
 
-    private bool _isSelected;  
+    private bool _isSelected = false;  
 
     private void Awake()
     {
@@ -80,7 +84,7 @@ public class OutlineController : MonoBehaviour
         return false;
     }
 
-    public void EnableOutline()
+    public void EnableOutlineCharacter()
     {
         if (_renderer == null) return;
 
@@ -94,6 +98,35 @@ public class OutlineController : MonoBehaviour
                 _mpb.SetColor(_colorId, defaultHoverOutlineColor);
         }
 
+        if (_hasWidth)
+            _mpb.SetFloat(_widthId, defaultOutlineWidth);
+
+        _renderer.SetPropertyBlock(_mpb);
+        outlineEnabled = true;
+    }
+
+    public void EnableOutlineCharacter(Color outlineColor, float outlineWidth)
+    {
+        if (_renderer == null) return;
+        _renderer.GetPropertyBlock(_mpb);
+        if (_hasColor)
+            _mpb.SetColor(_colorId, outlineColor);
+        if (_hasWidth)
+            _mpb.SetFloat(_widthId, outlineWidth);
+        _renderer.SetPropertyBlock(_mpb);
+        outlineEnabled = true;
+    }
+
+    public void EnableOutlineInteractable()
+    {
+        if (_renderer == null) return;
+
+        _renderer.GetPropertyBlock(_mpb);
+
+        if (_hasColor)
+        {
+             _mpb.SetColor(_colorId, defaultSelectedOutlineColor);
+        }
         if (_hasWidth)
             _mpb.SetFloat(_widthId, defaultOutlineWidth);
 
@@ -119,7 +152,7 @@ public class OutlineController : MonoBehaviour
         if (outlineEnabled) 
             DisableOutline();
         else 
-            EnableOutline();
+            EnableOutlineCharacter();
     }
 
     public void Reinitialize()
@@ -127,7 +160,7 @@ public class OutlineController : MonoBehaviour
         CachePropertyIdsAndAvailability();
 
         if (outlineEnabled) 
-            EnableOutline();
+            EnableOutlineCharacter();
 
         else DisableOutline();
     }
@@ -136,23 +169,25 @@ public class OutlineController : MonoBehaviour
     {
         _isSelected = isSelected;
         if (_isSelected)
-            EnableOutline();
+            EnableOutlineCharacter();
         else
             DisableOutline();
     }
 
     private void OnMouseEnter()
     {
+        if (!enableOnHover) 
+            return;
         if (_isSelected)
         {
             return;
         }
-        EnableOutline();
+        EnableOutlineCharacter();
     }
 
     private void OnMouseExit()
     {
-        if(_isSelected) 
+        if (_isSelected) 
             return;
 
         DisableOutline();
