@@ -123,14 +123,14 @@ public class CameraBehaviour : MonoBehaviour
         HandleDrag();
         HandleEdgeScroll();
         HandleZoom();
-        //
+        
         if (InputManager.Instance.NextCharacterInput)
             HandleCharacterScrollSelection(1);
 
         else if (InputManager.Instance.PreviousCharacterInput)
             HandleCharacterScrollSelection(-1);
 
-
+        
 
 
         if (isResetting && (Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.01f || Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.01f))
@@ -248,7 +248,9 @@ public class CameraBehaviour : MonoBehaviour
                 SetFocussed(clickedCharacter.gameObject);
                 _lastClickedCharacter = clickedCharacter;
 
-                if (isDoubleClick || isManual == false)
+                
+
+                if (isDoubleClick)
                 {
                     StartFollowing(resetZoom: false);
                 }
@@ -257,6 +259,8 @@ public class CameraBehaviour : MonoBehaviour
                     // Single-click: select only, do NOT follow yet.
                     StopFollowing(keepSelection: true);
                 }
+
+                
                 return;
             }
 
@@ -283,14 +287,20 @@ public class CameraBehaviour : MonoBehaviour
 
         if (InputManager.Instance.DeselectInput)
         {
-            ResetFocussed();
-            StopFollowing(keepSelection: false);
-            isManual = true;
-            ActivateReset();
-            manualOffset = new Vector3(0, 0, manualOffset.z);
-            transposer.m_FollowOffset = manualOffset;
+            DeslectCharacter();
         }
     }
+
+    private void DeslectCharacter()
+    {
+        ResetFocussed();
+        StopFollowing(keepSelection: false);
+        isManual = true;
+        ActivateReset();
+        manualOffset = new Vector3(0, 0, manualOffset.z);
+        transposer.m_FollowOffset = manualOffset;
+    }
+
 
     private void StartFollowing(bool resetZoom)
     {
@@ -378,10 +388,7 @@ public class CameraBehaviour : MonoBehaviour
 
     private void ActivateReset()
     {
-        if (isDragging ||
-            Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.01f ||
-            Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.01f)
-            return;
+        
 
         if (!isFollowing || focussedTarget == null)
         {
@@ -431,6 +438,10 @@ public class CameraBehaviour : MonoBehaviour
     {
         if (InputManager.Instance.DragInput)
         {
+            if(isManual == false)
+            {
+                DeslectCharacter();
+            }
             isDragging = true;
         }
         else
@@ -440,6 +451,7 @@ public class CameraBehaviour : MonoBehaviour
 
         if (isDragging)
         {
+
             Vector2 delta = InputManager.Instance.DragDeltaInput;
             Vector3 dragMove = new Vector3(-delta.x, -delta.y, 0) * dragSensitivity;
 
@@ -536,8 +548,8 @@ public class CameraBehaviour : MonoBehaviour
             return;
 
         // Apply green highlight to new focussed target
-        ApplyGreen(focussedTarget);
-        lastHighlightedTarget = focussedTarget;
+        //ApplyGreen(focussedTarget);
+        //lastHighlightedTarget = focussedTarget;
     }
 
     private void ApplyGreen(Transform target)

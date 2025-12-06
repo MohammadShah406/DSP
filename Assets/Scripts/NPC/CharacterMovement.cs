@@ -34,6 +34,9 @@ public class CharacterMovement : MonoBehaviour
     [Header("Runtime State (Read Only)")]
     [SerializeField] private Interactable currentInteractable;
 
+    [Header("Animator")]
+    [SerializeField] private Animator animator;
+
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -67,6 +70,7 @@ public class CharacterMovement : MonoBehaviour
             // Even idle we enforce Z lock (in case other systems moved it)
             if (lockZAxis && Mathf.Abs(transform.position.z - _initialZ) > 0.0001f)
                 ForceZLock();
+            animator.SetFloat("Speed", 0f);
             return;
         }
 
@@ -81,6 +85,8 @@ public class CharacterMovement : MonoBehaviour
 
         if (lockZAxis)
             ForceZLock();
+
+        UpdateAnimatorSpeed();
     }
 
     // External call to set movement target (full world pos, Z will be locked).
@@ -144,10 +150,10 @@ public class CharacterMovement : MonoBehaviour
         {
             if (currentInteractable != null)
             {
-                currentInteractable.OnInteract();
-                currentInteractable = null; // reset
+                currentInteractable.OnInteract(gameObject);
+                currentInteractable = null;
             }
-
+            animator.SetFloat("Speed", 0f); // stop locomotion blend
             ClearTarget();
             return;
         }
@@ -222,6 +228,45 @@ public class CharacterMovement : MonoBehaviour
                 if ((dest - _agent.destination).sqrMagnitude > 0.000001f)
                     _agent.SetDestination(dest);
             }
+        }
+    }
+
+    private void UpdateAnimatorSpeed()
+    {
+        float horizontalSpeed = 0f;
+
+        if (_agent != null && _agent.enabled)
+        {
+            // Use actual movement delta
+            horizontalSpeed = _agent.velocity.magnitude;
+        }
+        else if (_rb != null)
+        {
+            horizontalSpeed = Mathf.Abs(_rb.linearVelocity.x); // fallback for non-NavMesh
+        }
+
+        if (horizontalSpeed < 1f)
+            horizontalSpeed = 0f;
+
+        if (animator != null)
+            animator.SetFloat("Speed", horizontalSpeed);
+    }
+
+    public void PlayInteractionAnimation(Interactable.InteractionType type)
+    {
+        if (animator == null) return;
+
+        switch (type)
+        {
+            case Interactable.InteractionType.Harvest:
+                animator.SetTrigger("Harvest");
+                break;
+            case Interactable.InteractionType.Cook:
+                animator.SetTrigger("Cook");
+                break;
+            default:
+                // Default
+                break;
         }
     }
 
