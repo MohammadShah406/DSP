@@ -312,8 +312,6 @@ public class CharacterMovement : MonoBehaviour
 
     private void HandleInteraction(Interactable interactable)
     {
-        
-
 
         // If not currently interacting, nothing to interrupt
         if (!isInteracting || currentInteractable == null)
