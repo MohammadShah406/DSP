@@ -98,4 +98,9 @@ public class Interactable : MonoBehaviour
     {
         Debug.Log("Debug message called");
     }
+
+    public void InteractComplete()
+    {
+        Debug.Log($"{name} interaction complete.");
+    }
 }
