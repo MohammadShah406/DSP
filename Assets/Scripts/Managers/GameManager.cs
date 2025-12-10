@@ -39,10 +39,11 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKey(KeyCode.F2))
+        if(Input.GetKeyDown(KeyCode.F2))
         {
             TrySave();
         }
+
     }
 
     public void TrySave()
