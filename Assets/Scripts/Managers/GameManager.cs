@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
         {
             TrySave();
         }
+
     }
 
     public void ChangeHope(int delta)

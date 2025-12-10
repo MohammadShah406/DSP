@@ -173,6 +173,8 @@ public class CameraBehaviour : MonoBehaviour
             {
                 GameObject clicked = hit.collider.gameObject;
 
+                Debug.Log($"Clicked on: {clicked.name} at distance {hit.distance}");
+
                 // Priority 1: Interactable
                 if (focussedTarget != null && InteractionManager.Instance != null)
                 {

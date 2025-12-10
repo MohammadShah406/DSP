@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -21,7 +21,7 @@ public class CharacterMovement : MonoBehaviour
 
     [Header("Axis Lock")]
     [Tooltip("Locks world Z so character never drifts forward/back.")]
-    [SerializeField] private bool lockZAxis = true;
+    [SerializeField] public bool lockZAxis = true;
 
     public Vector3 targetLocation;
     public bool run = false;
@@ -29,7 +29,7 @@ public class CharacterMovement : MonoBehaviour
     private Rigidbody _rb;
     private NavMeshAgent _agent;
     private bool _hasTarget;
-    private float _initialZ;
+    private float _initialZ = 0f;
 
     [Header("Runtime State (Read Only)")]
     [SerializeField] private Interactable currentInteractable;
@@ -72,9 +72,6 @@ public class CharacterMovement : MonoBehaviour
         HandleInteraction(currentInteractable);
 
         if (!_hasTarget) {
-            // Even idle we enforce Z lock (in case other systems moved it)
-            if (lockZAxis && Mathf.Abs(transform.position.z - _initialZ) > 0.0001f)
-                ForceZLock();
             animator.SetFloat("Speed", 0f);
             return;
         }
@@ -90,8 +87,6 @@ public class CharacterMovement : MonoBehaviour
             HandleFallbackHorizontalMove();
         }
 
-        if (lockZAxis)
-            ForceZLock();
 
         UpdateAnimatorSpeed();
     }
@@ -100,14 +95,29 @@ public class CharacterMovement : MonoBehaviour
     public void SetTarget(Vector3 worldPos, bool runFlag = false, Interactable interactable = null)
     {
         run = runFlag;
+        currentInteractable = interactable;
 
-        if (lockZAxis)
+        if (currentInteractable != null)
+        {
+            Transform t = currentInteractable.transform;
+            if (t.childCount > 0)
+            {
+                worldPos = t.GetChild(0).position;
+            }
+            else
+            {
+                worldPos.z = _initialZ;
+            }
+        }
+        else if(lockZAxis)
+        {
             worldPos.z = _initialZ;
+        }
 
         targetLocation = worldPos;
         _hasTarget = true;
 
-        currentInteractable = interactable;
+        
 
         if (useNavMeshAgent && _agent != null)
         {
@@ -116,8 +126,6 @@ public class CharacterMovement : MonoBehaviour
             if (NavMesh.SamplePosition(worldPos, out hit, 2f, NavMesh.AllAreas))
             {
                 Vector3 navPos = hit.position;
-                if (lockZAxis)
-                    navPos.z = _initialZ;
                 worldPos = navPos;
             }
 
@@ -187,6 +195,14 @@ public class CharacterMovement : MonoBehaviour
             return;
 
         currentInteractable.OnInteract(gameObject);
+
+        Transform t = currentInteractable.transform;
+        if (t.childCount > 0)
+        {
+            transform.rotation = t.GetChild(0).rotation;
+        }
+
+
         isInteracting = true;
 
     }
