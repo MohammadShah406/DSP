@@ -7,6 +7,7 @@ public class GameSaveData
 {
     public int currentDay;
     public float timeOfDay;
+    public int hope;
 
     public List<CharacterSaveData> characters = new();
     public List<ResourceSaveData> resources = new();
@@ -15,7 +16,12 @@ public class GameSaveData
 [Serializable]
 public class CharacterSaveData
 {
-    public string id;
+    public string name;
+    public int health;
+    public int stability;
+    public int learning;
+    public int workReadiness;
+    public int trust;
     public Vector3 position;
 }
 

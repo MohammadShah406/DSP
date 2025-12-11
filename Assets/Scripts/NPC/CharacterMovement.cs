@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -21,7 +21,7 @@ public class CharacterMovement : MonoBehaviour
 
     [Header("Axis Lock")]
     [Tooltip("Locks world Z so character never drifts forward/back.")]
-    [SerializeField] private bool lockZAxis = true;
+    [SerializeField] public bool lockZAxis = true;
 
     public Vector3 targetLocation;
     public bool run = false;
@@ -29,7 +29,15 @@ public class CharacterMovement : MonoBehaviour
     private Rigidbody _rb;
     private NavMeshAgent _agent;
     private bool _hasTarget;
-    private float _initialZ;
+    private float _initialZ = 0f;
+
+    [Header("Runtime State (Read Only)")]
+    [SerializeField] private Interactable currentInteractable;
+
+    [Header("Animator")]
+    [SerializeField] private Animator animator;
+
+    [SerializeField]private bool isInteracting = false;
 
     void Awake()
     {
@@ -60,12 +68,15 @@ public class CharacterMovement : MonoBehaviour
 
     void Update()
     {
+
+        HandleInteraction(currentInteractable);
+
         if (!_hasTarget) {
-            // Even idle we enforce Z lock (in case other systems moved it)
-            if (lockZAxis && Mathf.Abs(transform.position.z - _initialZ) > 0.0001f)
-                ForceZLock();
+            animator.SetFloat("Speed", 0f);
             return;
         }
+
+        
 
         if (useNavMeshAgent && _agent != null)
         {
@@ -76,20 +87,37 @@ public class CharacterMovement : MonoBehaviour
             HandleFallbackHorizontalMove();
         }
 
-        if (lockZAxis)
-            ForceZLock();
+
+        UpdateAnimatorSpeed();
     }
 
     // External call to set movement target (full world pos, Z will be locked).
-    public void SetTarget(Vector3 worldPos, bool runFlag = false)
+    public void SetTarget(Vector3 worldPos, bool runFlag = false, Interactable interactable = null)
     {
         run = runFlag;
+        currentInteractable = interactable;
 
-        if (lockZAxis)
+        if (currentInteractable != null)
+        {
+            Transform t = currentInteractable.transform;
+            if (t.childCount > 0)
+            {
+                worldPos = t.GetChild(0).position;
+            }
+            else
+            {
+                worldPos.z = _initialZ;
+            }
+        }
+        else if(lockZAxis)
+        {
             worldPos.z = _initialZ;
+        }
 
         targetLocation = worldPos;
         _hasTarget = true;
+
+        
 
         if (useNavMeshAgent && _agent != null)
         {
@@ -98,8 +126,6 @@ public class CharacterMovement : MonoBehaviour
             if (NavMesh.SamplePosition(worldPos, out hit, 2f, NavMesh.AllAreas))
             {
                 Vector3 navPos = hit.position;
-                if (lockZAxis)
-                    navPos.z = _initialZ;
                 worldPos = navPos;
             }
 
@@ -124,6 +150,8 @@ public class CharacterMovement : MonoBehaviour
 
     private void HandleAgentMovement()
     {
+        
+
         if (_agent.pathPending) return;
 
         _agent.speed = run ? runSpeed : walkSpeed;
@@ -134,10 +162,22 @@ public class CharacterMovement : MonoBehaviour
             return;
         }
 
+        // When agent is close enough
         if (_agent.remainingDistance <= Mathf.Max(_agent.stoppingDistance, stopDistance))
         {
             ClearTarget();
+            if (currentInteractable != null)
+            {
+                StartInteraction();
+            }
+            animator.SetFloat("Speed", 0f); // stop locomotion blend
+            
             return;
+        }
+
+        if (_agent.isOnOffMeshLink)
+        {
+            _agent.CompleteOffMeshLink();
         }
 
         if (_agent.isOnOffMeshLink)
@@ -146,6 +186,26 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
+
+    private void StartInteraction()
+    {
+        
+
+        if (currentInteractable == null || animator == null) 
+            return;
+
+        currentInteractable.OnInteract(gameObject);
+
+        Transform t = currentInteractable.transform;
+        if (t.childCount > 0)
+        {
+            transform.rotation = t.GetChild(0).rotation;
+        }
+
+
+        isInteracting = true;
+
+    }
     private void HandleFallbackHorizontalMove()
     {
         float dx = targetLocation.x - transform.position.x;
@@ -207,6 +267,133 @@ public class CharacterMovement : MonoBehaviour
             }
         }
     }
+
+    private void UpdateAnimatorSpeed()
+    {
+        float horizontalSpeed = 0f;
+
+        if (_agent != null && _agent.enabled)
+        {
+            // Use actual movement delta
+            horizontalSpeed = _agent.velocity.magnitude;
+        }
+        else if (_rb != null)
+        {
+            horizontalSpeed = Mathf.Abs(_rb.linearVelocity.x); // fallback for non-NavMesh
+        }
+
+        if (horizontalSpeed < 1f)
+            horizontalSpeed = 0f;
+
+        if (animator != null)
+            animator.SetFloat("Speed", horizontalSpeed);
+    }
+
+    public void PlayInteractionAnimation(Interactable.InteractionType type)
+    {
+        if (animator == null) return;
+
+        switch (type)
+        {
+            case Interactable.InteractionType.Harvest:
+                animator.SetTrigger("Harvest");
+                break;
+            case Interactable.InteractionType.Cook:
+                animator.SetTrigger("Cook");
+                break;
+            case Interactable.InteractionType.Scavenge:
+                animator.SetTrigger("Scavenge");
+                break;
+            case Interactable.InteractionType.Rest:
+                animator.SetTrigger("Rest");
+                break;
+            case Interactable.InteractionType.Talk:
+                animator.SetTrigger("Talk");
+                break;
+            case Interactable.InteractionType.Paint:
+                animator.SetTrigger("Paint");
+                break;
+            case Interactable.InteractionType.Watering:
+                animator.SetTrigger("Watering");
+                break;
+            default:
+                // Default
+                break;
+        }
+    }
+
+    public void OnInteractionComplete()
+    {
+        // complete current interaction if any
+        if (currentInteractable != null)
+        {
+            currentInteractable.InteractComplete();
+            // clear the "interactedBy" on the interactable so it no longer tracks this character
+            currentInteractable.ClearInteractedBy();
+            currentInteractable = null;
+        }
+
+        // reset interaction state
+        isInteracting = false;
+
+        // ensure locomotion resumes cleanly
+        animator.SetFloat("Speed", 0f);
+
+    }
+
+    private void HandleInteraction(Interactable interactable)
+    {
+
+        // If not currently interacting, nothing to interrupt
+        if (!isInteracting || currentInteractable == null)
+        {
+            isInteracting = false;
+            Debug.Log("HandleInteraction: Not interacting currently.");
+            return;
+        }
+
+        // 1) If a different interactable was selected while interacting, cancel current interaction
+        if (interactable != null && interactable != currentInteractable)
+        {
+            Debug.Log("HandleInteraction: Different Interactable");
+            // Clear previous interactable state
+            currentInteractable.ClearInteractedBy();
+            currentInteractable = interactable;
+            isInteracting = false;
+            // Allow movement towards the newly selected interactable (SetTarget likely already called)
+            return;
+        }
+
+        // 2) If the player moves (agent or rigidbody gains velocity or a new target is set) cancel current interaction
+        bool characterIsMoving = _hasTarget; // a new target implies intent to move
+
+        if (characterIsMoving)
+        {
+            currentInteractable.ClearInteractedBy();
+            isInteracting = false;
+            Debug.Log("HandleInteraction: Character Moved during interaction");
+            return;
+        }
+
+        // 3) If the interaction animation has finished, complete the interaction.
+        // Assumes the interaction animation states are tagged "Interaction" in the Animator.
+        if (animator != null)
+        {
+            var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            bool inInteractionState = stateInfo.IsTag("Interaction");
+
+            Debug.Log($"HandleInteraction: Interaction state: {inInteractionState}");
+
+            // When we're in the interaction state and its normalized time is >= 1, it's finished.
+            if (inInteractionState && stateInfo.normalizedTime >= 0.99f)
+            {
+                Debug.Log("HandleInteraction: Interaction animation complete.");
+                OnInteractionComplete();
+            }
+        }
+
+    }
+
 
     private void OnDrawGizmosSelected()
     {

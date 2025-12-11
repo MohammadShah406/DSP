@@ -65,14 +65,25 @@ public class CameraBehaviour : MonoBehaviour
     // Double-click tracking
     private float _lastLmbTime = -1f;
     private Vector2 _lastLmbScreenPos;
+    private Vector3 _lastMoveClickPos;
+    private float _lastMoveClickTime = -1f;
     private Transform _lastClickedCharacter;
+    private Interactable _lastClickedInteractable;
 
     // Follow state (decoupled from manual pan state)
     private bool isFollowing = false;
 
+    public static CameraBehaviour Instance { get; private set; }
+
     private void Awake()
     {
         _mainCamera = Camera.main;
+
+        if(Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+
     }
 
     private void Start()
@@ -112,14 +123,14 @@ public class CameraBehaviour : MonoBehaviour
         HandleDrag();
         HandleEdgeScroll();
         HandleZoom();
-        //
+        
         if (InputManager.Instance.NextCharacterInput)
             HandleCharacterScrollSelection(1);
 
         else if (InputManager.Instance.PreviousCharacterInput)
             HandleCharacterScrollSelection(-1);
 
-
+        
 
 
         if (isResetting && (Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.01f || Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.01f))
@@ -155,17 +166,33 @@ public class CameraBehaviour : MonoBehaviour
             System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
             Transform clickedCharacter = null;
+            Interactable clickedInteractable = null;
             RaycastHit? movementSurfaceHit = null;
 
             foreach (var hit in hits)
             {
                 GameObject clicked = hit.collider.gameObject;
 
+                Debug.Log($"Clicked on: {clicked.name} at distance {hit.distance}");
+
+                // Priority 1: Interactable
+                if (focussedTarget != null && InteractionManager.Instance != null)
+                {
+                    if (InteractionManager.Instance.IsInteractableForCharacter(clicked.transform, focussedTarget))
+                    {
+                        clickedInteractable = clicked.GetComponent<Interactable>();
+                        break;
+                    }
+                }
+
+                // Priority 2: Interactable
                 if (IsCharacter(clicked))
                 {
                     clickedCharacter = hit.collider.transform;
                     break; 
                 }
+
+                // Priority 3: Movement surface
 
                 if (IsMovementSurface(clicked))
                 {
@@ -174,7 +201,18 @@ public class CameraBehaviour : MonoBehaviour
                 }
             }
 
-            // Determine double click ONLY if same character and within thresholds
+            // Determine interactable double click
+            bool interactableDoubleClick = false;
+            if (clickedInteractable != null &&
+                _lastClickedInteractable == clickedInteractable &&
+                dt >= 0f && dt <= doubleClickTime &&
+                pixelDist <= doubleClickMaxPixels)
+            {
+                interactableDoubleClick = true;
+            }
+            _lastClickedInteractable = clickedInteractable;
+
+            // Determine character double click
             if (clickedCharacter != null &&
                 _lastClickedCharacter == clickedCharacter &&
                 dt >= 0f && dt <= doubleClickTime &&
@@ -183,12 +221,38 @@ public class CameraBehaviour : MonoBehaviour
                 isDoubleClick = true;
             }
 
+            // Determine movement surface double click
+            bool moveDoubleClick = false;
+            if (movementSurfaceHit.HasValue)
+            {
+                Vector3 clickedPos = movementSurfaceHit.Value.point;
+                float dtMove = Time.time - _lastMoveClickTime;
+                float dist = Vector3.Distance(clickedPos, _lastMoveClickPos);
+
+                if (dtMove <= doubleClickTime && dist <= 0.5f) // small threshold in world units
+                    moveDoubleClick = true;
+
+                _lastMoveClickTime = Time.time;
+                _lastMoveClickPos = clickedPos;
+            }
+
+
+            // Handle interactable click first
+            if (clickedInteractable != null)
+            {
+                InteractionManager.Instance.TryInteract(focussedTarget, runFlag: interactableDoubleClick, clickedInteractable);
+                return;
+            }
+
+            //Handle character click
             if (clickedCharacter != null)
             {
                 SetFocussed(clickedCharacter.gameObject);
                 _lastClickedCharacter = clickedCharacter;
 
-                if (isDoubleClick || isManual == false)
+                
+
+                if (isDoubleClick)
                 {
                     StartFollowing(resetZoom: false);
                 }
@@ -197,16 +261,18 @@ public class CameraBehaviour : MonoBehaviour
                     // Single-click: select only, do NOT follow yet.
                     StopFollowing(keepSelection: true);
                 }
+
+                
                 return;
             }
 
-            // Issue movement command if we have a focussed character
+            // Handle movement surface click
             if (focussedTarget != null && movementSurfaceHit.HasValue)
             {
                 var mover = focussedTarget.GetComponent<CharacterMovement>();
                 if (mover != null)
                 {
-                    mover.SetTarget(movementSurfaceHit.Value.point, runFlag: isDoubleClick);
+                    mover.SetTarget(movementSurfaceHit.Value.point, runFlag: moveDoubleClick);
                 }
 
                 return;
@@ -223,14 +289,20 @@ public class CameraBehaviour : MonoBehaviour
 
         if (InputManager.Instance.DeselectInput)
         {
-            ResetFocussed();
-            StopFollowing(keepSelection: false);
-            isManual = true;
-            ActivateReset();
-            manualOffset = new Vector3(0, 0, manualOffset.z);
-            transposer.m_FollowOffset = manualOffset;
+            DeslectCharacter();
         }
     }
+
+    private void DeslectCharacter()
+    {
+        ResetFocussed();
+        StopFollowing(keepSelection: false);
+        isManual = true;
+        ActivateReset();
+        manualOffset = new Vector3(0, 0, manualOffset.z);
+        transposer.m_FollowOffset = manualOffset;
+    }
+
 
     private void StartFollowing(bool resetZoom)
     {
@@ -318,10 +390,7 @@ public class CameraBehaviour : MonoBehaviour
 
     private void ActivateReset()
     {
-        if (isDragging ||
-            Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.01f ||
-            Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.01f)
-            return;
+        
 
         if (!isFollowing || focussedTarget == null)
         {
@@ -371,6 +440,10 @@ public class CameraBehaviour : MonoBehaviour
     {
         if (InputManager.Instance.DragInput)
         {
+            if(isManual == false)
+            {
+                DeslectCharacter();
+            }
             isDragging = true;
         }
         else
@@ -380,6 +453,7 @@ public class CameraBehaviour : MonoBehaviour
 
         if (isDragging)
         {
+
             Vector2 delta = InputManager.Instance.DragDeltaInput;
             Vector3 dragMove = new Vector3(-delta.x, -delta.y, 0) * dragSensitivity;
 
@@ -476,8 +550,8 @@ public class CameraBehaviour : MonoBehaviour
             return;
 
         // Apply green highlight to new focussed target
-        ApplyGreen(focussedTarget);
-        lastHighlightedTarget = focussedTarget;
+        //ApplyGreen(focussedTarget);
+        //lastHighlightedTarget = focussedTarget;
     }
 
     private void ApplyGreen(Transform target)
