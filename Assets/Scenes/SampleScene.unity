@@ -2377,6 +2377,10 @@ PrefabInstance:
       propertyPath: m_Center.y
       value: -0.17748225
       objectReference: {fileID: 0}
+    - target: {fileID: 4791414136799898887, guid: 0897a8856fa0bae47a8083cf9b4c9979, type: 3}
+      propertyPath: characterName
+      value: Sahil
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

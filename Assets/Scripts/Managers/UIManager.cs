@@ -41,6 +41,10 @@ public class UIManager : MonoBehaviour
 
         if (pausePanel != null)
             pausePanel.SetActive(false);
+        if (statsPanel != null)
+            statsPanel.SetActive(false);
+        if (inventoryPanel != null)
+            inventoryPanel.SetActive(false);
     }
 
     private void Start()
@@ -49,16 +53,17 @@ public class UIManager : MonoBehaviour
         if (TimeManager.Instance != null)
         {
             TimeManager.Instance.MinuteChanged += UpdateTimeDisplay;
+            UpdateTimeDisplay(TimeManager.Instance.hours, TimeManager.Instance.minutes, TimeManager.Instance.days);
         }
 
-        CharacterStats.OnStatChanged += OnCharacterStatChanged;
+       // CharacterStats.OnStatChanged += OnCharacterStatChanged;
 
         //if (InventoryManager.Instance != null)
         //{
         //    InventoryManager.OnResourceChanged += OnResourceChanged;
         //}
 
-        RefreshAllUI();
+       // RefreshAllUI();
     }
 
     private void OnDestroy()
@@ -68,7 +73,7 @@ public class UIManager : MonoBehaviour
             TimeManager.Instance.MinuteChanged -= UpdateTimeDisplay;
         }
 
-        CharacterStats.OnStatChanged -= OnCharacterStatChanged;
+        //CharacterStats.OnStatChanged -= OnCharacterStatChanged;
 
         //if (InventoryManager.Instance != null)
         //{
@@ -78,15 +83,19 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
+        // Toggle pause
         if (Input.GetKeyDown(KeyCode.Escape))
             TogglePause();
 
+        // Toggle inventory
         if (Input.GetKeyDown(KeyCode.I))
             ToggleInventory();
 
+        // Toggle character stats
         if (Input.GetKeyDown(KeyCode.C))
             ToggleStats();
 
+        // Update hope bar continuously
         UpdateHopeDisplay();
     }
 
@@ -110,22 +119,22 @@ public class UIManager : MonoBehaviour
             hopeText.text = $"Hope: {GameManager.Instance.hope}";
     }
 
-    private void OnCharacterStatChanged(CharacterStats character, string statName, int oldVal, int newVal)
-    {
-        RefreshCharacterStats();
-    }
+    //private void OnCharacterStatChanged(CharacterStats character, string statName, int oldVal, int newVal)
+    //{
+    //    RefreshCharacterStats();
+    //}
 
-    private void OnResourceChanged(ResourceData resource, int delta)
-    {
-        //RefreshInventory();
-    }
+    //private void OnResourceChanged(ResourceData resource, int delta)
+    //{
+    //    RefreshInventory();
+    //}
 
-    private void RefreshAllUI()
-    {
-        RefreshCharacterStats();
-       // RefreshInventory();
-        UpdateHopeDisplay();
-    }
+    //private void RefreshAllUI()
+    //{
+    //    RefreshCharacterStats();
+    //    RefreshInventory();
+    //    UpdateHopeDisplay();
+    //}
 
     private void RefreshCharacterStats()
     {
@@ -151,11 +160,28 @@ public class UIManager : MonoBehaviour
 
     private void UpdateCharacterStatDisplay(CharacterStats character, GameObject display)
     {
-        // Find text components in the prefab and update them
+        // Update the prefab's text components
         TextMeshProUGUI[] texts = display.GetComponentsInChildren<TextMeshProUGUI>();
+
         if (texts.Length > 0)
         {
-            texts[0].text = $"{character.characterName}\nH:{character.health} S:{character.stability} T:{character.trust}";
+            texts[0].text = $"{character.name}\n" +
+                           $"Health: {character.health}\n" +
+                           $"Stability: {character.stability}\n" +
+                           $"Learning: {character.learning}\n" +
+                           $"Work: {character.workReadiness}\n" +
+                           $"Trust: {character.trust}";
+        }
+
+        // Update stat bars if they exist
+        Image[] images = display.GetComponentsInChildren<Image>();
+        if (images.Length >= 5)
+        {
+            images[0].fillAmount = character.health / 100f;
+            images[1].fillAmount = character.stability / 100f;
+            images[2].fillAmount = character.learning / 100f;
+            images[3].fillAmount = character.workReadiness / 100f;
+            images[4].fillAmount = character.trust / 100f;
         }
     }
 
@@ -184,6 +210,10 @@ public class UIManager : MonoBehaviour
     //            {
     //                texts[0].text = $"{item.resource.resourceName}\nx{item.quantity}";
     //            }
+    //            // Set icon if available
+    //            Image icon = itemDisplay.GetComponentInChildren<Image>();
+    //            if (icon != null && resource.icon != null)
+    //                icon.sprite = resource.icon;
     //        }
     //    }
     //}
@@ -217,4 +247,8 @@ public class UIManager : MonoBehaviour
             if (isActive) RefreshCharacterStats();
         }
     }
+
+    public void OnResumeButtonClicked() => SetPause(false);
+    
+    public void OnQuitButtonClicked() => Application.Quit();
 }
