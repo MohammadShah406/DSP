@@ -6,8 +6,8 @@ public class TimeManager : MonoBehaviour
     public static TimeManager Instance { get; private set; }
 
     [Header("Clock")]
-    [SerializeField] private int minutes = 0;
-    [SerializeField] private int hours = 8;
+    [SerializeField] public int minutes = 0;
+    [SerializeField] public int hours = 8;
     [SerializeField] public int days = 1;
     public TimePeriod currentTimePeriod = TimePeriod.Morning;
 

@@ -301,6 +301,21 @@ public class CharacterMovement : MonoBehaviour
             case Interactable.InteractionType.Cook:
                 animator.SetTrigger("Cook");
                 break;
+            case Interactable.InteractionType.Scavenge:
+                animator.SetTrigger("Scavenge");
+                break;
+            case Interactable.InteractionType.Rest:
+                animator.SetTrigger("Rest");
+                break;
+            case Interactable.InteractionType.Talk:
+                animator.SetTrigger("Talk");
+                break;
+            case Interactable.InteractionType.Paint:
+                animator.SetTrigger("Paint");
+                break;
+            case Interactable.InteractionType.Watering:
+                animator.SetTrigger("Watering");
+                break;
             default:
                 // Default
                 break;
