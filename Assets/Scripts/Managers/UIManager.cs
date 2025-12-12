@@ -1,7 +1,9 @@
+﻿using System.Collections.Generic;
+using System;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
@@ -19,8 +21,21 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI hopeText;
 
     [Header("Character Stats Display")]
-    public Transform characterStatsContainer;
-    public GameObject characterStatPrefab;
+    public Image characterPicture;
+    public TextMeshProUGUI characterNameText;
+    public TextMeshProUGUI characterDescriptionText;
+
+    [Header("Stat Sliders")]
+    public Slider healthSlider;
+    public TextMeshProUGUI healthPercentText;
+    public Slider stabilitySlider;
+    public TextMeshProUGUI stabilityPercentText;
+    public Slider learningSlider;
+    public TextMeshProUGUI learningPercentText;
+    public Slider workReadinessSlider;
+    public TextMeshProUGUI workReadinessPercentText;
+    public Slider trustSlider;
+    public TextMeshProUGUI trustPercentText;
 
     [Header("Inventory Display")]
     public Transform inventoryGrid;
@@ -28,7 +43,7 @@ public class UIManager : MonoBehaviour
 
     public bool IsPaused { get; private set; }
 
-    private Dictionary<CharacterStats, GameObject> characterStatDisplays = new Dictionary<CharacterStats, GameObject>();
+    private CharacterStats currentCharacter;
 
     private void Awake()
     {
@@ -56,14 +71,14 @@ public class UIManager : MonoBehaviour
             UpdateTimeDisplay(TimeManager.Instance.hours, TimeManager.Instance.minutes, TimeManager.Instance.days);
         }
 
-       // CharacterStats.OnStatChanged += OnCharacterStatChanged;
+        // Set slider ranges
+        if (healthSlider != null) healthSlider.maxValue = 100;
+        if (stabilitySlider != null) stabilitySlider.maxValue = 100;
+        if (learningSlider != null) learningSlider.maxValue = 100;
+        if (workReadinessSlider != null) workReadinessSlider.maxValue = 100;
+        if (trustSlider != null) trustSlider.maxValue = 100;
 
-        //if (InventoryManager.Instance != null)
-        //{
-        //    InventoryManager.OnResourceChanged += OnResourceChanged;
-        //}
-
-       // RefreshAllUI();
+        CharacterStats.OnAnyStatChanged += OnCharacterStatChanged;
     }
 
     private void OnDestroy()
@@ -73,12 +88,7 @@ public class UIManager : MonoBehaviour
             TimeManager.Instance.MinuteChanged -= UpdateTimeDisplay;
         }
 
-        //CharacterStats.OnStatChanged -= OnCharacterStatChanged;
-
-        //if (InventoryManager.Instance != null)
-        //{
-        //    InventoryManager.OnResourceChanged -= OnResourceChanged;
-        //}
+        CharacterStats.OnAnyStatChanged -= OnCharacterStatChanged;
     }
 
     private void Update()
@@ -94,6 +104,28 @@ public class UIManager : MonoBehaviour
         // Toggle character stats
         if (Input.GetKeyDown(KeyCode.C))
             ToggleStats();
+
+        // ✅ AUTO-UPDATE: If stats panel is open, update with currently selected character
+        if (statsPanel != null && statsPanel.activeSelf)
+        {
+            // Get currently selected character from camera
+            if (CameraBehaviour.Instance != null && CameraBehaviour.Instance.focussedTarget != null)
+            {
+                CharacterStats selectedChar = CameraBehaviour.Instance.focussedTarget.GetComponent<CharacterStats>();
+
+                // Update if character changed or stats changed
+                if (selectedChar != null)
+                {
+                    currentCharacter = selectedChar;
+                    UpdateCharacterStatsDisplay(currentCharacter);
+                }
+            }
+            else if (currentCharacter != null)
+            {
+                // Still update current character even if not focused (for live stat changes)
+                UpdateCharacterStatsDisplay(currentCharacter);
+            }
+        }
 
         // Update hope bar continuously
         UpdateHopeDisplay();
@@ -119,104 +151,47 @@ public class UIManager : MonoBehaviour
             hopeText.text = $"Hope: {GameManager.Instance.hope}";
     }
 
-    //private void OnCharacterStatChanged(CharacterStats character, string statName, int oldVal, int newVal)
-    //{
-    //    RefreshCharacterStats();
-    //}
-
-    //private void OnResourceChanged(ResourceData resource, int delta)
-    //{
-    //    RefreshInventory();
-    //}
-
-    //private void RefreshAllUI()
-    //{
-    //    RefreshCharacterStats();
-    //    RefreshInventory();
-    //    UpdateHopeDisplay();
-    //}
-
-    private void RefreshCharacterStats()
+    private void UpdateCharacterStatsDisplay(CharacterStats character)
     {
-        if (characterStatsContainer == null || GameManager.Instance == null) return;
+        if (character == null) return;
 
-        // Clear old displays
-        foreach (Transform child in characterStatsContainer)
-            Destroy(child.gameObject);
+        // Update character info
+        if (characterNameText != null)
+            characterNameText.text = character.characterName;
 
-        characterStatDisplays.Clear();
+        if (characterDescriptionText != null)
+            characterDescriptionText.text = character.description ?? "Refugee";
 
-        // Use helper method to get Character components
-        foreach (CharacterStats character in GameManager.Instance.GetCharacterComponents())
-        {
-            if (characterStatPrefab != null)
-            {
-                GameObject statDisplay = Instantiate(characterStatPrefab, characterStatsContainer);
-                characterStatDisplays[character] = statDisplay;
-                UpdateCharacterStatDisplay(character, statDisplay);
-            }
-        }
+        // Update Health
+        if (healthSlider != null)
+            healthSlider.value = character.health;
+        if (healthPercentText != null)
+            healthPercentText.text = $"{character.health}%";
+
+        // Update Stability
+        if (stabilitySlider != null)
+            stabilitySlider.value = character.stability;
+        if (stabilityPercentText != null)
+            stabilityPercentText.text = $"{character.stability}%";
+
+        // Update Learning
+        if (learningSlider != null)
+            learningSlider.value = character.learning;
+        if (learningPercentText != null)
+            learningPercentText.text = $"{character.learning}%";
+
+        // Update Work Readiness
+        if (workReadinessSlider != null)
+            workReadinessSlider.value = character.workReadiness;
+        if (workReadinessPercentText != null)
+            workReadinessPercentText.text = $"{character.workReadiness}%";
+
+        // Update Trust
+        if (trustSlider != null)
+            trustSlider.value = character.trust;
+        if (trustPercentText != null)
+            trustPercentText.text = $"{character.trust}%";
     }
-
-    private void UpdateCharacterStatDisplay(CharacterStats character, GameObject display)
-    {
-        // Update the prefab's text components
-        TextMeshProUGUI[] texts = display.GetComponentsInChildren<TextMeshProUGUI>();
-
-        if (texts.Length > 0)
-        {
-            texts[0].text = $"{character.name}\n" +
-                           $"Health: {character.health}\n" +
-                           $"Stability: {character.stability}\n" +
-                           $"Learning: {character.learning}\n" +
-                           $"Work: {character.workReadiness}\n" +
-                           $"Trust: {character.trust}";
-        }
-
-        // Update stat bars if they exist
-        Image[] images = display.GetComponentsInChildren<Image>();
-        if (images.Length >= 5)
-        {
-            images[0].fillAmount = character.health / 100f;
-            images[1].fillAmount = character.stability / 100f;
-            images[2].fillAmount = character.learning / 100f;
-            images[3].fillAmount = character.workReadiness / 100f;
-            images[4].fillAmount = character.trust / 100f;
-        }
-    }
-
-    //private void RefreshInventory()
-    //{
-    //    if (inventoryGrid == null || InventoryManager.Instance == null) return;
-
-    //    // Clear old items
-    //    foreach (Transform child in inventoryGrid)
-    //        Destroy(child.gameObject);
-
-    //    // Create new items
-    //    foreach (var item in InventoryManager.Instance.inventory)
-    //    {
-    //        if (inventoryItemPrefab != null)
-    //        {
-    //            GameObject itemDisplay = Instantiate(inventoryItemPrefab, inventoryGrid);
-
-    //            // Update display
-    //            Image icon = itemDisplay.GetComponentInChildren<Image>();
-    //            if (icon != null && item.resource.icon != null)
-    //                icon.sprite = item.resource.icon;
-
-    //            TextMeshProUGUI[] texts = itemDisplay.GetComponentsInChildren<TextMeshProUGUI>();
-    //            if (texts.Length > 0)
-    //            {
-    //                texts[0].text = $"{item.resource.resourceName}\nx{item.quantity}";
-    //            }
-    //            // Set icon if available
-    //            Image icon = itemDisplay.GetComponentInChildren<Image>();
-    //            if (icon != null && resource.icon != null)
-    //                icon.sprite = resource.icon;
-    //        }
-    //    }
-    //}
 
     public void SetPause(bool pause)
     {
@@ -234,7 +209,6 @@ public class UIManager : MonoBehaviour
         {
             bool isActive = !inventoryPanel.activeSelf;
             inventoryPanel.SetActive(isActive);
-           // if (isActive) RefreshInventory();
         }
     }
 
@@ -244,11 +218,37 @@ public class UIManager : MonoBehaviour
         {
             bool isActive = !statsPanel.activeSelf;
             statsPanel.SetActive(isActive);
-            if (isActive) RefreshCharacterStats();
+
+            if (isActive)
+            {
+                // ✅ Show stats of currently selected character, or first character
+                if (CameraBehaviour.Instance != null && CameraBehaviour.Instance.focussedTarget != null)
+                {
+                    CharacterStats selectedChar = CameraBehaviour.Instance.focussedTarget.GetComponent<CharacterStats>();
+                    if (selectedChar != null)
+                    {
+                        currentCharacter = selectedChar;
+                        UpdateCharacterStatsDisplay(currentCharacter);
+                    }
+                }
+                else
+                {
+                    
+                }
+            }
+        }
+    }
+
+    private void OnCharacterStatChanged(CharacterStats character)
+    {
+        // Only update if it's the currently displayed character
+        if (character == currentCharacter && statsPanel != null && statsPanel.activeSelf)
+        {
+            UpdateCharacterStatsDisplay(character);
         }
     }
 
     public void OnResumeButtonClicked() => SetPause(false);
-    
+
     public void OnQuitButtonClicked() => Application.Quit();
 }
