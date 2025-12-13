@@ -6,17 +6,14 @@ using UnityEngine.TextCore.Text;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
     [Header("Shared Stat")]
     [Range(0, 100)] public int hope = 50;
-
-    public static GameManager Instance { get; private set; }
 
     [SerializeField] private TimeManager timeManager;
 
     public List<GameObject> characters = new List<GameObject>();
-
     public List<ResourceData> resources = new List<ResourceData>();
-
     public List<CharacterStats> GetCharacterComponents()
     {
         List<CharacterStats> characterList = new List<CharacterStats>();
@@ -43,8 +40,8 @@ public class GameManager : MonoBehaviour
         }
         Instance = this;
 
-        
-        
+
+
 
         TryLoad();
     }
@@ -60,16 +57,11 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.F2))
+        if (Input.GetKeyDown(KeyCode.F2))
         {
             TrySave();
         }
 
-    }
-
-    public void ChangeHope(int delta)
-    {
-        hope = Mathf.Clamp(hope + delta, 0, 100);
     }
 
     public void TrySave()
@@ -79,19 +71,20 @@ public class GameManager : MonoBehaviour
         data.timeOfDay = timeManager.TimeOfDay;
         data.hope = hope;
 
-        foreach (CharacterStats character in GetCharacterComponents())
+        foreach (GameObject obj in characters)
         {
-            if (character == null) continue;
-
+            if (obj == null) continue;
+            CharacterStats stats = obj.GetComponent<CharacterStats>();
             data.characters.Add(new CharacterSaveData
             {
-                name = character.characterName,
-                position = character.transform.position,
-                health = character.health,
-                stability = character.stability,
-                learning = character.learning,
-                workReadiness = character.workReadiness,
-                trust = character.trust
+                name = obj.name,
+                position = obj.transform.position,
+
+                health = stats.health,
+                stability = stats.stability,
+                learning = stats.learning,
+                workReadiness = stats.workReadiness,
+                trust = stats.trust,
             });
         }
 
@@ -114,12 +107,13 @@ public class GameManager : MonoBehaviour
         GameSaveData data = SaveAndLoadSystem.Load();
         if (data == null)
             return;
-        PendingGameLoad.hope = data.hope;
+
         // Store everything in the pending buffer
         PendingGameLoad.day = data.currentDay;
         PendingGameLoad.timeOfDay = data.timeOfDay;
         PendingGameLoad.characters = data.characters;
         PendingGameLoad.resources = data.resources;
+        hope = data.hope;
 
         // Try immediate apply for anything that exists
         TryApplyPending();
@@ -140,22 +134,16 @@ public class GameManager : MonoBehaviour
             PendingGameLoad.timeOfDay = null;
         }
 
-        // Apply hope if it exists
-        if (PendingGameLoad.hope.HasValue)
-        {
-            hope = PendingGameLoad.hope.Value;
-            PendingGameLoad.hope = null;
-        }
-
         // Apply character positions if they exist
         if (PendingGameLoad.characters != null && characters != null)
         {
             foreach (var charData in PendingGameLoad.characters)
             {
-                // Find GameObject first
-                GameObject obj = characters.Find(c => c != null && c.name == charData.name);
+                GameObject obj = characters.Find(c => c.name == charData.name);
                 if (obj != null)
                 {
+                    obj.transform.position = charData.position;
+
                     // Get Character component
                     CharacterStats character = obj.GetComponent<CharacterStats>();
                     if (character != null)
@@ -168,6 +156,8 @@ public class GameManager : MonoBehaviour
                         character.workReadiness = charData.workReadiness;
                         character.trust = charData.trust;
                     }
+                    
+
                 }
             }
             PendingGameLoad.characters = null;
@@ -197,6 +187,4 @@ public static class PendingGameLoad
     public static float? timeOfDay;
     public static List<CharacterSaveData> characters;
     public static List<ResourceSaveData> resources;
-    public static int? hope;
-
 }
