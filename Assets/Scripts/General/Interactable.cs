@@ -150,6 +150,7 @@ public class Interactable : MonoBehaviour
     {
         if (interactionManager != null)
         {
+            Debug.Log($"Adding {name} to InteractionManager for allowed characters.");
             interactionManager.AddInteractable(allowedCharacters,this);
         }
     }
