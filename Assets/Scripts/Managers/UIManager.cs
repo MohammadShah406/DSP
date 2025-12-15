@@ -44,6 +44,7 @@ public class UIManager : MonoBehaviour
     public bool IsPaused { get; private set; }
 
     private CharacterStats currentCharacter;
+    private Transform lastFocussedTarget;
 
     private void Awake()
     {
@@ -95,15 +96,26 @@ public class UIManager : MonoBehaviour
     {
         // Toggle pause
         if (Input.GetKeyDown(KeyCode.Escape))
-            TogglePause();
+        {
+            if (CameraBehaviour.Instance != null && CameraBehaviour.Instance.focussedTarget != null)
+            {
+                // Character selected - let camera deselect it
+                // (Camera already has deselect logic on Escape via DeselectInput)
+                // Stats panel will auto-hide via HandleStatsDisplay()
+            }
+            else
+            {
+                // Nothing selected - open pause menu
+                TogglePause();
+            }
+        }
 
         // Toggle inventory
         if (Input.GetKeyDown(KeyCode.I))
             ToggleInventory();
 
         // Toggle character stats
-        if (Input.GetKeyDown(KeyCode.C))
-            ToggleStats();
+        HandleStatsDisplay();
 
         // ✅ AUTO-UPDATE: If stats panel is open, update with currently selected character
         if (statsPanel != null && statsPanel.activeSelf)
@@ -129,6 +141,42 @@ public class UIManager : MonoBehaviour
 
         // Update hope bar continuously
         UpdateHopeDisplay();
+    }
+
+    private void HandleStatsDisplay()
+    {
+        if (CameraBehaviour.Instance == null || statsPanel == null) return;
+
+        Transform focussedTarget = CameraBehaviour.Instance.focussedTarget;
+
+        // Check if selection changed
+        if (focussedTarget != lastFocussedTarget)
+        {
+            lastFocussedTarget = focussedTarget;
+
+            if (focussedTarget != null)
+            {
+                // Character selected - show stats
+                CharacterStats character = focussedTarget.GetComponent<CharacterStats>();
+                if (character != null)
+                {
+                    currentCharacter = character;
+                    statsPanel.SetActive(true);
+                    UpdateCharacterStatsDisplay(currentCharacter);
+                }
+            }
+            else
+            {
+                // No character selected - hide stats
+                statsPanel.SetActive(false);
+                currentCharacter = null;
+            }
+        }
+        else if (focussedTarget != null && currentCharacter != null && statsPanel.activeSelf)
+        {
+            // Character still selected - update stats (for live changes)
+            UpdateCharacterStatsDisplay(currentCharacter);
+        }
     }
 
     private void UpdateTimeDisplay(int hours, int minutes, int days)
@@ -221,7 +269,7 @@ public class UIManager : MonoBehaviour
 
             if (isActive)
             {
-                // ✅ Show stats of currently selected character, or first character
+                // Show stats of currently selected character, or first character
                 if (CameraBehaviour.Instance != null && CameraBehaviour.Instance.focussedTarget != null)
                 {
                     CharacterStats selectedChar = CameraBehaviour.Instance.focussedTarget.GetComponent<CharacterStats>();
