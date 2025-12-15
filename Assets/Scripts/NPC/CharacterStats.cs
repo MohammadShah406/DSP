@@ -103,10 +103,10 @@ public class CharacterStats : MonoBehaviour
     }
 
     // Helpers now use properties
-    public void ChangeHealth(int delta) => Health += delta;
-    public void ChangeStability(int delta) => Stability += delta;
-    public void ChangeLearning(int delta) => Learning += delta;
-    public void ChangeWorkReadiness(int delta) => WorkReadiness += delta;
-    public void ChangeTrust(int delta) => Trust += delta;
+    public void ChangeHealth(int change) => Health += change;
+    public void ChangeStability(int change) => Stability += change;
+    public void ChangeLearning(int change) => Learning += change;
+    public void ChangeWorkReadiness(int change) => WorkReadiness += change;
+    public void ChangeTrust(int change) => Trust += change;
 
 }
