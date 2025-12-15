@@ -1,16 +1,37 @@
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.TextCore.Text;
 
 public class Interactable : MonoBehaviour
 {
+    [Header("Outline Controller")]
     private OutlineController outline;
+
+    [Header("Singleton Reference")]
+    [SerializeField] private TimeManager timeManager;
+    [SerializeField] private InteractionManager interactionManager; 
+
+    [Header("Time Restrictions")]
+    [SerializeField] private bool timeRestricted = false;
+    [SerializeField] private int afterHour = 10;
+    [SerializeField] private int afterMinutes = 0;
+    [SerializeField] private bool canInteract = true;
+
+    [Header("Who can Interact")]
+    [SerializeField] private List<Transform> allowedCharacters;
 
     public enum InteractionType
     {
         None,
         Harvest,
-        Cook
+        Cook,
+        Scavenge,
+        Rest,
+        Talk,
+        Paint,
+        Watering,
     }
 
     [Header("Runtime State (Read Only)")]
@@ -34,6 +55,27 @@ public class Interactable : MonoBehaviour
                 Debug.LogWarning($"Interactable {name} has no OutlineController!");
             }
         }   
+    }
+
+   
+
+    private void Start()
+    {
+        timeManager = TimeManager.Instance;
+        interactionManager = InteractionManager.Instance;
+    }
+
+    private void Update()
+    {
+        if (timeRestricted && !canInteract && timeManager != null)
+        {
+            if (timeManager.hours >= afterHour && timeManager.minutes >= afterMinutes)
+            {
+                canInteract = true;
+                Debug.Log($"{name} is now able to be interacted with after time check.");
+                AddToInteractionManager();
+            }
+        }
     }
 
     /// <summary>
@@ -102,5 +144,13 @@ public class Interactable : MonoBehaviour
     public void InteractComplete()
     {
         Debug.Log($"{name} interaction complete.");
+    }
+
+    public void AddToInteractionManager()
+    {
+        if (interactionManager != null)
+        {
+            interactionManager.AddInteractable(allowedCharacters,this);
+        }
     }
 }

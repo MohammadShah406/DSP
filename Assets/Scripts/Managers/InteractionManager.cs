@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -117,6 +118,18 @@ public class InteractionManager : MonoBehaviour
     {
         var set = GetSetForCharacter(character);
         return set != null && set.interactables.Contains(interactable.GetComponent<Interactable>());
+    }
+
+    public void AddInteractable(List<Transform> characters, Interactable interactable)
+    {
+        foreach (var character in characters)
+        {
+            var set = GetSetForCharacter(character);
+            if (set != null && !set.interactables.Contains(interactable))
+            {
+                set.interactables.Add(interactable);
+            }
+        }
     }
 
 }
