@@ -1279,6 +1279,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1858440573}
     m_Modifications:
+    - target: {fileID: 4358066015284002512, guid: b73a2c3460b671241ac62c619f8e8707, type: 3}
+      propertyPath: sets.Array.data[0].character
+      value: 
+      objectReference: {fileID: 791676597}
+    - target: {fileID: 4358066015284002512, guid: b73a2c3460b671241ac62c619f8e8707, type: 3}
+      propertyPath: sets.Array.data[1].character
+      value: 
+      objectReference: {fileID: 372416830}
+    - target: {fileID: 4358066015284002512, guid: b73a2c3460b671241ac62c619f8e8707, type: 3}
+      propertyPath: sets.Array.data[0].interactables.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4358066015284002512, guid: b73a2c3460b671241ac62c619f8e8707, type: 3}
+      propertyPath: sets.Array.data[1].interactables.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4451387613728155949, guid: b73a2c3460b671241ac62c619f8e8707, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2184,6 +2200,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3514590241281805240, guid: 0897a8856fa0bae47a8083cf9b4c9979, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4791414136799898887, guid: 0897a8856fa0bae47a8083cf9b4c9979, type: 3}
+      propertyPath: workReadiness
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -6366,6 +6386,10 @@ PrefabInstance:
       propertyPath: defaultTarget
       value: 
       objectReference: {fileID: 1854896166}
+    - target: {fileID: 8515405428228870643, guid: 1902d8a4b37ae7a44a66d3df5e6e1742, type: 3}
+      propertyPath: allowEdgeScroll
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8515405428228870643, guid: 1902d8a4b37ae7a44a66d3df5e6e1742, type: 3}
       propertyPath: mapBounds.width
       value: 60

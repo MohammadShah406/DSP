@@ -144,6 +144,7 @@ public class Interactable : MonoBehaviour
     public void InteractComplete()
     {
         Debug.Log($"{name} interaction complete.");
+        IncreaseStats();
     }
 
     public void AddToInteractionManager()
@@ -153,5 +154,40 @@ public class Interactable : MonoBehaviour
             Debug.Log($"Adding {name} to InteractionManager for allowed characters.");
             interactionManager.AddInteractable(allowedCharacters,this);
         }
+    }
+
+    public void IncreaseStats()
+    {
+        var characterStats = interactedBy.GetComponent<CharacterStats>();
+        switch (interactionType)
+        {
+            case Interactable.InteractionType.Harvest:
+                Debug.Log("Harvest interaction completed.");
+                break;
+            case Interactable.InteractionType.Cook:
+                characterStats.ChangeWorkReadiness(5);
+                Debug.Log("Cook interaction completed.");
+                break;
+            case Interactable.InteractionType.Scavenge:
+                Debug.Log("Scavenge interaction completed.");
+                break;
+            case Interactable.InteractionType.Rest:
+                Debug.Log("Rest interaction completed.");
+                break;
+            case Interactable.InteractionType.Talk:
+                Debug.Log("Talk interaction completed.");
+                break;
+            case Interactable.InteractionType.Paint:
+                Debug.Log("Paint interaction completed.");
+                break;
+            case Interactable.InteractionType.Watering:
+                Debug.Log("Watering interaction completed.");
+                break;
+            default:
+                // Default
+                break;
+        }
+
+        
     }
 }
