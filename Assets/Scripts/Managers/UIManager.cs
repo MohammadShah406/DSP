@@ -296,7 +296,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void OnResumeButtonClicked() => SetPause(false);
+    public void OnResumeButtonClicked()
+    {
+        Debug.Log("Resuming game from pause menu.");
+        SetPause(false);
+       
+    }
 
     public void OnQuitButtonClicked() => Application.Quit();
 }
