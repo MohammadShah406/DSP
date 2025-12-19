@@ -85,6 +85,9 @@ public class GameManager : MonoBehaviour
                 learning = stats.learning,
                 workReadiness = stats.workReadiness,
                 trust = stats.trust,
+                nutrition = stats.nutrition,
+                hygiene = stats.hygiene,
+                energy = stats.energy,
             });
         }
 
@@ -150,11 +153,14 @@ public class GameManager : MonoBehaviour
                     {
                         character.name = charData.name;
                         character.transform.position = charData.position;
-                        character.health = charData.health;
-                        character.stability = charData.stability;
-                        character.learning = charData.learning;
-                        character.workReadiness = charData.workReadiness;
-                        character.trust = charData.trust;
+                        character.Health = charData.health;
+                        character.Stability = charData.stability;
+                        character.Learning = charData.learning;
+                        character.WorkReadiness = charData.workReadiness;
+                        character.Trust = charData.trust;
+                        character.Nutrition = charData.nutrition;
+                        character.Hygiene = charData.hygiene;
+                        character.Energy = charData.energy;
                     }
                     
 

@@ -18,9 +18,9 @@ public class CharacterStats : MonoBehaviour
     [Range(0, 100)]public int learning = 10;
     [Range(0, 100)]public int workReadiness = 100;
     [Range(0, 100)]public int trust = 50;
-    [Range(0, 100)]public int hunger = 50;
-    [Range(0, 100)]public int thurst = 50;
-    [Range(0, 100)]public int sleep = 50;
+    [Range(0, 100)]public int nutrition = 50;
+    [Range(0, 100)]public int hygiene = 50;
+    [Range(0, 100)]public int energy = 50;
     public int drainRatePerMinute = 10;
     private float _drainIntervalInSeconds = 60f;
 
@@ -41,9 +41,9 @@ public class CharacterStats : MonoBehaviour
         {
             yield return new WaitForSeconds(_drainIntervalInSeconds);
 
-            ChangeHunger(drainRatePerMinute);
-            ChangeSleep(drainRatePerMinute);
-            ChangeThurst(drainRatePerMinute);
+            ChangeNutrition(drainRatePerMinute);
+            ChangeEnergy(drainRatePerMinute);
+            ChangeHygiene(drainRatePerMinute);
         }
     }
 
@@ -124,40 +124,40 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
-    public int Hunger
+    public int Nutrition
     {
-        get => hunger;
+        get => nutrition;
         set
         {
-            if (hunger != value)
+            if (nutrition != value)
             {
-                hunger = Mathf.Clamp(value, 0, 100);
+                nutrition = Mathf.Clamp(value, 0, 100);
                 OnAnyStatChanged?.Invoke(this);
             }
         }
     }
 
-    public int Thurst
+    public int Hygiene
     {
-        get => thurst;
+        get => hygiene;
         set
         {
-            if (thurst != value)
+            if (hygiene != value)
             {
-                thurst = Mathf.Clamp(value, 0, 100);
+                hygiene = Mathf.Clamp(value, 0, 100);
                 OnAnyStatChanged?.Invoke(this);
             }
         }
     }
 
-    public int Sleep
+    public int Energy
     {
-        get => sleep;
+        get => energy;
         set
         {
-            if (sleep != value)
+            if (energy != value)
             {
-                sleep = Mathf.Clamp(value, 0, 100);
+                energy = Mathf.Clamp(value, 0, 100);
                 OnAnyStatChanged?.Invoke(this);
             }
         }
@@ -169,8 +169,8 @@ public class CharacterStats : MonoBehaviour
     public void ChangeLearning(int change) => Learning += change;
     public void ChangeWorkReadiness(int change) => WorkReadiness += change;
     public void ChangeTrust(int change) => Trust += change;
-    public void ChangeHunger(int change) => Hunger += change;
-    public void ChangeThurst(int change) => Thurst += change;
-    public void ChangeSleep(int change) => Sleep += change;
+    public void ChangeNutrition(int change) => Nutrition += change;
+    public void ChangeHygiene(int change) => Hygiene += change;
+    public void ChangeEnergy(int change) => Energy += change;
 
 }

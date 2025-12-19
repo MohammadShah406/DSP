@@ -17,7 +17,7 @@ public class UIManager : MonoBehaviour
     [Header("HUD Elements")]
     public TextMeshProUGUI timeText;
     public TextMeshProUGUI dayText;
-    public Image hopeBar;
+    public Slider hopeSlider;
     public TextMeshProUGUI hopeText;
 
     [Header("Character Stats Display")]
@@ -36,6 +36,12 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI workReadinessPercentText;
     public Slider trustSlider;
     public TextMeshProUGUI trustPercentText;
+    public Slider nutritionSlider;
+    public TextMeshProUGUI nutritionPercentText;
+    public Slider hygieneSlider;
+    public TextMeshProUGUI hygienePercentText;
+    public Slider energySlider;
+    public TextMeshProUGUI energyPercentText;
 
     [Header("Inventory Display")]
     public Transform inventoryGrid;
@@ -78,6 +84,9 @@ public class UIManager : MonoBehaviour
         if (learningSlider != null) learningSlider.maxValue = 100;
         if (workReadinessSlider != null) workReadinessSlider.maxValue = 100;
         if (trustSlider != null) trustSlider.maxValue = 100;
+        if (nutritionSlider != null) nutritionSlider.maxValue = 100;
+        if (hygieneSlider != null) hygieneSlider.maxValue = 100;
+        if (energySlider != null) energySlider.maxValue = 100;
 
         CharacterStats.OnAnyStatChanged += OnCharacterStatChanged;
     }
@@ -192,11 +201,14 @@ public class UIManager : MonoBehaviour
     {
         if (GameManager.Instance == null) return;
 
-        if (hopeBar != null)
-            hopeBar.fillAmount = GameManager.Instance.hope / 100f;
+        float hopeValue = GameManager.Instance.hope;
+        float normalizedHope = hopeValue / 100f;
+
+        if (hopeSlider != null)
+            hopeSlider.value = normalizedHope;
 
         if (hopeText != null)
-            hopeText.text = $"Hope: {GameManager.Instance.hope}";
+            hopeText.text = $"Hope: {hopeValue}%";
     }
 
     private void UpdateCharacterStatsDisplay(CharacterStats character)
@@ -239,6 +251,24 @@ public class UIManager : MonoBehaviour
             trustSlider.value = character.trust;
         if (trustPercentText != null)
             trustPercentText.text = $"{character.trust}%";
+
+        // Update Nutrition
+        if (nutritionSlider != null)
+            nutritionSlider.value = character.nutrition;
+        if (nutritionPercentText != null)
+            nutritionPercentText.text = $"{character.nutrition}%";
+
+        // Update Hygiene
+        if (hygieneSlider != null)
+            hygieneSlider.value = character.hygiene;
+        if (hygienePercentText != null)
+            hygienePercentText.text = $"{character.hygiene}%";
+
+        // Update Energy
+        if (energySlider != null)
+            energySlider.value = character.energy;
+        if (energyPercentText != null)
+            energyPercentText.text = $"{character.energy}%";
     }
 
     public void SetPause(bool pause)

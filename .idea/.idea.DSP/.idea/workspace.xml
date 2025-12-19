@@ -6,23 +6,23 @@
   <component name="ChangeListManager">
     <list default="true" id="31cf0be9-8dc4-40e8-bd71-14784c1b8606" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.DSP/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DSP/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/20251120_1646_Umeed_Multilingual_Logo_simple_compose_01kah2gdxteftt6n8f7n2chhpn.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/20251120_1646_Umeed_Multilingual_Logo_simple_compose_01kah2gdxteftt6n8f7n2chhpn.png.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Main Menu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Main Menu.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/AssetArt/UI Toolkit/Prefabs/Health.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/AssetArt/UI Toolkit/Prefabs/Health.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/AssetArt/UI Toolkit/Prefabs/Max Health.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/AssetArt/UI Toolkit/Prefabs/Max Health.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/AssetArt/UI Toolkit/Prefabs/Max Stamina.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/AssetArt/UI Toolkit/Prefabs/Max Stamina.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/AssetArt/UI Toolkit/Prefabs/Stamina.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/AssetArt/UI Toolkit/Prefabs/Stamina.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/UI/UIManager.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/UI/UIManager.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Nandan.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Nandan.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/GameManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/UIManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/UIManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/NPC/CharacterStats.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/NPC/CharacterStats.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIscripts/ButtonGradient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIscripts/ButtonGradient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/SaveStructure/SaveDataClasses.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/SaveStructure/SaveDataClasses.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Bangers SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Bangers SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/UI Toolkit/Prefabs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/UI Toolkit/Prefabs/Health.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/UI Toolkit/Prefabs/Health.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/UI Toolkit/Prefabs/Max Health.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/UI Toolkit/Prefabs/Max Health.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/UI Toolkit/Prefabs/Max Stamina.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/UI Toolkit/Prefabs/Max Stamina.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/UI Toolkit/Prefabs/Stamina.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/UI Toolkit/Prefabs/Stamina.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,7 +30,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="45" />
+    <option name="cachedIndexableFilesCount" value="11" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -49,18 +49,25 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/MohammadShah406/DSP.git&quot;,
-    &quot;accountId&quot;: &quot;99d01638-3636-49e8-a7ba-4a9778674e0a&quot;
+    &quot;accountId&quot;: &quot;a0d5f069-972e-46d7-a10a-6dbf3ff90e2c&quot;
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/AssetArt/UI Icons/20251120_1646_Umeed_Multilingual_Logo_simple_compose_01kah2gdxteftt6n8f7n2chhpn.png.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/AssetArt/UI Icons/Exit Icon.png.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scenes/Main Menu.unity" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scenes/Nandan.unity" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/General/CameraBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/GameManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/InteractionManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/UIManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/Unity Projects/DSP/Assets/Scripts/Managers/UIManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Unity Projects/DSP/Assets/Scripts/Managers/UIManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Unity Projects/DSP/Assets/Scripts/Managers/UIManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Unity Projects/DSP/Assets/Scripts/Managers/UIManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/NPC/CharacterStats.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UIscripts/ButtonGradient.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UIscripts/RoundCorners.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
@@ -76,6 +83,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
@@ -148,8 +156,24 @@
       <workItem from="1765876459306" duration="439000" />
       <workItem from="1765879457564" duration="1090000" />
       <workItem from="1765881518926" duration="477000" />
-      <workItem from="1765882030283" duration="366000" />
+      <workItem from="1765882030283" duration="2783000" />
+      <workItem from="1765895406039" duration="81000" />
+      <workItem from="1765895502447" duration="112000" />
+      <workItem from="1765984607638" duration="669000" />
+      <workItem from="1765985398643" duration="347000" />
+      <workItem from="1765985764712" duration="827000" />
+      <workItem from="1766070839638" duration="4603000" />
+      <workItem from="1766162729327" duration="3734000" />
     </task>
+    <task id="LOCAL-00001" summary="Enhance UI and character stats management with new features and improvements">
+      <option name="closed" value="true" />
+      <created>1765882429484</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1765882429485</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -195,6 +219,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Enhance UI and character stats management with new features and improvements" />
+    <option name="LAST_COMMIT_MESSAGE" value="Enhance UI and character stats management with new features and improvements" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -22,6 +22,9 @@ public class CharacterSaveData
     public int learning;
     public int workReadiness;
     public int trust;
+    public int nutrition;
+    public int hygiene;
+    public int energy;
     public Vector3 position;
 }
 
