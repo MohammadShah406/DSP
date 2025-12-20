@@ -8,6 +8,8 @@ public class GameSaveData
     public int currentDay;
     public float timeOfDay;
     public int hope;
+    public int upgradesDone;
+    public int totalUpgrades;
 
     public List<CharacterSaveData> characters = new();
     public List<ResourceSaveData> resources = new();
@@ -17,7 +19,8 @@ public class GameSaveData
 public class CharacterSaveData
 {
     public string name;
-    public int health;
+    public string iconName;
+    public float health;
     public int stability;
     public int learning;
     public int workReadiness;
@@ -25,12 +28,14 @@ public class CharacterSaveData
     public int nutrition;
     public int hygiene;
     public int energy;
+    public string primaryAttribute;
+    public float growthRate;
     public Vector3 position;
 }
 
 [Serializable]
 public class ResourceSaveData
 {
-    public string id;
+    public string id; // This is ItemData.itemName
     public int quantity;
 }

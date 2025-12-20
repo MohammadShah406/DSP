@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -24,6 +25,8 @@ public class UIManager : MonoBehaviour
     public Image characterPicture;
     public TextMeshProUGUI characterNameText;
     public TextMeshProUGUI characterDescriptionText;
+    public TextMeshProUGUI primaryAttributeText;
+    public TextMeshProUGUI growthRateText;
 
     [Header("Stat Sliders")]
     public Slider healthSlider;
@@ -126,7 +129,7 @@ public class UIManager : MonoBehaviour
         // Toggle character stats
         HandleStatsDisplay();
 
-        // ✅ AUTO-UPDATE: If stats panel is open, update with currently selected character
+        //  If stats panel is open, update with currently selected character
         if (statsPanel != null && statsPanel.activeSelf)
         {
             // Get currently selected character from camera
@@ -219,8 +222,28 @@ public class UIManager : MonoBehaviour
         if (characterNameText != null)
             characterNameText.text = character.characterName;
 
+        if (characterPicture != null)
+        {
+            if (character.characterIcon != null)
+            {
+                characterPicture.sprite = character.characterIcon;
+                characterPicture.enabled = true;
+            }
+            else
+            {
+                // Optionally hide or set a default if no icon
+                characterPicture.enabled = false;
+            }
+        }
+
         if (characterDescriptionText != null)
             characterDescriptionText.text = character.description ?? "Refugee";
+
+        if (primaryAttributeText != null)
+            primaryAttributeText.text = $"Primary: {character.primaryAttribute}";
+
+        if (growthRateText != null)
+            growthRateText.text = $"Growth Rate: {character.growthRate:F1}x";
 
         // Update Health
         if (healthSlider != null)
@@ -287,6 +310,46 @@ public class UIManager : MonoBehaviour
         {
             bool isActive = !inventoryPanel.activeSelf;
             inventoryPanel.SetActive(isActive);
+            if (isActive)
+            {
+                UpdateInventoryDisplay();
+            }
+        }
+    }
+
+    public void UpdateInventoryDisplay()
+    {
+        if (inventoryGrid == null || GameManager.Instance == null) return;
+
+        // Clear existing items
+        foreach (Transform child in inventoryGrid)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // Spawn new items from GameManager resources
+        foreach (var res in GameManager.Instance.resources)
+        {
+            if (res.quantity <= 0) continue;
+
+            GameObject itemObj = Instantiate(inventoryItemPrefab, inventoryGrid);
+            ItemData data = GameManager.Instance.GetItemData(res.resourceName);
+
+            // Configure the UI element
+            // Assuming the prefab has a script or we set components directly
+            var text = itemObj.GetComponentInChildren<TextMeshProUGUI>();
+            var image = itemObj.GetComponentsInChildren<Image>().FirstOrDefault(img => img.gameObject != itemObj);
+
+            if (text != null)
+            {
+                string typeStr = data != null ? $" [{data.itemType}]" : "";
+                text.text = $"{res.resourceName}{typeStr}: {res.quantity}";
+            }
+
+            if (image != null && data != null && data.icon != null)
+            {
+                image.sprite = data.icon;
+            }
         }
     }
 
