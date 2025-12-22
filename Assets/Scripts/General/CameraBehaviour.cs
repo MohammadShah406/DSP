@@ -2,7 +2,7 @@
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.TextCore.Text;
+using UnityEngine.EventSystems;
 
 public class CameraBehaviour : MonoBehaviour
 {
@@ -149,6 +149,12 @@ public class CameraBehaviour : MonoBehaviour
 
     private void HandleClick()
     {
+        // Block interaction if mouse is over UI
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         if (InputManager.Instance.SelectInput)
         {
             bool isDoubleClick = false;
@@ -472,6 +478,16 @@ public class CameraBehaviour : MonoBehaviour
         // Combine scroll wheel and keys
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         float keyInput = InputManager.Instance.ZoomInput;
+
+        // Block scroll zoom if mouse is over TaskUI or any UI element
+        if (TaskUI.IsMouseOver || (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()))
+        {
+            scroll = 0f;
+        }
+        else
+        {
+            // Debug.Log("[DEBUG_LOG] Zooming possible, scroll: " + scroll);
+        }
 
         float deltaZ = (scroll + keyInput * Time.deltaTime) * zoomSpeed;
 

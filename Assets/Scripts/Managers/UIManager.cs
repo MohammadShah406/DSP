@@ -14,6 +14,8 @@ public class UIManager : MonoBehaviour
     public GameObject pausePanel;
     public GameObject statsPanel;
     public GameObject inventoryPanel;
+    public GameObject taskPanel;
+    public GameObject topStatsHUD; // Reference to the new HUD top stats panel
 
     [Header("HUD Elements")]
     public TextMeshProUGUI timeText;
@@ -70,6 +72,10 @@ public class UIManager : MonoBehaviour
             statsPanel.SetActive(false);
         if (inventoryPanel != null)
             inventoryPanel.SetActive(false);
+        if (taskPanel != null)
+            taskPanel.SetActive(true); // Task panel usually visible by default in HUD or togglable
+        if (topStatsHUD != null)
+            topStatsHUD.SetActive(false); // HUD stats usually hidden until character selected
     }
 
     private void Start()
@@ -174,6 +180,7 @@ public class UIManager : MonoBehaviour
                 {
                     currentCharacter = character;
                     statsPanel.SetActive(true);
+                    if (topStatsHUD != null) topStatsHUD.SetActive(true);
                     UpdateCharacterStatsDisplay(currentCharacter);
                 }
             }
@@ -181,6 +188,7 @@ public class UIManager : MonoBehaviour
             {
                 // No character selected - hide stats
                 statsPanel.SetActive(false);
+                if (topStatsHUD != null) topStatsHUD.SetActive(false);
                 currentCharacter = null;
             }
         }

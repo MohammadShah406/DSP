@@ -42,6 +42,7 @@ public class Interactable : MonoBehaviour
 
     [Header("Interaction Settings")]
     public InteractionType interactionType = InteractionType.None;
+    public string taskRequirement;
 
 
     private void Awake()
@@ -144,6 +145,10 @@ public class Interactable : MonoBehaviour
     public void InteractComplete()
     {
         Debug.Log($"{name} interaction complete.");
+        if (TaskManager.Instance != null && !string.IsNullOrEmpty(taskRequirement))
+        {
+            TaskManager.Instance.CompleteTaskByRequirement(taskRequirement);
+        }
         IncreaseStats();
     }
 
