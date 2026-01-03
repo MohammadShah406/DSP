@@ -27,8 +27,6 @@ public class UIManager : MonoBehaviour
     public Image characterPicture;
     public TextMeshProUGUI characterNameText;
     public TextMeshProUGUI characterDescriptionText;
-    public TextMeshProUGUI primaryAttributeText;
-    public TextMeshProUGUI growthRateText;
 
     [Header("Stat Sliders")]
     public Slider healthSlider;
@@ -260,7 +258,8 @@ public class UIManager : MonoBehaviour
         if (character == null) return;
 
         // Update character info
-        characterNameText.text = character.characterName;
+        if (characterNameText != null)
+            characterNameText.text = character.characterName;
 
         if (characterPicture != null)
         {
@@ -276,9 +275,8 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        characterDescriptionText.text = character.description ?? "Refugee";
-        primaryAttributeText.text = $"Primary: {character.primaryAttribute}";
-        growthRateText.text = $"Growth Rate: {character.growthRate:F1}x";
+        if (characterDescriptionText != null)
+            characterDescriptionText.text = character.description ?? "Refugee";
 
         // Update Health
         if (healthSlider != null)

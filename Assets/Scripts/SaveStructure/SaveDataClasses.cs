@@ -20,7 +20,7 @@ public class CharacterSaveData
 {
     public string name;
     public string iconName;
-    public float health;
+    public int health;
     public int stability;
     public int learning;
     public int workReadiness;

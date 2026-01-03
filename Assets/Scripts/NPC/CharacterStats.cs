@@ -30,7 +30,7 @@ public class CharacterStats : MonoBehaviour
     public float growthRate = 1.0f;
 
     [Header("Individual Stats")]
-    [Range(0, 100)] [SerializeField] private float health = 100;
+    [Range(0, 100)] [SerializeField] private int health = 100;
     [Range(0, 100)] [SerializeField] private int stability = 100;
     [Range(0, 100)] [SerializeField] private int learning = 10;
     [Range(0, 100)] [SerializeField] private int workReadiness = 100;
@@ -74,10 +74,9 @@ public class CharacterStats : MonoBehaviour
     {
         // Formula: Health = Health + (Avg - Base) * M
         // Avg = average of h,e,n (hygiene, energy, nutrition)
-        float avg = (nutrition + hygiene + energy) / 3f;
+        float avg = (Nutrition + Hygiene + Energy) / 3f;
         
-        health = Mathf.Clamp(health + (avg - healthBase) * healthMultiplier, 0f, 100f);
-        OnAnyStatChanged?.Invoke(this);
+        Health += Mathf.RoundToInt((avg - healthBase) * healthMultiplier);
     }
 
     private void OnDestroy()
@@ -98,12 +97,12 @@ public class CharacterStats : MonoBehaviour
     // Properties that notify when changed
     public int Health
     {
-        get => Mathf.RoundToInt(health);
+        get => health;
         set
         {
-            if (!Mathf.Approximately(health, value))
+            if (health != value)
             {
-                health = Mathf.Clamp(value, 0f, 100f);
+                health = Mathf.Clamp(value, 0, 100);
                 OnAnyStatChanged?.Invoke(this);
             }
         }
