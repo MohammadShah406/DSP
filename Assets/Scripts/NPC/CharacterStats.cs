@@ -30,14 +30,14 @@ public class CharacterStats : MonoBehaviour
     public float growthRate = 1.0f;
 
     [Header("Individual Stats")]
-    [Range(0, 100)]public float health = 100;
-    [Range(0, 100)]public int stability = 100;
-    [Range(0, 100)]public int learning = 10;
-    [Range(0, 100)]public int workReadiness = 100;
-    [Range(0, 100)]public int trust = 50;
-    [Range(0, 100)]public int nutrition = 50;
-    [Range(0, 100)]public int hygiene = 50;
-    [Range(0, 100)]public int energy = 50;
+    [Range(0, 100)] [SerializeField] private float health = 100;
+    [Range(0, 100)] [SerializeField] private int stability = 100;
+    [Range(0, 100)] [SerializeField] private int learning = 10;
+    [Range(0, 100)] [SerializeField] private int workReadiness = 100;
+    [Range(0, 100)] [SerializeField] private int trust = 50;
+    [Range(0, 100)] [SerializeField] private int nutrition = 50;
+    [Range(0, 100)] [SerializeField] private int hygiene = 50;
+    [Range(0, 100)] [SerializeField] private int energy = 50;
 
     [Header("Hourly Decay Rates")]
     public int nutritionDecayRate = 5;

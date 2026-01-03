@@ -157,14 +157,14 @@ public class GameManager : MonoBehaviour
                 iconName = stats.characterIcon != null ? stats.characterIcon.name : "",
                 position = obj.transform.position,
 
-                health = stats.health,
-                stability = stats.stability,
-                learning = stats.learning,
-                workReadiness = stats.workReadiness,
-                trust = stats.trust,
-                nutrition = stats.nutrition,
-                hygiene = stats.hygiene,
-                energy = stats.energy,
+                health = stats.Health,
+                stability = stats.Stability,
+                learning = stats.Learning,
+                workReadiness = stats.WorkReadiness,
+                trust = stats.Trust,
+                nutrition = stats.Nutrition,
+                hygiene = stats.Hygiene,
+                energy = stats.Energy,
                 primaryAttribute = stats.primaryAttribute.ToString(),
                 growthRate = stats.growthRate,
             });
@@ -237,7 +237,7 @@ public class GameManager : MonoBehaviour
                         // as loading sprites by name from Resources at runtime is specific to project structure.
                         // We save it for metadata purposes, but won't force a load if not using Resources folder.
                         character.transform.position = charData.position;
-                        character.health = charData.health;
+                        character.Health = Mathf.RoundToInt(charData.health);
                         character.Stability = charData.stability;
                         character.Learning = charData.learning;
                         character.WorkReadiness = charData.workReadiness;

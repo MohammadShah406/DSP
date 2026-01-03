@@ -282,51 +282,51 @@ public class UIManager : MonoBehaviour
 
         // Update Health
         if (healthSlider != null)
-            healthSlider.value = character.health;
+            healthSlider.value = character.Health;
         if (healthPercentText != null)
-            healthPercentText.text = $"{character.health}%";
+            healthPercentText.text = $"{character.Health}%";
 
         // Update Stability
         if (stabilitySlider != null)
-            stabilitySlider.value = character.stability;
+            stabilitySlider.value = character.Stability;
         if (stabilityPercentText != null)
-            stabilityPercentText.text = $"{character.stability}%";
+            stabilityPercentText.text = $"{character.Stability}%";
 
         // Update Learning
         if (learningSlider != null)
-            learningSlider.value = character.learning;
+            learningSlider.value = character.Learning;
         if (learningPercentText != null)
-            learningPercentText.text = $"{character.learning}%";
+            learningPercentText.text = $"{character.Learning}%";
 
         // Update Work Readiness
         if (workReadinessSlider != null)
-            workReadinessSlider.value = character.workReadiness;
+            workReadinessSlider.value = character.WorkReadiness;
         if (workReadinessPercentText != null)
-            workReadinessPercentText.text = $"{character.workReadiness}%";
+            workReadinessPercentText.text = $"{character.WorkReadiness}%";
 
         // Update Trust
         if (trustSlider != null)
-            trustSlider.value = character.trust;
+            trustSlider.value = character.Trust;
         if (trustPercentText != null)
-            trustPercentText.text = $"{character.trust}%";
+            trustPercentText.text = $"{character.Trust}%";
 
         // Update Nutrition
         if (nutritionSlider != null)
-            nutritionSlider.value = character.nutrition;
+            nutritionSlider.value = character.Nutrition;
         if (nutritionPercentText != null)
-            nutritionPercentText.text = $"{character.nutrition}%";
+            nutritionPercentText.text = $"{character.Nutrition}%";
 
         // Update Hygiene
         if (hygieneSlider != null)
-            hygieneSlider.value = character.hygiene;
+            hygieneSlider.value = character.Hygiene;
         if (hygienePercentText != null)
-            hygienePercentText.text = $"{character.hygiene}%";
+            hygienePercentText.text = $"{character.Hygiene}%";
 
         // Update Energy
         if (energySlider != null)
-            energySlider.value = character.energy;
+            energySlider.value = character.Energy;
         if (energyPercentText != null)
-            energyPercentText.text = $"{character.energy}%";
+            energyPercentText.text = $"{character.Energy}%";
     }
 
     public void SetPause(bool pause)
