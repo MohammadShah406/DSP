@@ -52,6 +52,13 @@ public class UIManager : MonoBehaviour
     public Transform inventoryGrid;
     public GameObject inventoryItemPrefab;
 
+    [Header("Item Detail Panel")]
+    public GameObject itemDetailPanel;
+    public TextMeshProUGUI detailItemNameText;
+    public Image detailItemIcon;
+    public TextMeshProUGUI detailItemQuantityText;
+    public TextMeshProUGUI detailItemDescriptionText;
+
     public bool IsPaused { get; private set; }
 
     private CharacterStats currentCharacter;
@@ -66,20 +73,17 @@ public class UIManager : MonoBehaviour
         }
         Instance = this;
 
-        if (pausePanel != null)
-            pausePanel.SetActive(false);
-        if (statsPanel != null)
-            statsPanel.SetActive(false);
-        if (inventoryPanel != null)
-            inventoryPanel.SetActive(false);
-        if (taskPanel != null)
-            taskPanel.SetActive(true); // Task panel usually visible by default in HUD or togglable
-        if (topStatsHUD != null)
-            topStatsHUD.SetActive(false); // HUD stats usually hidden until character selected
+        if (pausePanel != null) pausePanel.SetActive(false);
+        if (statsPanel != null) statsPanel.SetActive(false);
+        if (inventoryPanel != null) inventoryPanel.SetActive(false);
+        if (itemDetailPanel != null) itemDetailPanel.SetActive(false);
+        if (taskPanel != null) taskPanel.SetActive(true);
+        if (topStatsHUD != null) topStatsHUD.SetActive(false);
     }
 
     private void Start()
     {
+        SetupInventoryGrid();
         // Subscribe to events
         if (TimeManager.Instance != null)
         {
@@ -98,6 +102,11 @@ public class UIManager : MonoBehaviour
         if (energySlider != null) energySlider.maxValue = 100;
 
         CharacterStats.OnAnyStatChanged += OnCharacterStatChanged;
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnResourcesChanged += UpdateInventoryDisplay;
+        }
     }
 
     private void OnDestroy()
@@ -108,6 +117,11 @@ public class UIManager : MonoBehaviour
         }
 
         CharacterStats.OnAnyStatChanged -= OnCharacterStatChanged;
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnResourcesChanged -= UpdateInventoryDisplay;
+        }
     }
 
     private void Update()
@@ -199,13 +213,32 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void SetupInventoryGrid()
+    {
+        if (inventoryGrid == null) return;
+
+        // Ensure we have a GridLayoutGroup for "side-by-side then vertical"
+        GridLayoutGroup grid = inventoryGrid.GetComponent<GridLayoutGroup>();
+        if (grid == null) grid = inventoryGrid.gameObject.AddComponent<GridLayoutGroup>();
+
+        grid.cellSize = new Vector2(100, 100); // Default size, user can adjust in Inspector
+        grid.spacing = new Vector2(10, 10);
+        grid.startCorner = GridLayoutGroup.Corner.UpperLeft;
+        grid.startAxis = GridLayoutGroup.Axis.Horizontal; // Side-by-side first
+        grid.childAlignment = TextAnchor.UpperLeft;
+        grid.constraintCount = 0; // Flexible based on width
+
+        // Ensure we have a ContentSizeFitter so the grid grows to fit items
+        ContentSizeFitter fitter = inventoryGrid.GetComponent<ContentSizeFitter>();
+        if (fitter == null) fitter = inventoryGrid.gameObject.AddComponent<ContentSizeFitter>();
+        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+    }
+
     private void UpdateTimeDisplay(int hours, int minutes, int days)
     {
-        if (timeText != null)
-            timeText.text = $"{hours:00}:{minutes:00}";
-
-        if (dayText != null)
-            dayText.text = $"Day {days}";
+        timeText.text = $"{hours:00}:{minutes:00}";
+        dayText.text = $"Day {days}";
     }
 
     private void UpdateHopeDisplay()
@@ -227,8 +260,7 @@ public class UIManager : MonoBehaviour
         if (character == null) return;
 
         // Update character info
-        if (characterNameText != null)
-            characterNameText.text = character.characterName;
+        characterNameText.text = character.characterName;
 
         if (characterPicture != null)
         {
@@ -244,14 +276,9 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        if (characterDescriptionText != null)
-            characterDescriptionText.text = character.description ?? "Refugee";
-
-        if (primaryAttributeText != null)
-            primaryAttributeText.text = $"Primary: {character.primaryAttribute}";
-
-        if (growthRateText != null)
-            growthRateText.text = $"Growth Rate: {character.growthRate:F1}x";
+        characterDescriptionText.text = character.description ?? "Refugee";
+        primaryAttributeText.text = $"Primary: {character.primaryAttribute}";
+        growthRateText.text = $"Growth Rate: {character.growthRate:F1}x";
 
         // Update Health
         if (healthSlider != null)
@@ -314,20 +341,48 @@ public class UIManager : MonoBehaviour
 
     public void ToggleInventory()
     {
-        if (inventoryPanel != null)
+        bool isActive = !inventoryPanel.activeSelf;
+        inventoryPanel.SetActive(isActive);
+
+        if (isActive)
         {
-            bool isActive = !inventoryPanel.activeSelf;
-            inventoryPanel.SetActive(isActive);
-            if (isActive)
+            // Hide other UI elements when inventory is opened
+            if (taskPanel != null) taskPanel.SetActive(false);
+            if (statsPanel != null) statsPanel.SetActive(false);
+            if (topStatsHUD != null) topStatsHUD.SetActive(false);
+            
+            // Note: timeText and dayText are usually part of HUD but might be separate
+            // If they are under a different parent, they might still be visible.
+            // But usually topStatsHUD or taskPanel covers most HUD elements.
+
+            // Force update when opening, even if it's not active in hierarchy yet
+            UpdateInventoryDisplay(true);
+        }
+        else
+        {
+            // Restore UI elements when inventory is closed
+            if (taskPanel != null) taskPanel.SetActive(true);
+            
+            // Re-show stats if a character is still focused
+            if (currentCharacter != null)
             {
-                UpdateInventoryDisplay();
+                if (statsPanel != null) statsPanel.SetActive(true);
+                if (topStatsHUD != null) topStatsHUD.SetActive(true);
             }
+
+            // Close details when inventory is closed
+            if (itemDetailPanel != null) itemDetailPanel.SetActive(false);
         }
     }
 
-    public void UpdateInventoryDisplay()
+    public void UpdateInventoryDisplay() => UpdateInventoryDisplay(false);
+
+    public void UpdateInventoryDisplay(bool force)
     {
         if (inventoryGrid == null || GameManager.Instance == null) return;
+
+        // If inventory is not open, don't bother updating (optional optimization)
+        if (!force && inventoryPanel != null && !inventoryPanel.activeInHierarchy) return;
 
         // Clear existing items
         foreach (Transform child in inventoryGrid)
@@ -341,57 +396,90 @@ public class UIManager : MonoBehaviour
             if (res.quantity <= 0) continue;
 
             GameObject itemObj = Instantiate(inventoryItemPrefab, inventoryGrid);
+            InventoryItemUI itemUI = itemObj.GetComponent<InventoryItemUI>();
             ItemData data = GameManager.Instance.GetItemData(res.resourceName);
 
-            // Configure the UI element
-            // Assuming the prefab has a script or we set components directly
-            var text = itemObj.GetComponentInChildren<TextMeshProUGUI>();
-            var image = itemObj.GetComponentsInChildren<Image>().FirstOrDefault(img => img.gameObject != itemObj);
-
-            if (text != null)
+            if (itemUI != null)
             {
-                string typeStr = data != null ? $" [{data.itemType}]" : "";
-                text.text = $"{res.resourceName}{typeStr}: {res.quantity}";
+                itemUI.Setup(data, res.quantity);
             }
-
-            if (image != null && data != null && data.icon != null)
+            else
             {
-                image.sprite = data.icon;
+                // Fallback if no InventoryItemUI script is attached
+                var text = itemObj.GetComponentInChildren<TextMeshProUGUI>();
+                var image = itemObj.GetComponentsInChildren<Image>().FirstOrDefault(img => img.gameObject != itemObj);
+
+                if (text != null)
+                {
+                    string typeStr = data != null ? $" [{data.itemType}]" : "";
+                    text.text = $"{res.resourceName}{typeStr}: {res.quantity}";
+                }
+
+                if (image != null && data != null && data.icon != null)
+                {
+                    image.sprite = data.icon;
+                }
             }
         }
+    }
+
+    public void ShowItemDetails(ItemData data, int quantity)
+    {
+        if (itemDetailPanel == null) return;
+
+        itemDetailPanel.SetActive(true);
+
+        if (detailItemNameText != null)
+            detailItemNameText.text = data.itemName;
+
+        if (detailItemIcon != null)
+        {
+            if (data.icon != null)
+            {
+                detailItemIcon.sprite = data.icon;
+                detailItemIcon.enabled = true;
+            }
+            else
+            {
+                detailItemIcon.enabled = false;
+            }
+        }
+
+        if (detailItemQuantityText != null)
+            detailItemQuantityText.text = $"Quantity: {quantity}";
+
+        if (detailItemDescriptionText != null)
+            detailItemDescriptionText.text = data.description;
     }
 
     public void ToggleStats()
     {
-        if (statsPanel != null)
-        {
-            bool isActive = !statsPanel.activeSelf;
-            statsPanel.SetActive(isActive);
+        bool isActive = !statsPanel.activeSelf;
+        statsPanel.SetActive(isActive);
 
-            if (isActive)
+        if (isActive)
+        {
+            // Show stats of currently selected character, or first character
+            if (CameraBehaviour.Instance != null && CameraBehaviour.Instance.focussedTarget != null)
             {
-                // Show stats of currently selected character, or first character
-                if (CameraBehaviour.Instance != null && CameraBehaviour.Instance.focussedTarget != null)
+                CharacterStats selectedChar = CameraBehaviour.Instance.focussedTarget.GetComponent<CharacterStats>();
+                if (selectedChar != null)
                 {
-                    CharacterStats selectedChar = CameraBehaviour.Instance.focussedTarget.GetComponent<CharacterStats>();
-                    if (selectedChar != null)
-                    {
-                        currentCharacter = selectedChar;
-                        UpdateCharacterStatsDisplay(currentCharacter);
-                    }
+                    currentCharacter = selectedChar;
+                    UpdateCharacterStatsDisplay(currentCharacter);
                 }
-                else
-                {
-                    
-                }
+            }
+            else
+            {
+                
             }
         }
     }
 
-    private void OnCharacterStatChanged(CharacterStats character)
+    public void OnCharacterStatChanged(CharacterStats character)
     {
         // Only update if it's the currently displayed character
-        if (character == currentCharacter && statsPanel != null && statsPanel.activeSelf)
+        if (character == currentCharacter && statsPanel.activeSelf)
         {
             UpdateCharacterStatsDisplay(character);
         }

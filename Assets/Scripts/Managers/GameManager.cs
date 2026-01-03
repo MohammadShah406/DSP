@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
         return itemDatabase.Find(i => i.itemName == name);
     }
 
+    public event Action OnResourcesChanged;
+
     public void AddResource(string name, int amount)
     {
         ResourceData res = resources.Find(r => r.resourceName == name);
@@ -40,6 +42,7 @@ public class GameManager : MonoBehaviour
         {
             resources.Add(new ResourceData { resourceName = name, quantity = amount });
         }
+        OnResourcesChanged?.Invoke();
     }
     public List<CharacterStats> GetCharacterComponents()
     {
@@ -266,8 +269,13 @@ public class GameManager : MonoBehaviour
                 {
                     res.quantity = resData.quantity;
                 }
+                else
+                {
+                    resources.Add(new ResourceData { resourceName = resData.id, quantity = resData.quantity });
+                }
             }
             PendingGameLoad.resources = null;
+            OnResourcesChanged?.Invoke();
         }
     }
 

@@ -313,12 +313,14 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private void SetTextValue(Graphic textGraphic, string value)
     {
+        if (textGraphic == null) return;
         if (textGraphic is Text t) t.text = value;
         else if (textGraphic is TextMeshProUGUI tmp) tmp.text = value;
     }
 
     private void ApplyStrikethrough(Graphic textGraphic)
     {
+        if (textGraphic == null) return;
         if (textGraphic is Text t)
         {
             t.color = Color.gray;
@@ -331,7 +333,7 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
     }
 
-    public void RefreshTaskList()
+    private void RefreshTaskList()
     {
         if (taskListContainer == null) return;
 
@@ -487,19 +489,13 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             if (descText == null && textComponents.Count > 1) descText = textComponents[1];
             if (descText == null && timeText != null) descText = timeText; // Use same for both if only one exists
 
-            if (timeText != null)
-            {
-                SetTextValue(timeText, $"{task.hour:00}:{task.minute:00}");
-                timeText.raycastTarget = false;
-                if (task.isCompleted) ApplyStrikethrough(timeText);
-            }
+            SetTextValue(timeText, $"{task.hour:00}:{task.minute:00}");
+            if (timeText != null) timeText.raycastTarget = false;
+            if (task.isCompleted) ApplyStrikethrough(timeText);
 
-            if (descText != null)
-            {
-                SetTextValue(descText, task.taskDescription);
-                descText.raycastTarget = false;
-                if (task.isCompleted) ApplyStrikethrough(descText);
-            }
+            SetTextValue(descText, task.taskDescription);
+            if (descText != null) descText.raycastTarget = false;
+            if (task.isCompleted) ApplyStrikethrough(descText);
 
             // Ensure the entry is visible above other UI siblings in the container
             entry.transform.SetAsLastSibling();
