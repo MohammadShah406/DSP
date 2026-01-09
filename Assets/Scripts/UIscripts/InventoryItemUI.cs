@@ -6,7 +6,6 @@ public class InventoryItemUI : MonoBehaviour
 {
     public Image itemIcon;
     public TextMeshProUGUI itemNameText;
-    public TextMeshProUGUI itemQuantityText;
     public Button itemButton;
 
     private ItemData _currentData;
@@ -40,7 +39,6 @@ public class InventoryItemUI : MonoBehaviour
             itemIcon.enabled = false;
         }
 
-        itemQuantityText.text = quantity.ToString();
         itemButton.onClick.RemoveAllListeners();
         itemButton.onClick.AddListener(OnItemClicked);
     }

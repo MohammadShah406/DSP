@@ -14,6 +14,8 @@ public class InputManager : MonoBehaviour
     public float ZoomInput { get; private set; }   // +1 (E), -1 (Q)
     public bool NextCharacterInput { get; private set; }
     public bool PreviousCharacterInput { get; private set; }
+    public bool PauseInput { get; private set; }
+    public bool InventoryInput { get; private set; }
 
 
     private PlayerInput _playerInput;
@@ -28,6 +30,8 @@ public class InputManager : MonoBehaviour
     private InputAction ZoomOut;
     private InputAction NextCharacter;
     private InputAction PreviousCharacter;
+    private InputAction Pause;
+    private InputAction Inventory;
 
     private void Awake()
     {
@@ -63,6 +67,8 @@ public class InputManager : MonoBehaviour
         ZoomOut = _playerInput.actions["ZoomOut"];
         NextCharacter = _playerInput.actions["NextCharacter"];
         PreviousCharacter = _playerInput.actions["PreviousCharacter"];
+        Pause = _playerInput.actions["Pause"];
+        Inventory = _playerInput.actions["Inventory"];
     }
 
     private void UpdateActions()
@@ -82,5 +88,7 @@ public class InputManager : MonoBehaviour
 
         NextCharacterInput = NextCharacter.triggered;
         PreviousCharacterInput = PreviousCharacter.triggered;
+        PauseInput = Pause.triggered;
+        InventoryInput = Inventory.triggered;
     }
 }

@@ -99,7 +99,7 @@ public class UIManager : MonoBehaviour
     private void Update()
     {
         // Toggle pause
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (InputManager.Instance.PauseInput || InputManager.Instance.DeselectInput)
         {
             // Close inventory first if it's open
             if (inventoryUI.inventoryPanel.activeSelf)
@@ -107,12 +107,13 @@ public class UIManager : MonoBehaviour
                 inventoryUI.Toggle();
                 return;
             }
-
-            if (CameraBehaviour.Instance.focussedTarget != null)
+            else if (CameraBehaviour.Instance.focussedTarget != null)
             {
                 // Character selected - let camera deselect it
                 // (Camera already has deselect logic on Escape via DeselectInput)
                 // Stats panel will auto-hide via HandleStatsDisplay()
+
+                CameraBehaviour.Instance.DeselectCharacter();
             }
             else
             {
@@ -122,7 +123,7 @@ public class UIManager : MonoBehaviour
         }
 
         // Toggle inventory
-        if (Input.GetKeyDown(KeyCode.I))
+        if (InputManager.Instance.InventoryInput)
             ToggleInventory();
 
         // Toggle character stats
@@ -270,7 +271,11 @@ public class UIManager : MonoBehaviour
         Time.timeScale = pause ? 0f : 1f;
     }
 
-    public void TogglePause() => SetPause(!IsPaused);
+    public void TogglePause()
+    {
+        SetPause(!IsPaused);
+        ToggleHUD();
+    }
 
     public void ToggleInventory()
     {
@@ -280,10 +285,7 @@ public class UIManager : MonoBehaviour
     public void OnInventoryOpened()
     {
         // Hide other UI elements when inventory is opened
-        taskPanel.SetActive(false);
-        statsPanel.SetActive(false);
-        topStatsHUD.SetActive(false);
-        mainHUD.SetActive(false);
+        ToggleHUD();
     }
 
     public void OnInventoryClosed()
@@ -318,6 +320,12 @@ public class UIManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void ToggleHUD()
+    {
+        bool isActive = !mainHUD.activeSelf;
+        mainHUD.SetActive(isActive);
     }
 
     public void OnCharacterStatChanged(CharacterStats character)

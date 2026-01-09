@@ -8,29 +8,54 @@ using UnityEngine.TextCore.Text;
 
 public class GameManager : MonoBehaviour
 {
+    // Singleton Instance
     public static GameManager Instance { get; private set; }
-    [Header("Shared Stat")]
-    [Range(0, 100)] public int hope = 50;
 
-    [Header("Upgrade Progress")]
-    public int upgradesDone = 0;
-    public int totalUpgrades = 10;
-
+    // Reference to TimeManager
     [SerializeField] private TimeManager timeManager;
 
+    // Characters and Resources
     public List<GameObject> characters = new List<GameObject>();
     public List<ResourceData> resources = new List<ResourceData>();
-    
+    List<CharacterStats> charStatsList = new List<CharacterStats>();
+
+    // Item Database
     [Header("Item Database")]
     public List<ItemData> itemDatabase = new List<ItemData>();
 
+    // Shared Game State
+    [Header("Shared Stat")]
+    [Range(0, 100)] public int hope = 50;
+
+    // Upgrade Progress
+    [Header("Upgrade Progress")]
+    public int upgradesDone = 0;
+    public int totalUpgrades = 0;
+
+    private float upgradeValue = 0;
+    private float totalAttributeSum = 0;
+    private int characterCount = 0;
+    // Average attribute score across all characters
+    private float averageAttributeScore = 0; // 0-100
+    private float a = 0; // 0-10
+
+    // Event for resource changes
+    public event Action OnResourcesChanged;
+
+    // Whether to load saved game on start
+    public bool loadsavedgame = true;
+
+    /// <summary>
+    /// Retrieves item data by name from the item database.
+    /// </summary>
     public ItemData GetItemData(string name)
     {
         return itemDatabase.Find(i => i.itemName == name);
     }
 
-    public event Action OnResourcesChanged;
-
+    /// <summary>
+    /// Adds a resource to the resource list or updates its quantity.
+    /// </summary>
     public void AddResource(string name, int amount)
     {
         ResourceData res = resources.Find(r => r.resourceName == name);
@@ -44,6 +69,10 @@ public class GameManager : MonoBehaviour
         }
         OnResourcesChanged?.Invoke();
     }
+
+    /// <summary>
+    /// Retrieves a list of CharacterStats components from the character GameObjects.
+    /// </summary>
     public List<CharacterStats> GetCharacterComponents()
     {
         List<CharacterStats> characterList = new List<CharacterStats>();
@@ -70,10 +99,9 @@ public class GameManager : MonoBehaviour
         }
         Instance = this;
 
-
-
-
-        TryLoad();
+        // Attempt to load any pending game state
+        if (loadsavedgame)
+            TryLoad();
     }
 
     private void Start()
@@ -83,19 +111,26 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("GameManager: No TimeManager assigned, searching for an instance in the scene.");
             timeManager = TimeManager.Instance;
         }
+
+        charStatsList = GetCharacterComponents();
     }
 
     private void Update()
     {
+        // Calculate hope based on current game state
         CalculateHope();
 
         if (Input.GetKeyDown(KeyCode.F2))
         {
+            //  Save the game
             TrySave();
         }
 
     }
 
+    /// <summary>
+    /// Calculates the hope value based on upgrades and character attributes.
+    /// </summary>
     private void CalculateHope()
     {
         // Formula:
@@ -103,36 +138,42 @@ public class GameManager : MonoBehaviour
         // Attribute Value (A) = Avg of each resident's attributes
         // Hope = (U * 60) + (A * 4)
 
-        float u = 0;
+        upgradeValue = 0;
+        totalAttributeSum = 0;
+        characterCount = 0;
+
         if (totalUpgrades > 0)
         {
-            u = (float)upgradesDone / totalUpgrades;
+            upgradeValue = (float)upgradesDone / totalUpgrades;
+        }
+        else
+        {
+            upgradeValue = 1;
         }
 
-        float totalAttributeSum = 0;
-        int attributeCount = 0;
-        List<CharacterStats> charStatsList = GetCharacterComponents();
-
+        // Calculate average attribute score across all characters
         if (charStatsList.Count > 0)
         {
             foreach (var stats in charStatsList)
             {
                 // Averaging all major stats: Health, Stability, Learning, WorkReadiness, Trust, Nutrition, Hygiene, Energy
                 // Since they are 0-100, we'll sum them and then normalize to 0-10 as per (A * 4) logic
-                totalAttributeSum += (stats.Health + stats.Stability + stats.Learning + stats.WorkReadiness + 
+                totalAttributeSum += (stats.Health + stats.Stability + stats.Learning + stats.WorkReadiness +
                                      stats.Trust + stats.Nutrition + stats.Hygiene + stats.Energy) / 8f;
-                attributeCount++;
+                characterCount++;
             }
 
-            float averageAttributeScore = totalAttributeSum / attributeCount; // 0-100
-            float a = averageAttributeScore / 10f; // 0-10
+            // Average attribute score across all characters
+            averageAttributeScore = totalAttributeSum / characterCount; // 0-100
+            a = averageAttributeScore / 10f; // 0-10
 
-            hope = Mathf.RoundToInt((u * 60f) + (a * 4f));
+            hope = Mathf.RoundToInt((upgradeValue * 60f) + (a * 4f));
+
         }
         else
         {
             // If no characters, hope only depends on upgrades or stays at a base
-            hope = Mathf.RoundToInt(u * 60f);
+            hope = Mathf.RoundToInt(upgradeValue * 60f);
         }
         
         hope = Mathf.Clamp(hope, 0, 100);
@@ -277,6 +318,14 @@ public class GameManager : MonoBehaviour
             PendingGameLoad.resources = null;
             OnResourcesChanged?.Invoke();
         }
+    }
+
+    /// <summary>
+    /// Updates the list of character stats.
+    /// </summary>
+    public void UpdateCharacterStatsList()
+    {
+        charStatsList = GetCharacterComponents();
     }
 
 

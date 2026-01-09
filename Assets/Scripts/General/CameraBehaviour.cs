@@ -297,11 +297,11 @@ public class CameraBehaviour : MonoBehaviour
 
         if (InputManager.Instance.DeselectInput)
         {
-            DeslectCharacter();
+            DeselectCharacter();
         }
     }
 
-    private void DeslectCharacter()
+    public void DeselectCharacter()
     {
         ResetFocussed();
         StopFollowing(keepSelection: false);
@@ -450,7 +450,7 @@ public class CameraBehaviour : MonoBehaviour
         {
             if(isManual == false)
             {
-                DeslectCharacter();
+                DeselectCharacter();
             }
             isDragging = true;
         }

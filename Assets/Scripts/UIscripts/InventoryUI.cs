@@ -103,7 +103,10 @@ public class InventoryUI : MonoBehaviour
 
     public void UpdateInventoryDisplay(bool force)
     {
-        if (!force && !inventoryPanel.activeInHierarchy) return;
+        if (!force && !inventoryPanel.activeInHierarchy) 
+        {
+            return;
+        }
 
         List<GameObject> children = new List<GameObject>();
         foreach (Transform child in inventoryGrid) children.Add(child.gameObject);
