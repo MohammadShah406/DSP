@@ -1,19 +1,78 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using Unity.Hierarchy;
 using Unity.VisualScripting;
-using UnityEngine;
 using UnityEngine.TextCore.Text;
 
 public class GameManager : MonoBehaviour
 {
+    // Singleton Instance
     public static GameManager Instance { get; private set; }
+
+    // Reference to TimeManager
+    [SerializeField] private TimeManager timeManager;
+
+    // Characters and Resources
+    public List<GameObject> characters = new List<GameObject>();
+    public List<ResourceData> resources = new List<ResourceData>();
+    List<CharacterStats> charStatsList = new List<CharacterStats>();
+
+    // Item Database
+    [Header("Item Database")]
+    public List<ItemData> itemDatabase = new List<ItemData>();
+
+    // Shared Game State
     [Header("Shared Stat")]
     [Range(0, 100)] public int hope = 50;
 
-    [SerializeField] private TimeManager timeManager;
+    // Upgrade Progress
+    [Header("Upgrade Progress")]
+    public int upgradesDone = 0;
+    public int totalUpgrades = 0;
 
-    public List<GameObject> characters = new List<GameObject>();
-    public List<ResourceData> resources = new List<ResourceData>();
+    private float upgradeValue = 0;
+    private float totalAttributeSum = 0;
+    private int characterCount = 0;
+    // Average attribute score across all characters
+    private float averageAttributeScore = 0; // 0-100
+    private float a = 0; // 0-10
+
+    // Event for resource changes
+    public event Action OnResourcesChanged;
+
+    // Whether to load saved game on start
+    public bool loadsavedgame = true;
+
+    /// <summary>
+    /// Retrieves item data by name from the item database.
+    /// </summary>
+    public ItemData GetItemData(string name)
+    {
+        return itemDatabase.Find(i => i.itemName == name);
+    }
+
+    /// <summary>
+    /// Adds a resource to the resource list or updates its quantity.
+    /// </summary>
+    public void AddResource(string name, int amount)
+    {
+        ResourceData res = resources.Find(r => r.resourceName == name);
+        if (res != null)
+        {
+            res.quantity += amount;
+        }
+        else
+        {
+            resources.Add(new ResourceData { resourceName = name, quantity = amount });
+        }
+        OnResourcesChanged?.Invoke();
+    }
+
+    /// <summary>
+    /// Retrieves a list of CharacterStats components from the character GameObjects.
+    /// </summary>
     public List<CharacterStats> GetCharacterComponents()
     {
         List<CharacterStats> characterList = new List<CharacterStats>();
@@ -40,10 +99,9 @@ public class GameManager : MonoBehaviour
         }
         Instance = this;
 
-
-
-
-        TryLoad();
+        // Attempt to load any pending game state
+        if (loadsavedgame)
+            TryLoad();
     }
 
     private void Start()
@@ -53,15 +111,72 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("GameManager: No TimeManager assigned, searching for an instance in the scene.");
             timeManager = TimeManager.Instance;
         }
+
+        charStatsList = GetCharacterComponents();
     }
 
     private void Update()
     {
+        // Calculate hope based on current game state
+        CalculateHope();
+
         if (Input.GetKeyDown(KeyCode.F2))
         {
+            //  Save the game
             TrySave();
         }
 
+    }
+
+    /// <summary>
+    /// Calculates the hope value based on upgrades and character attributes.
+    /// </summary>
+    private void CalculateHope()
+    {
+        // Formula:
+        // Upgrade Value (U) = (Upgrades Done / Total Available Upgrades)
+        // Attribute Value (A) = Avg of each resident's attributes
+        // Hope = (U * 60) + (A * 4)
+
+        upgradeValue = 0;
+        totalAttributeSum = 0;
+        characterCount = 0;
+
+        if (totalUpgrades > 0)
+        {
+            upgradeValue = (float)upgradesDone / totalUpgrades;
+        }
+        else
+        {
+            upgradeValue = 1;
+        }
+
+        // Calculate average attribute score across all characters
+        if (charStatsList.Count > 0)
+        {
+            foreach (var stats in charStatsList)
+            {
+                // Averaging all major stats: Health, Stability, Learning, WorkReadiness, Trust, Nutrition, Hygiene, Energy
+                // Since they are 0-100, we'll sum them and then normalize to 0-10 as per (A * 4) logic
+                totalAttributeSum += (stats.Health + stats.Stability + stats.Learning + stats.WorkReadiness +
+                                     stats.Trust + stats.Nutrition + stats.Hygiene + stats.Energy) / 8f;
+                characterCount++;
+            }
+
+            // Average attribute score across all characters
+            averageAttributeScore = totalAttributeSum / characterCount; // 0-100
+            a = averageAttributeScore / 10f; // 0-10
+
+            hope = Mathf.RoundToInt((upgradeValue * 60f) + (a * 4f));
+
+        }
+        else
+        {
+            // If no characters, hope only depends on upgrades or stays at a base
+            hope = Mathf.RoundToInt(upgradeValue * 60f);
+        }
+        
+        hope = Mathf.Clamp(hope, 0, 100);
     }
 
     public void TrySave()
@@ -70,6 +185,8 @@ public class GameManager : MonoBehaviour
         data.currentDay = timeManager.days;
         data.timeOfDay = timeManager.TimeOfDay;
         data.hope = hope;
+        data.upgradesDone = upgradesDone;
+        data.totalUpgrades = totalUpgrades;
 
         foreach (GameObject obj in characters)
         {
@@ -78,13 +195,19 @@ public class GameManager : MonoBehaviour
             data.characters.Add(new CharacterSaveData
             {
                 name = obj.name,
+                iconName = stats.characterIcon != null ? stats.characterIcon.name : "",
                 position = obj.transform.position,
 
-                health = stats.health,
-                stability = stats.stability,
-                learning = stats.learning,
-                workReadiness = stats.workReadiness,
-                trust = stats.trust,
+                health = stats.Health,
+                stability = stats.Stability,
+                learning = stats.Learning,
+                workReadiness = stats.WorkReadiness,
+                trust = stats.Trust,
+                nutrition = stats.Nutrition,
+                hygiene = stats.Hygiene,
+                energy = stats.Energy,
+                primaryAttribute = stats.primaryAttribute.ToString(),
+                growthRate = stats.growthRate,
             });
         }
 
@@ -114,6 +237,8 @@ public class GameManager : MonoBehaviour
         PendingGameLoad.characters = data.characters;
         PendingGameLoad.resources = data.resources;
         hope = data.hope;
+        upgradesDone = data.upgradesDone;
+        totalUpgrades = data.totalUpgrades;
 
         // Try immediate apply for anything that exists
         TryApplyPending();
@@ -149,12 +274,24 @@ public class GameManager : MonoBehaviour
                     if (character != null)
                     {
                         character.name = charData.name;
+                        // For characterIcon, we usually rely on the prefab/inspector setting 
+                        // as loading sprites by name from Resources at runtime is specific to project structure.
+                        // We save it for metadata purposes, but won't force a load if not using Resources folder.
                         character.transform.position = charData.position;
-                        character.health = charData.health;
-                        character.stability = charData.stability;
-                        character.learning = charData.learning;
-                        character.workReadiness = charData.workReadiness;
-                        character.trust = charData.trust;
+                        character.Health = Mathf.RoundToInt(charData.health);
+                        character.Stability = charData.stability;
+                        character.Learning = charData.learning;
+                        character.WorkReadiness = charData.workReadiness;
+                        character.Trust = charData.trust;
+                        character.Nutrition = charData.nutrition;
+                        character.Hygiene = charData.hygiene;
+                        character.Energy = charData.energy;
+
+                        if (Enum.TryParse(charData.primaryAttribute, out CharacterStats.PrimaryAttribute attr))
+                        {
+                            character.primaryAttribute = attr;
+                        }
+                        character.growthRate = charData.growthRate;
                     }
                     
 
@@ -173,9 +310,22 @@ public class GameManager : MonoBehaviour
                 {
                     res.quantity = resData.quantity;
                 }
+                else
+                {
+                    resources.Add(new ResourceData { resourceName = resData.id, quantity = resData.quantity });
+                }
             }
             PendingGameLoad.resources = null;
+            OnResourcesChanged?.Invoke();
         }
+    }
+
+    /// <summary>
+    /// Updates the list of character stats.
+    /// </summary>
+    public void UpdateCharacterStatsList()
+    {
+        charStatsList = GetCharacterComponents();
     }
 
 

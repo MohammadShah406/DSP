@@ -2,7 +2,9 @@
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.TextCore.Text;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using TMPro;
 
 public class CameraBehaviour : MonoBehaviour
 {
@@ -149,6 +151,12 @@ public class CameraBehaviour : MonoBehaviour
 
     private void HandleClick()
     {
+        // Block interaction if mouse is over UI
+        if (IsMouseOverUI())
+        {
+            return;
+        }
+
         if (InputManager.Instance.SelectInput)
         {
             bool isDoubleClick = false;
@@ -289,11 +297,11 @@ public class CameraBehaviour : MonoBehaviour
 
         if (InputManager.Instance.DeselectInput)
         {
-            DeslectCharacter();
+            DeselectCharacter();
         }
     }
 
-    private void DeslectCharacter()
+    public void DeselectCharacter()
     {
         ResetFocussed();
         StopFollowing(keepSelection: false);
@@ -442,7 +450,7 @@ public class CameraBehaviour : MonoBehaviour
         {
             if(isManual == false)
             {
-                DeslectCharacter();
+                DeselectCharacter();
             }
             isDragging = true;
         }
@@ -473,6 +481,12 @@ public class CameraBehaviour : MonoBehaviour
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         float keyInput = InputManager.Instance.ZoomInput;
 
+        // Block scroll zoom if mouse is over UI
+        if (IsMouseOverUI())
+        {
+            scroll = 0f;
+        }
+
         float deltaZ = (scroll + keyInput * Time.deltaTime) * zoomSpeed;
 
         if (Mathf.Abs(deltaZ) < 0.0001f)
@@ -488,6 +502,62 @@ public class CameraBehaviour : MonoBehaviour
             isManual = true;
 
         transposer.m_FollowOffset = manualOffset;
+    }
+
+    private bool IsMouseOverUI()
+    {
+        if (EventSystem.current == null) return false;
+
+        // Check if mouse is over ANY UI object
+        if (!EventSystem.current.IsPointerOverGameObject()) return false;
+
+        // If it is, check if it's an interactive element or a blocked area
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        foreach (var result in results)
+        {
+            if (result.gameObject == null) continue;
+
+            // 1. Check for specific interactive components
+            if (result.gameObject.GetComponent<Button>() != null ||
+                result.gameObject.GetComponent<Slider>() != null ||
+                result.gameObject.GetComponent<Scrollbar>() != null ||
+                result.gameObject.GetComponent<TMP_InputField>() != null)
+            {
+                return true;
+            }
+
+            // 2. Check for TaskUI items specifically
+            if (result.gameObject.name.Contains("TaskEntry") || 
+                result.gameObject.name.Contains("Handle"))
+            {
+                return true;
+            }
+
+            // 3. If it's part of a known menu that should block (Pause, Inventory, Stats, HUD, Tasks)
+            if (UIManager.Instance != null)
+            {
+                if (IsChildOf(result.gameObject.transform, UIManager.Instance.pausePanel) ||
+                    (InventoryUI.Instance != null && IsChildOf(result.gameObject.transform, InventoryUI.Instance.inventoryPanel)) ||
+                    IsChildOf(result.gameObject.transform, UIManager.Instance.statsPanel) ||
+                    IsChildOf(result.gameObject.transform, UIManager.Instance.topStatsHUD) ||
+                    IsChildOf(result.gameObject.transform, UIManager.Instance.taskPanel))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsChildOf(Transform child, GameObject parent)
+    {
+        if (parent == null) return false;
+        return child.IsChildOf(parent.transform);
     }
 
     private void ApplyBoundsAndPushToTransposer()

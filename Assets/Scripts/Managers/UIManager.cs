@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,12 +13,15 @@ public class UIManager : MonoBehaviour
     [Header("Panels")]
     public GameObject pausePanel;
     public GameObject statsPanel;
-    public GameObject inventoryPanel;
+    public InventoryUI inventoryUI;
+    public GameObject taskPanel;
+    public GameObject topStatsHUD; // Reference to the new HUD top stats panel
+    public GameObject mainHUD; // Main HUD elements (time, day, hope)
 
     [Header("HUD Elements")]
     public TextMeshProUGUI timeText;
     public TextMeshProUGUI dayText;
-    public Image hopeBar;
+    public Slider hopeSlider;
     public TextMeshProUGUI hopeText;
 
     [Header("Character Stats Display")]
@@ -26,6 +30,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI characterDescriptionText;
 
     [Header("Stat Sliders")]
+    public float sliderLerpSpeed = 5f;
     public Slider healthSlider;
     public TextMeshProUGUI healthPercentText;
     public Slider stabilitySlider;
@@ -36,10 +41,12 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI workReadinessPercentText;
     public Slider trustSlider;
     public TextMeshProUGUI trustPercentText;
-
-    [Header("Inventory Display")]
-    public Transform inventoryGrid;
-    public GameObject inventoryItemPrefab;
+    public Slider nutritionSlider;
+    public TextMeshProUGUI nutritionPercentText;
+    public Slider hygieneSlider;
+    public TextMeshProUGUI hygienePercentText;
+    public Slider energySlider;
+    public TextMeshProUGUI energyPercentText;
 
     public bool IsPaused { get; private set; }
 
@@ -55,53 +62,58 @@ public class UIManager : MonoBehaviour
         }
         Instance = this;
 
-        if (pausePanel != null)
-            pausePanel.SetActive(false);
-        if (statsPanel != null)
-            statsPanel.SetActive(false);
-        if (inventoryPanel != null)
-            inventoryPanel.SetActive(false);
+        pausePanel.SetActive(false);
+        statsPanel.SetActive(false);
+        taskPanel.SetActive(true);
+        topStatsHUD.SetActive(false);
+        mainHUD.SetActive(true);
     }
 
     private void Start()
     {
         // Subscribe to events
-        if (TimeManager.Instance != null)
-        {
-            TimeManager.Instance.MinuteChanged += UpdateTimeDisplay;
-            UpdateTimeDisplay(TimeManager.Instance.hours, TimeManager.Instance.minutes, TimeManager.Instance.days);
-        }
+        TimeManager.Instance.MinuteChanged += UpdateTimeDisplay;
+        UpdateTimeDisplay(TimeManager.Instance.hours, TimeManager.Instance.minutes, TimeManager.Instance.days);
+        
 
         // Set slider ranges
-        if (healthSlider != null) healthSlider.maxValue = 100;
-        if (stabilitySlider != null) stabilitySlider.maxValue = 100;
-        if (learningSlider != null) learningSlider.maxValue = 100;
-        if (workReadinessSlider != null) workReadinessSlider.maxValue = 100;
-        if (trustSlider != null) trustSlider.maxValue = 100;
+        healthSlider.maxValue = 100;
+        stabilitySlider.maxValue = 100;
+        learningSlider.maxValue = 100;
+        workReadinessSlider.maxValue = 100;
+        trustSlider.maxValue = 100;
+        nutritionSlider.maxValue = 100;
+        hygieneSlider.maxValue = 100;
+        energySlider.maxValue = 100;
 
         CharacterStats.OnAnyStatChanged += OnCharacterStatChanged;
     }
 
     private void OnDestroy()
     {
-        if (TimeManager.Instance != null)
-        {
-            TimeManager.Instance.MinuteChanged -= UpdateTimeDisplay;
-        }
-
+        TimeManager.Instance.MinuteChanged -= UpdateTimeDisplay;
+        
         CharacterStats.OnAnyStatChanged -= OnCharacterStatChanged;
     }
 
     private void Update()
     {
         // Toggle pause
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (InputManager.Instance.PauseInput || InputManager.Instance.DeselectInput)
         {
-            if (CameraBehaviour.Instance != null && CameraBehaviour.Instance.focussedTarget != null)
+            // Close inventory first if it's open
+            if (inventoryUI.inventoryPanel.activeSelf)
+            {
+                inventoryUI.Toggle();
+                return;
+            }
+            else if (CameraBehaviour.Instance.focussedTarget != null)
             {
                 // Character selected - let camera deselect it
                 // (Camera already has deselect logic on Escape via DeselectInput)
                 // Stats panel will auto-hide via HandleStatsDisplay()
+
+                CameraBehaviour.Instance.DeselectCharacter();
             }
             else
             {
@@ -111,17 +123,17 @@ public class UIManager : MonoBehaviour
         }
 
         // Toggle inventory
-        if (Input.GetKeyDown(KeyCode.I))
+        if (InputManager.Instance.InventoryInput)
             ToggleInventory();
 
         // Toggle character stats
         HandleStatsDisplay();
 
-        // ✅ AUTO-UPDATE: If stats panel is open, update with currently selected character
-        if (statsPanel != null && statsPanel.activeSelf)
+        //  If stats panel is open, update with currently selected character
+        if (statsPanel.activeSelf)
         {
             // Get currently selected character from camera
-            if (CameraBehaviour.Instance != null && CameraBehaviour.Instance.focussedTarget != null)
+            if (CameraBehaviour.Instance.focussedTarget != null)
             {
                 CharacterStats selectedChar = CameraBehaviour.Instance.focussedTarget.GetComponent<CharacterStats>();
 
@@ -145,8 +157,6 @@ public class UIManager : MonoBehaviour
 
     private void HandleStatsDisplay()
     {
-        if (CameraBehaviour.Instance == null || statsPanel == null) return;
-
         Transform focussedTarget = CameraBehaviour.Instance.focussedTarget;
 
         // Check if selection changed
@@ -162,6 +172,7 @@ public class UIManager : MonoBehaviour
                 {
                     currentCharacter = character;
                     statsPanel.SetActive(true);
+                    if (topStatsHUD != null) topStatsHUD.SetActive(true);
                     UpdateCharacterStatsDisplay(currentCharacter);
                 }
             }
@@ -169,6 +180,7 @@ public class UIManager : MonoBehaviour
             {
                 // No character selected - hide stats
                 statsPanel.SetActive(false);
+                if (topStatsHUD != null) topStatsHUD.SetActive(false);
                 currentCharacter = null;
             }
         }
@@ -179,24 +191,22 @@ public class UIManager : MonoBehaviour
         }
     }
 
+
     private void UpdateTimeDisplay(int hours, int minutes, int days)
     {
-        if (timeText != null)
-            timeText.text = $"{hours:00}:{minutes:00}";
-
-        if (dayText != null)
-            dayText.text = $"Day {days}";
+        timeText.text = $"{hours:00}:{minutes:00}";
+        dayText.text = $"Day {days}";
     }
 
     private void UpdateHopeDisplay()
     {
         if (GameManager.Instance == null) return;
 
-        if (hopeBar != null)
-            hopeBar.fillAmount = GameManager.Instance.hope / 100f;
+        float hopeValue = GameManager.Instance.hope;
+        float normalizedHope = hopeValue / 100f;
 
-        if (hopeText != null)
-            hopeText.text = $"Hope: {GameManager.Instance.hope}";
+        hopeSlider.value = Mathf.Lerp(hopeSlider.value, normalizedHope, Time.deltaTime * sliderLerpSpeed);
+        hopeText.text = $"Hope: {hopeValue}%";
     }
 
     private void UpdateCharacterStatsDisplay(CharacterStats character)
@@ -204,99 +214,134 @@ public class UIManager : MonoBehaviour
         if (character == null) return;
 
         // Update character info
-        if (characterNameText != null)
-            characterNameText.text = character.characterName;
+        characterNameText.text = character.characterName;
+        if (character.characterIcon != null)
+        {
+            characterPicture.sprite = character.characterIcon;
+            characterPicture.enabled = true;
+        }
+        else
+        {
+            // Optionally hide or set a default if no icon
+            characterPicture.enabled = false;
+        }
 
-        if (characterDescriptionText != null)
-            characterDescriptionText.text = character.description ?? "Refugee";
+        characterDescriptionText.text = character.description ?? "Refugee";
+
+        // Smoothly update all sliders
+        float t = Time.deltaTime * sliderLerpSpeed;
 
         // Update Health
-        if (healthSlider != null)
-            healthSlider.value = character.health;
-        if (healthPercentText != null)
-            healthPercentText.text = $"{character.health}%";
+        healthSlider.value = Mathf.Lerp(healthSlider.value, character.Health, t); 
+        healthPercentText.text = $"{Mathf.RoundToInt(healthSlider.value)}%";
 
         // Update Stability
-        if (stabilitySlider != null)
-            stabilitySlider.value = character.stability;
-        if (stabilityPercentText != null)
-            stabilityPercentText.text = $"{character.stability}%";
+        stabilitySlider.value = Mathf.Lerp(stabilitySlider.value, character.Stability, t);
+        stabilityPercentText.text = $"{Mathf.RoundToInt(stabilitySlider.value)}%";
 
         // Update Learning
-        if (learningSlider != null)
-            learningSlider.value = character.learning;
-        if (learningPercentText != null)
-            learningPercentText.text = $"{character.learning}%";
+        learningSlider.value = Mathf.Lerp(learningSlider.value, character.Learning, t);
+        learningPercentText.text = $"{Mathf.RoundToInt(learningSlider.value)}%";
 
         // Update Work Readiness
-        if (workReadinessSlider != null)
-            workReadinessSlider.value = character.workReadiness;
-        if (workReadinessPercentText != null)
-            workReadinessPercentText.text = $"{character.workReadiness}%";
+        workReadinessSlider.value = Mathf.Lerp(workReadinessSlider.value, character.WorkReadiness, t);
+        workReadinessPercentText.text = $"{Mathf.RoundToInt(workReadinessSlider.value)}%";
 
         // Update Trust
-        if (trustSlider != null)
-            trustSlider.value = character.trust;
-        if (trustPercentText != null)
-            trustPercentText.text = $"{character.trust}%";
+        trustSlider.value = Mathf.Lerp(trustSlider.value, character.Trust, t);
+        trustPercentText.text = $"{Mathf.RoundToInt(trustSlider.value)}%";
+
+        // Update Nutrition
+        nutritionSlider.value = Mathf.Lerp(nutritionSlider.value, character.Nutrition, t);
+        nutritionPercentText.text = $"{Mathf.RoundToInt(nutritionSlider.value)}%";
+
+        // Update Hygiene
+        hygieneSlider.value = Mathf.Lerp(hygieneSlider.value, character.Hygiene, t);
+        hygienePercentText.text = $"{Mathf.RoundToInt(hygieneSlider.value)}%";
+
+        // Update Energy
+        energySlider.value = Mathf.Lerp(energySlider.value, character.Energy, t);
+        energyPercentText.text = $"{Mathf.RoundToInt(energySlider.value)}%";
     }
 
     public void SetPause(bool pause)
     {
         IsPaused = pause;
-        if (pausePanel != null)
-            pausePanel.SetActive(pause);
+        pausePanel.SetActive(pause);
         Time.timeScale = pause ? 0f : 1f;
     }
 
-    public void TogglePause() => SetPause(!IsPaused);
+    public void TogglePause()
+    {
+        SetPause(!IsPaused);
+        ToggleHUD();
+    }
 
     public void ToggleInventory()
     {
-        if (inventoryPanel != null)
+        inventoryUI.Toggle();
+    }
+
+    public void OnInventoryOpened()
+    {
+        // Hide other UI elements when inventory is opened
+        ToggleHUD();
+    }
+
+    public void OnInventoryClosed()
+    {
+        // Restore UI elements when inventory is closed
+        taskPanel.SetActive(true);
+        mainHUD.SetActive(true);
+        
+        // Re-show stats if a character is still focused
+        if (CameraBehaviour.Instance.focussedTarget != null)
         {
-            bool isActive = !inventoryPanel.activeSelf;
-            inventoryPanel.SetActive(isActive);
+            statsPanel.SetActive(true);
+            topStatsHUD.SetActive(true);
         }
     }
 
     public void ToggleStats()
     {
-        if (statsPanel != null)
-        {
-            bool isActive = !statsPanel.activeSelf;
-            statsPanel.SetActive(isActive);
+        bool isActive = !statsPanel.activeSelf;
+        statsPanel.SetActive(isActive);
 
-            if (isActive)
+        if (isActive)
+        {
+            // Show stats of currently selected character, or first character
+            if (CameraBehaviour.Instance.focussedTarget != null)
             {
-                // Show stats of currently selected character, or first character
-                if (CameraBehaviour.Instance != null && CameraBehaviour.Instance.focussedTarget != null)
+                CharacterStats selectedChar = CameraBehaviour.Instance.focussedTarget.GetComponent<CharacterStats>();
+                if (selectedChar != null)
                 {
-                    CharacterStats selectedChar = CameraBehaviour.Instance.focussedTarget.GetComponent<CharacterStats>();
-                    if (selectedChar != null)
-                    {
-                        currentCharacter = selectedChar;
-                        UpdateCharacterStatsDisplay(currentCharacter);
-                    }
-                }
-                else
-                {
-                    
+                    currentCharacter = selectedChar;
+                    UpdateCharacterStatsDisplay(currentCharacter);
                 }
             }
         }
     }
 
-    private void OnCharacterStatChanged(CharacterStats character)
+    public void ToggleHUD()
+    {
+        bool isActive = !mainHUD.activeSelf;
+        mainHUD.SetActive(isActive);
+    }
+
+    public void OnCharacterStatChanged(CharacterStats character)
     {
         // Only update if it's the currently displayed character
-        if (character == currentCharacter && statsPanel != null && statsPanel.activeSelf)
+        if (character == currentCharacter && statsPanel.activeSelf)
         {
             UpdateCharacterStatsDisplay(character);
         }
     }
 
-    public void OnResumeButtonClicked() => SetPause(false);
+    public void OnResumeButtonClicked()
+    {
+        SetPause(false);
+       
+    }
 
     public void OnQuitButtonClicked() => Application.Quit();
 }
