@@ -4649,6 +4649,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3648812545253965925, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3648812545253965925, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3648812545253965925, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3790583744772292990, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -4676,6 +4688,10 @@ PrefabInstance:
     - target: {fileID: 7114904019194923860, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8806082279848277739, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6661,6 +6677,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1084058006}
     - target: {fileID: 4265828883223752541, guid: 4ee892a467fd8814590d28f22a5da974, type: 3}
+      propertyPath: resources.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4265828883223752541, guid: 4ee892a467fd8814590d28f22a5da974, type: 3}
+      propertyPath: itemDatabase.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4265828883223752541, guid: 4ee892a467fd8814590d28f22a5da974, type: 3}
       propertyPath: 'characters.Array.data[0]'
       value: 
       objectReference: {fileID: 372416829}
@@ -6668,6 +6692,18 @@ PrefabInstance:
       propertyPath: 'characters.Array.data[1]'
       value: 
       objectReference: {fileID: 791676596}
+    - target: {fileID: 4265828883223752541, guid: 4ee892a467fd8814590d28f22a5da974, type: 3}
+      propertyPath: 'itemDatabase.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 29bafc89df71b2944b4fe7fcc07f47ce, type: 2}
+    - target: {fileID: 4265828883223752541, guid: 4ee892a467fd8814590d28f22a5da974, type: 3}
+      propertyPath: resources.Array.data[0].quantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4265828883223752541, guid: 4ee892a467fd8814590d28f22a5da974, type: 3}
+      propertyPath: resources.Array.data[0].resourceName
+      value: Aloo Gobi
+      objectReference: {fileID: 0}
     - target: {fileID: 7072935197748490789, guid: 4ee892a467fd8814590d28f22a5da974, type: 3}
       propertyPath: m_Name
       value: GameManager
