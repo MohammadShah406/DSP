@@ -19,7 +19,7 @@ public class InventoryItemUI : MonoBehaviour
 
         if (data != null)
         {
-            itemNameText.text = data.itemName;
+            if (itemNameText != null) itemNameText.text = data.itemName;
             if (itemIcon != null)
             {
                 if (data.icon != null)
@@ -37,23 +37,16 @@ public class InventoryItemUI : MonoBehaviour
         else
         {
             itemNameText.text = "Unknown Item";
-            if (itemIcon != null) itemIcon.enabled = false;
+            itemIcon.enabled = false;
         }
 
         itemQuantityText.text = quantity.ToString();
-
-        if (itemButton != null)
-        {
-            itemButton.onClick.RemoveAllListeners();
-            itemButton.onClick.AddListener(OnItemClicked);
-        }
+        itemButton.onClick.RemoveAllListeners();
+        itemButton.onClick.AddListener(OnItemClicked);
     }
 
     private void OnItemClicked()
-    {
-        if (_currentData != null)
-        {
-            UIManager.Instance.ShowItemDetails(_currentData, _currentQuantity);
-        }
+    { 
+        InventoryUI.Instance.ShowItemDetails(_currentData, _currentQuantity);
     }
 }

@@ -541,7 +541,7 @@ public class CameraBehaviour : MonoBehaviour
             if (UIManager.Instance != null)
             {
                 if (IsChildOf(result.gameObject.transform, UIManager.Instance.pausePanel) ||
-                    IsChildOf(result.gameObject.transform, UIManager.Instance.inventoryPanel) ||
+                    (InventoryUI.Instance != null && IsChildOf(result.gameObject.transform, InventoryUI.Instance.inventoryPanel)) ||
                     IsChildOf(result.gameObject.transform, UIManager.Instance.statsPanel) ||
                     IsChildOf(result.gameObject.transform, UIManager.Instance.topStatsHUD) ||
                     IsChildOf(result.gameObject.transform, UIManager.Instance.taskPanel))

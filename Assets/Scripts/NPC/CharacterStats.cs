@@ -50,17 +50,11 @@ public class CharacterStats : MonoBehaviour
 
     private void Start()
     {
-        if (GameManager.Instance != null)
-        {
-            if (!GameManager.Instance.characters.Contains(this.gameObject))
-                GameManager.Instance.characters.Add(this.gameObject);
-        }
-
-        if (TimeManager.Instance != null)
-        {
-            TimeManager.Instance.HourChanged += ApplyHourlyDecay;
-            TimeManager.Instance.HourChanged += UpdateHealth;
-        }
+        if (!GameManager.Instance.characters.Contains(this.gameObject))
+            GameManager.Instance.characters.Add(this.gameObject);
+        
+        TimeManager.Instance.HourChanged += ApplyHourlyDecay;
+        TimeManager.Instance.HourChanged += UpdateHealth;
     }
 
     private void ApplyHourlyDecay(int hours, int minutes, int days)
@@ -81,16 +75,10 @@ public class CharacterStats : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.characters.Remove(this.gameObject);
-        }
-
-        if (TimeManager.Instance != null)
-        {
-            TimeManager.Instance.HourChanged -= ApplyHourlyDecay;
-            TimeManager.Instance.HourChanged -= UpdateHealth;
-        }
+        GameManager.Instance.characters.Remove(this.gameObject);
+        
+        TimeManager.Instance.HourChanged -= ApplyHourlyDecay;
+        TimeManager.Instance.HourChanged -= UpdateHealth;
     }
 
     // Helpers to update stats with clamping to 0..100
