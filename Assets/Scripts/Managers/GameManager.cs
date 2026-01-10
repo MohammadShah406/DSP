@@ -25,7 +25,21 @@ public class GameManager : MonoBehaviour
 
     // Shared Game State
     [Header("Shared Stat")]
-    [Range(0, 100)] public int hope = 50;
+    [Range(0, 100)] [SerializeField] private int hope = 50;
+    public int Hope
+    {
+        get => hope;
+        private set
+        {
+            if (hope != value)
+            {
+                hope = Mathf.Clamp(value, 0, 100);
+                OnHopeChanged?.Invoke(hope);
+            }
+        }
+    }
+
+    public event Action<int> OnHopeChanged;
 
     // Upgrade Progress
     [Header("Upgrade Progress")]
@@ -172,16 +186,13 @@ public class GameManager : MonoBehaviour
             averageAttributeScore = totalAttributeSum / characterCount; // 0-100
             a = averageAttributeScore / 10f; // 0-10
 
-            hope = Mathf.RoundToInt((upgradeValue * 60f) + (a * 4f));
-
+            Hope = Mathf.RoundToInt((upgradeValue * 60f) + (a * 4f));
         }
         else
         {
             // If no characters, hope only depends on upgrades or stays at a base
-            hope = Mathf.RoundToInt(upgradeValue * 60f);
+            Hope = Mathf.RoundToInt(upgradeValue * 60f);
         }
-        
-        hope = Mathf.Clamp(hope, 0, 100);
     }
 
     public void TrySave()
@@ -189,7 +200,7 @@ public class GameManager : MonoBehaviour
         GameSaveData data = new GameSaveData();
         data.currentDay = timeManager.days;
         data.timeOfDay = timeManager.TimeOfDay;
-        data.hope = hope;
+        data.hope = Hope;
         data.upgradesDone = upgradesDone;
         data.totalUpgrades = totalUpgrades;
 
@@ -241,7 +252,7 @@ public class GameManager : MonoBehaviour
         PendingGameLoad.timeOfDay = data.timeOfDay;
         PendingGameLoad.characters = data.characters;
         PendingGameLoad.resources = data.resources;
-        hope = data.hope;
+        Hope = data.hope;
         upgradesDone = data.upgradesDone;
         totalUpgrades = data.totalUpgrades;
 

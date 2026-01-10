@@ -4,14 +4,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    /// <summary>
-    /// Gets or sets the singleton instance of the class.
-    /// </summary>
-    /// <remarks>
-    /// This property provides access to the single, shared instance of the class,
-    /// ensuring that only one instance is created and used throughout the application.
-    /// Typically used in the Singleton design pattern.
-    /// </remarks>
+    // Gets or sets the singleton instance of the class.
     public static UIManager Instance { get; private set; }
 
     /// <summary>
@@ -21,248 +14,68 @@ public class UIManager : MonoBehaviour
     /// </summary>
     [Header("Panels")]
     public GameObject pausePanel;
-
-    /// <summary>
-    /// Represents the UI panel that displays statistical information in the application.
-    /// </summary>
     public GameObject statsPanel;
-
-    /// <summary>
-    /// Represents the user interface component responsible for displaying and managing the inventory system.
-    /// This variable encapsulates the functionality required to interact with and update
-    /// the visual representation of the inventory in the application.
-    /// </summary>
     public InventoryUI inventoryUI;
-
-    /// <summary>
-    /// Represents a user interface panel designed to display and manage tasks.
-    /// This panel serves as a container for task-related elements such as controls,
-    /// lists, or interactive components that allow users to view or modify tasks.
-    /// </summary>
     public GameObject taskPanel;
-
-    /// <summary>
-    /// Represents the top-level Heads-Up Display (HUD) for displaying statistical information.
-    /// </summary>
-    /// <remarks>
-    /// This variable is typically used to manage and render the visual representation
-    /// of critical game or application statistics on the screen, such as scores, health,
-    /// performance metrics, or other relevant data points.
-    /// </remarks>
-    public GameObject topStatsHUD; // Reference to the new HUD top stats panel
-
-    /// <summary>
-    /// Represents the primary Heads-Up Display (HUD) interface within the application.
-    /// </summary>
-    /// <remarks>
-    /// The mainHUD variable is responsible for managing and displaying critical visual
-    /// information to the user, typically used in gaming or simulation contexts. It acts
-    /// as the primary interface for providing feedback, notifications, and status updates
-    /// during runtime.
-    /// </remarks>
-    public GameObject mainHUD; // Main HUD elements (time, day, hope)
-
-    /// <summary>
-    /// Represents the textual representation of time.
-    /// </summary>
+    public GameObject topStatsHUD;
+    public GameObject mainHUD;
+    
     [Header("HUD Elements")]
     public TextMeshProUGUI timeText;
-
-    /// <summary>
-    /// Represents the textual description or name of a specific day.
-    /// </summary>
     public TextMeshProUGUI dayText;
-
-    /// <summary>
-    /// Represents a slider control that allows users to select a value or position
-    /// within a defined range. The hopeSlider can be used in various UI components
-    /// to provide interactive value input.
-    /// </summary>
     public Slider hopeSlider;
-
-    /// <summary>
-    /// Represents a textual string containing a message of hope or positivity.
-    /// </summary>
     public TextMeshProUGUI hopeText;
-
-    /// <summary>
-    /// Represents the visual representation of a character.
-    /// </summary>
-    /// <remarks>
-    /// This variable is used to store data related to how a character appears,
-    /// which could include image paths, sprites, or graphical elements.
-    /// </remarks>
+    
     [Header("Character Stats Display")]
     public Image characterPicture;
-
-    /// <summary>
-    /// Represents the text associated with the name of a character.
-    /// This variable is typically used to store or display the name of a character in a game or application.
-    /// </summary>
     public TextMeshProUGUI characterNameText;
-
-    /// <summary>
-    /// Represents a descriptive string providing detailed information
-    /// about the attributes, traits, or background of a character.
-    /// </summary>
     public TextMeshProUGUI characterDescriptionText;
-
-    /// <summary>
-    /// Represents the speed at which the slider interpolates between values.
-    /// Controls how quickly the slider moves when transitioning from its current value
-    /// to the target value, with higher values indicating faster transitions.
-    /// </summary>
+    
     [Header("Stat Sliders")]
     public float sliderLerpSpeed = 5f;
-
-    /// <summary>
-    /// Represents a UI component that visually displays the health of an entity as a slider.
-    /// The slider's value typically corresponds to the entity's current health,
-    /// providing a graphical representation of a health proportion in relation to
-    /// its maximum value.
-    /// </summary>
     public Slider healthSlider;
-
-    /// <summary>
-    /// Represents the textual display of the health percentage.
-    /// This variable is typically used to show the player's current health
-    /// as a percentage in the user interface.
-    /// </summary>
     public TextMeshProUGUI healthPercentText;
-
-    /// <summary>
-    /// Represents a UI control element that allows the user to adjust the stability setting
-    /// within a predefined range, typically as a slider component.
-    /// </summary>
-    /// <remarks>
-    /// The stabilitySlider variable is commonly used in applications where user-controlled
-    /// stability adjustments are required, such as image processing, simulations, or audio manipulation.
-    /// </remarks>
     public Slider stabilitySlider;
-
-    /// <summary>
-    /// Represents a textual value that denotes the stability percentage.
-    /// This variable is used to store or display the stability of a specific entity
-    /// or process as a percentage in string format.
-    /// </summary>
     public TextMeshProUGUI stabilityPercentText;
-
-    /// <summary>
-    /// Represents a UI slider control used for adjusting the learning rate in an application.
-    /// </summary>
-    /// <remarks>
-    /// The learningSlider is typically used in scenarios involving machine learning
-    /// or similar applications where a numerical value representing the learning rate
-    /// needs to be fine-tuned interactively by the user. The slider allows the user
-    /// to select a value within a predefined range.
-    /// </remarks>
     public Slider learningSlider;
-
-    /// <summary>
-    /// Represents the text or string value that displays the percentage of learning progress.
-    /// </summary>
     public TextMeshProUGUI learningPercentText;
-
-    /// <summary>
-    /// Represents a slider control that measures or adjusts the user's work readiness level.
-    /// </summary>
-    /// <remarks>
-    /// This slider can be used in various contexts, such as user interfaces for
-    /// performance assessments, readiness tracking, or progress updates.
-    /// </remarks>
     public Slider workReadinessSlider;
-
-    /// <summary>
-    /// Represents the textual description or formatted representation
-    /// of the work readiness percentage. This variable is typically
-    /// used to convey the readiness status as a human-readable string.
-    /// </summary>
     public TextMeshProUGUI workReadinessPercentText;
     public Slider trustSlider;
-
-    /// <summary>
-    /// Represents a text value displaying the level of trust as a percentage.
-    /// This variable is typically used to convey trustworthiness in a readable format,
-    /// often accompanied by a numerical percentage value.
-    /// </summary>
     public TextMeshProUGUI trustPercentText;
-
-    /// <summary>
-    /// Represents a slider component used to adjust or display
-    /// nutritional values such as calories, macronutrients, or other
-    /// dietary metrics in a user interface.
-    /// </summary>
     public Slider nutritionSlider;
-
-    /// <summary>
-    /// Represents the text displaying the percentage of nutritional value, typically used to indicate
-    /// the proportion of a specific nutrient in relation to a recommended daily intake or total amount.
-    /// </summary>
     public TextMeshProUGUI nutritionPercentText;
-
-    /// <summary>
-    /// Represents a slider control used to adjust or display the hygiene value in the user interface.
-    /// </summary>
     public Slider hygieneSlider;
-
-    /// <summary>
-    /// Represents the text value or label associated with the hygiene percentage.
-    /// This typically conveys information about the level or status
-    /// of hygiene as a percentage in a readable text format.
-    /// </summary>
     public TextMeshProUGUI hygienePercentText;
-
-    /// <summary>
-    /// Represents a slider control that allows the user to adjust energy levels.
-    /// </summary>
     public Slider energySlider;
-
-    /// <summary>
-    /// Represents the text indicating the percentage of energy.
-    /// </summary>
-    /// <remarks>
-    /// This variable is typically used to display or store the energy level
-    /// in a human-readable percentage format.
-    /// </remarks>
     public TextMeshProUGUI energyPercentText;
-
-    /// <summary>
-    /// Gets or sets a value indicating whether the operation or process is currently paused.
-    /// </summary>
-    /// <remarks>
-    /// This property can be used to determine or control whether an operation is in a paused state.
-    /// When set to true, the process is paused; when false, the process is active or running.
-    /// </remarks>
     private bool IsPaused { get; set; }
-
-    /// <summary>
-    /// Represents the current character being processed or evaluated within the scope
-    /// of the application logic. This variable is typically used to track the specific
-    /// character in workflows such as parsing, iteration, or text analysis operations.
-    /// </summary>
     private CharacterStats _currentCharacter;
-
-    /// <summary>
-    /// Stores a reference to the most recently focused target within the application.
-    /// </summary>
-    /// <remarks>
-    /// This variable is typically used to track the UI element or application component
-    /// that had the user's focus before it shifted to another target.
-    /// </remarks>
     private Transform _lastFocussedTarget;
 
-    /// <summary>
-    /// Called when the script instance is being loaded. This method is invoked
-    /// during the initialization phase of the object lifecycle, before the Start
-    /// method is called.
-    /// </summary>
-    /// <remarks>
-    /// Use this method to perform any setup or initialization required for the script
-    /// before it becomes active. This includes allocating resources, subscribing to
-    /// events, or setting initial state values.
-    /// Avoid accessing other game objects or components in this method, as they may
-    /// not yet be fully initialized.
-    /// </remarks>
+    public enum UIState
+    {
+        Gameplay,
+        Pause,
+        Inventory,
+        CharacterStats
+    }
+
+    public UIState CurrentState => _currentState;
+    private UIState _currentState = UIState.Gameplay;
+    private const float MaxStatValue = 100f;
+
+    // Target values for smooth slider updates
+    private float _targetHope;
+    private float _targetHealth;
+    private float _targetStability;
+    private float _targetLearning;
+    private float _targetWorkReadiness;
+    private float _targetTrust;
+    private float _targetNutrition;
+    private float _targetHygiene;
+    private float _targetEnergy;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -271,7 +84,9 @@ public class UIManager : MonoBehaviour
             return;
         }
         Instance = this;
-
+        
+        // Ensure inventory manager is active so it can initialize and listen for events
+        inventoryUI.gameObject.SetActive(true);
         pausePanel.SetActive(false);
         statsPanel.SetActive(false);
         taskPanel.SetActive(true);
@@ -280,7 +95,10 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Retrieves a customer's order history based on their customer ID.
+    /// Initializes the UIManager by subscribing to events and setting up the default
+    /// state of the UI elements, including timers and stat sliders.
+    /// This method is automatically called by Unity when the script's GameObject
+    /// becomes active in the scene.
     /// </summary>
     private void Start()
     {
@@ -288,18 +106,28 @@ public class UIManager : MonoBehaviour
         TimeManager.Instance.MinuteChanged += UpdateTimeDisplay;
         UpdateTimeDisplay(TimeManager.Instance.hours, TimeManager.Instance.minutes, TimeManager.Instance.days);
         
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnHopeChanged += OnHopeChanged;
+            _targetHope = GameManager.Instance.Hope / MaxStatValue;
+            hopeSlider.value = _targetHope;
+            hopeText.text = $"Hope: {GameManager.Instance.Hope}%";
+        }
 
         // Set slider ranges
-        healthSlider.maxValue = 100;
-        stabilitySlider.maxValue = 100;
-        learningSlider.maxValue = 100;
-        workReadinessSlider.maxValue = 100;
-        trustSlider.maxValue = 100;
-        nutritionSlider.maxValue = 100;
-        hygieneSlider.maxValue = 100;
-        energySlider.maxValue = 100;
+        healthSlider.maxValue = MaxStatValue;
+        stabilitySlider.maxValue = MaxStatValue;
+        learningSlider.maxValue = MaxStatValue;
+        workReadinessSlider.maxValue = MaxStatValue;
+        trustSlider.maxValue = MaxStatValue;
+        nutritionSlider.maxValue = MaxStatValue;
+        hygieneSlider.maxValue = MaxStatValue;
+        energySlider.maxValue = MaxStatValue;
 
         CharacterStats.OnAnyStatChanged += OnCharacterStatChanged;
+
+        // Initialize UI State
+        SwitchState(UIState.Gameplay);
     }
 
     /// <summary>
@@ -309,107 +137,208 @@ public class UIManager : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
-        TimeManager.Instance.MinuteChanged -= UpdateTimeDisplay;
+        if (TimeManager.Instance != null)
+            TimeManager.Instance.MinuteChanged -= UpdateTimeDisplay;
+        
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnHopeChanged -= OnHopeChanged;
         
         CharacterStats.OnAnyStatChanged -= OnCharacterStatChanged;
     }
 
     private void Update()
     {
-        // Toggle pause
+        // State-independent inputs
         if (InputManager.Instance.PauseInput || InputManager.Instance.DeselectInput)
         {
-            // Close inventory first if it's open
-            if (inventoryUI.inventoryPanel.activeSelf)
-            {
-                inventoryUI.Toggle();
-                return;
-            }
-            else if (CameraBehaviour.Instance.focussedTarget != null)
-            {
-                // Character selected - let the camera deselect it
-                // (Camera already has deselected logic on Escape via DeselectInput)
-                // a Stats panel will auto-hide via HandleStatsDisplay()
-
-                CameraBehaviour.Instance.DeselectCharacter();
-            }
-            else
-            {
-                // Nothing selected - open a pause menu
-                TogglePause();
-            }
+            HandleBackInput();
         }
 
-        // Toggle inventory
         if (InputManager.Instance.InventoryInput)
-            ToggleInventory();
-
-        // Toggle character stats
-        HandleStatsDisplay();
-
-        //  If a stats panel is open, update with the currently selected character
-        if (statsPanel.activeSelf)
         {
-            // Get currently selected character from camera
-            if (CameraBehaviour.Instance.focussedTarget != null)
-            {
-                CharacterStats selectedChar = CameraBehaviour.Instance.focussedTarget.GetComponent<CharacterStats>();
-
-                // Update if character changed or stats changed
-                if (selectedChar != null)
-                {
-                    _currentCharacter = selectedChar;
-                    UpdateCharacterStatsDisplay(_currentCharacter);
-                }
-            }
-            else if (_currentCharacter != null)
-            {
-                // Still update the current character even if not focused (for live stat changes)
-                UpdateCharacterStatsDisplay(_currentCharacter);
-            }
+            ToggleInventory();
         }
 
-        // Update hope bar continuously
-        UpdateHopeDisplay();
+        // Handle selection changes (replaces polling HandleStatsDisplay)
+        UpdateSelectionState();
+
+        // Smoothly update sliders if they haven't reached targets
+        LerpSliders();
     }
 
-    /// <summary>
-    /// Updates and displays the player's statistical information in the game's user interface.
-    /// </summary>
-    private void HandleStatsDisplay()
+    private void HandleBackInput()
+    {
+        if (_currentState == UIState.Inventory)
+        {
+            ToggleInventory();
+        }
+        else if (_currentState == UIState.CharacterStats)
+        {
+            CameraBehaviour.Instance.DeselectCharacter();
+        }
+        else if (_currentState == UIState.Pause)
+        {
+            SwitchState(UIState.Gameplay);
+        }
+        else
+        {
+            SwitchState(UIState.Pause);
+        }
+    }
+
+    private void UpdateSelectionState()
     {
         Transform focussedTarget = CameraBehaviour.Instance.focussedTarget;
 
-        // Check if selection changed
         if (focussedTarget != _lastFocussedTarget)
         {
             _lastFocussedTarget = focussedTarget;
 
             if (focussedTarget != null)
             {
-                // Character selected - show stats
                 CharacterStats character = focussedTarget.GetComponent<CharacterStats>();
                 if (character != null)
                 {
                     _currentCharacter = character;
-                    statsPanel.SetActive(true);
-                    if (topStatsHUD != null) topStatsHUD.SetActive(true);
-                    UpdateCharacterStatsDisplay(_currentCharacter);
+                    UpdateCharacterStatsDisplay(_currentCharacter, true); // Force immediate update of texts
+                    SwitchState(UIState.CharacterStats);
                 }
             }
             else
             {
-                // No character selected - hide stats
-                statsPanel.SetActive(false);
-                if (topStatsHUD != null) topStatsHUD.SetActive(false);
                 _currentCharacter = null;
+                if (_currentState == UIState.CharacterStats)
+                {
+                    SwitchState(UIState.Gameplay);
+                }
             }
         }
-        else if (focussedTarget != null && _currentCharacter != null && statsPanel.activeSelf)
+    }
+
+    public void SwitchState(UIState newState)
+    {
+        UIState oldState = _currentState;
+        _currentState = newState;
+
+        // Panel visibility logic based on state
+        pausePanel.SetActive(_currentState == UIState.Pause);
+        statsPanel.SetActive(_currentState == UIState.CharacterStats);
+        topStatsHUD.SetActive(_currentState == UIState.CharacterStats);
+
+        // Ensure inventory panel is in sync with state
+        if (inventoryUI != null && inventoryUI.inventoryPanel != null)
         {
-            // Character still selected - update stats (for live changes)
-            UpdateCharacterStatsDisplay(_currentCharacter);
+            bool isInventory = _currentState == UIState.Inventory;
+            
+            // Ensure the manager script object is active if we are entering inventory state.
+            // This prevents "Coroutine couldn't be started" errors.
+            if (isInventory && !inventoryUI.gameObject.activeSelf)
+            {
+                inventoryUI.gameObject.SetActive(true);
+            }
+
+            inventoryUI.inventoryPanel.SetActive(isInventory);
+            
+            if (isInventory && oldState != UIState.Inventory)
+            {
+                inventoryUI.OnOpened();
+            }
+            else if (!isInventory && oldState == UIState.Inventory)
+            {
+                inventoryUI.OnClosed();
+            }
         }
+        
+        // mainHUD and taskPanel might have more complex visibility rules
+        // For now, keep them mostly on except in Pause or Inventory if that's the current behavior
+        bool hideMainHUD = (_currentState == UIState.Pause || _currentState == UIState.Inventory);
+        mainHUD.SetActive(!hideMainHUD);
+        taskPanel.SetActive(!hideMainHUD);
+
+        // Time management
+        Time.timeScale = (_currentState == UIState.Pause) ? 0f : 1f;
+        IsPaused = (_currentState == UIState.Pause);
+    }
+
+    private void LerpSliders()
+    {
+        float t = Time.deltaTime * sliderLerpSpeed;
+        bool anyStatChanged = false;
+
+        // Lerp Hope
+        if (!Mathf.Approximately(hopeSlider.value, _targetHope))
+        {
+            hopeSlider.value = Mathf.Lerp(hopeSlider.value, _targetHope, t);
+        }
+
+        // Only lerp character stats if stats panel is visible
+        if (statsPanel.activeSelf && _currentCharacter != null)
+        {
+            if (!Mathf.Approximately(healthSlider.value, _targetHealth))
+            {
+                healthSlider.value = Mathf.Lerp(healthSlider.value, _targetHealth, t);
+                anyStatChanged = true;
+            }
+            
+            if (!Mathf.Approximately(stabilitySlider.value, _targetStability))
+            {
+                stabilitySlider.value = Mathf.Lerp(stabilitySlider.value, _targetStability, t);
+                anyStatChanged = true;
+            }
+            
+            if (!Mathf.Approximately(learningSlider.value, _targetLearning))
+            {
+                learningSlider.value = Mathf.Lerp(learningSlider.value, _targetLearning, t);
+                anyStatChanged = true;
+            }
+            
+            if (!Mathf.Approximately(workReadinessSlider.value, _targetWorkReadiness))
+            {
+                workReadinessSlider.value = Mathf.Lerp(workReadinessSlider.value, _targetWorkReadiness, t);
+                anyStatChanged = true;
+            }
+            
+            if (!Mathf.Approximately(trustSlider.value, _targetTrust))
+            {
+                trustSlider.value = Mathf.Lerp(trustSlider.value, _targetTrust, t);
+                anyStatChanged = true;
+            }
+            
+            if (!Mathf.Approximately(nutritionSlider.value, _targetNutrition))
+            {
+                nutritionSlider.value = Mathf.Lerp(nutritionSlider.value, _targetNutrition, t);
+                anyStatChanged = true;
+            }
+            
+            if (!Mathf.Approximately(hygieneSlider.value, _targetHygiene))
+            {
+                hygieneSlider.value = Mathf.Lerp(hygieneSlider.value, _targetHygiene, t);
+                anyStatChanged = true;
+            }
+            
+            if (!Mathf.Approximately(energySlider.value, _targetEnergy))
+            {
+                energySlider.value = Mathf.Lerp(energySlider.value, _targetEnergy, t);
+                anyStatChanged = true;
+            }
+            
+            if (anyStatChanged)
+            {
+                UpdateStatTexts();
+            }
+        }
+    }
+
+    private void UpdateStatTexts()
+    {
+        healthPercentText.text = $"{Mathf.RoundToInt(healthSlider.value)}%";
+        stabilityPercentText.text = $"{Mathf.RoundToInt(stabilitySlider.value)}%";
+        learningPercentText.text = $"{Mathf.RoundToInt(learningSlider.value)}%";
+        workReadinessPercentText.text = $"{Mathf.RoundToInt(workReadinessSlider.value)}%";
+        trustPercentText.text = $"{Mathf.RoundToInt(trustSlider.value)}%";
+        nutritionPercentText.text = $"{Mathf.RoundToInt(nutritionSlider.value)}%";
+        hygienePercentText.text = $"{Mathf.RoundToInt(hygieneSlider.value)}%";
+        energyPercentText.text = $"{Mathf.RoundToInt(energySlider.value)}%";
     }
 
 
@@ -422,26 +351,24 @@ public class UIManager : MonoBehaviour
         dayText.text = $"Day {days}";
     }
 
-    /// <summary>
-    /// Updates the display elements related to hope indicators in the application's user interface.
-    /// </summary>
-    private void UpdateHopeDisplay()
+    private void OnHopeChanged(int hopeValue)
     {
-        if (GameManager.Instance == null) return;
-
-        float hopeValue = GameManager.Instance.hope;
-        float normalizedHope = hopeValue / 100f;
-
-        hopeSlider.value = Mathf.Lerp(hopeSlider.value, normalizedHope, Time.deltaTime * sliderLerpSpeed);
+        _targetHope = hopeValue / MaxStatValue;
         hopeText.text = $"Hope: {hopeValue}%";
+    }
+
+    private void OnCharacterStatChanged(CharacterStats character)
+    {
+        if (_currentCharacter == character && statsPanel.activeSelf)
+        {
+            UpdateCharacterStatsDisplay(character);
+        }
     }
 
     /// <summary>
     /// Updates the character's stats display on the user interface.
-    /// This includes refreshing the displayed values for health, stamina,
-    /// mana, and other relevant stats to match the current character data.
     /// </summary>
-    private void UpdateCharacterStatsDisplay(CharacterStats character)
+    private void UpdateCharacterStatsDisplay(CharacterStats character, bool immediate = false)
     {
         if (character == null) return;
 
@@ -454,65 +381,33 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            // Optionally hide or set a default if no icon
             characterPicture.enabled = false;
         }
 
         characterDescriptionText.text = character.description ?? "Refugee";
 
-        // Smoothly update all sliders
-        float t = Time.deltaTime * sliderLerpSpeed;
+        // Set targets
+        _targetHealth = character.Health;
+        _targetStability = character.Stability;
+        _targetLearning = character.Learning;
+        _targetWorkReadiness = character.WorkReadiness;
+        _targetTrust = character.Trust;
+        _targetNutrition = character.Nutrition;
+        _targetHygiene = character.Hygiene;
+        _targetEnergy = character.Energy;
 
-        // Update Health
-        healthSlider.value = Mathf.Lerp(healthSlider.value, character.Health, t); 
-        healthPercentText.text = $"{Mathf.RoundToInt(healthSlider.value)}%";
-
-        // Update Stability
-        stabilitySlider.value = Mathf.Lerp(stabilitySlider.value, character.Stability, t);
-        stabilityPercentText.text = $"{Mathf.RoundToInt(stabilitySlider.value)}%";
-
-        // Update Learning
-        learningSlider.value = Mathf.Lerp(learningSlider.value, character.Learning, t);
-        learningPercentText.text = $"{Mathf.RoundToInt(learningSlider.value)}%";
-
-        // Update Work Readiness
-        workReadinessSlider.value = Mathf.Lerp(workReadinessSlider.value, character.WorkReadiness, t);
-        workReadinessPercentText.text = $"{Mathf.RoundToInt(workReadinessSlider.value)}%";
-
-        // Update Trust
-        trustSlider.value = Mathf.Lerp(trustSlider.value, character.Trust, t);
-        trustPercentText.text = $"{Mathf.RoundToInt(trustSlider.value)}%";
-
-        // Update Nutrition
-        nutritionSlider.value = Mathf.Lerp(nutritionSlider.value, character.Nutrition, t);
-        nutritionPercentText.text = $"{Mathf.RoundToInt(nutritionSlider.value)}%";
-
-        // Update Hygiene
-        hygieneSlider.value = Mathf.Lerp(hygieneSlider.value, character.Hygiene, t);
-        hygienePercentText.text = $"{Mathf.RoundToInt(hygieneSlider.value)}%";
-
-        // Update Energy
-        energySlider.value = Mathf.Lerp(energySlider.value, character.Energy, t);
-        energyPercentText.text = $"{Mathf.RoundToInt(energySlider.value)}%";
-    }
-
-    /// <summary>
-    /// Pauses the current operation or process, allowing it to resume later.
-    /// </summary>
-    private void SetPause(bool pause)
-    {
-        IsPaused = pause;
-        pausePanel.SetActive(pause);
-        Time.timeScale = pause ? 0f : 1f;
-    }
-
-    /// <summary>
-    /// Toggles the paused state of the application or process.
-    /// </summary>
-    private void TogglePause()
-    {
-        SetPause(!IsPaused);
-        ToggleHUD();
+        if (immediate)
+        {
+            healthSlider.value = _targetHealth;
+            stabilitySlider.value = _targetStability;
+            learningSlider.value = _targetLearning;
+            workReadinessSlider.value = _targetWorkReadiness;
+            trustSlider.value = _targetTrust;
+            nutritionSlider.value = _targetNutrition;
+            hygieneSlider.value = _targetHygiene;
+            energySlider.value = _targetEnergy;
+            UpdateStatTexts();
+        }
     }
 
     /// <summary>
@@ -520,18 +415,18 @@ public class UIManager : MonoBehaviour
     /// </summary>
     private void ToggleInventory()
     {
-        inventoryUI.Toggle();
+        if (_currentState == UIState.Inventory)
+            OnInventoryClosed();
+        else
+            OnInventoryOpened();
     }
 
     /// <summary>
     /// Triggered when the inventory is opened by the user or system.
-    /// This method allows the implementation of logic to handle actions or updates
-    /// required when the inventory UI becomes visible or active.
     /// </summary>
     public void OnInventoryOpened()
     {
-        // Hide other UI elements when inventory is opened
-        ToggleHUD();
+        SwitchState(UIState.Inventory);
     }
 
     /// <summary>
@@ -539,16 +434,10 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void OnInventoryClosed()
     {
-        // Restore UI elements when inventory is closed
-        taskPanel.SetActive(true);
-        mainHUD.SetActive(true);
-        
-        // Re-show stats if a character is still focused
         if (CameraBehaviour.Instance.focussedTarget != null)
-        {
-            statsPanel.SetActive(true);
-            topStatsHUD.SetActive(true);
-        }
+            SwitchState(UIState.CharacterStats);
+        else
+            SwitchState(UIState.Gameplay);
     }
 
     /// <summary>
@@ -556,45 +445,10 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void ToggleStats()
     {
-        bool isActive = !statsPanel.activeSelf;
-        statsPanel.SetActive(isActive);
-
-        if (isActive)
-        {
-            // Show stats of the currently selected character, or first character
-            if (CameraBehaviour.Instance.focussedTarget != null)
-            {
-                CharacterStats selectedChar = CameraBehaviour.Instance.focussedTarget.GetComponent<CharacterStats>();
-                if (selectedChar != null)
-                {
-                    _currentCharacter = selectedChar;
-                    UpdateCharacterStatsDisplay(_currentCharacter);
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Toggles the state of the Heads-Up Display (HUD) in the application.
-    /// This method switches the visibility or active state of the HUD,
-    /// enabling it if it is currently disabled and disabling it if it is currently enabled.
-    /// </summary>
-    private void ToggleHUD()
-    {
-        bool isActive = !mainHUD.activeSelf;
-        mainHUD.SetActive(isActive);
-    }
-
-    /// <summary>
-    /// Triggered whenever a character's stat changes.
-    /// </summary>
-    private void OnCharacterStatChanged(CharacterStats character)
-    {
-        // Only update if it's the currently displayed character
-        if (character == _currentCharacter && statsPanel.activeSelf)
-        {
-            UpdateCharacterStatsDisplay(character);
-        }
+        if (_currentState == UIState.CharacterStats)
+            SwitchState(UIState.Gameplay);
+        else if (CameraBehaviour.Instance.focussedTarget != null)
+            SwitchState(UIState.CharacterStats);
     }
 
     /// <summary>
@@ -602,8 +456,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void OnResumeButtonClicked()
     {
-        SetPause(false);
-       
+        SwitchState(UIState.Gameplay);
     }
 
     /// <summary>

@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterStats : MonoBehaviour
 {
     public static event Action<CharacterStats> OnAnyStatChanged;
+    public const int MaxStatValue = 100;
 
     public enum PrimaryAttribute
     {
@@ -90,7 +91,7 @@ public class CharacterStats : MonoBehaviour
         {
             if (health != value)
             {
-                health = Mathf.Clamp(value, 0, 100);
+                health = Mathf.Clamp(value, 0, MaxStatValue);
                 OnAnyStatChanged?.Invoke(this);
             }
         }
@@ -103,7 +104,7 @@ public class CharacterStats : MonoBehaviour
         {
             if (stability != value)
             {
-                stability = Mathf.Clamp(value, 0, 100);
+                stability = Mathf.Clamp(value, 0, MaxStatValue);
                 OnAnyStatChanged?.Invoke(this);
             }
         }
@@ -116,7 +117,7 @@ public class CharacterStats : MonoBehaviour
         {
             if (learning != value)
             {
-                learning = Mathf.Clamp(value, 0, 100);
+                learning = Mathf.Clamp(value, 0, MaxStatValue);
                 OnAnyStatChanged?.Invoke(this);
             }
         }
@@ -129,7 +130,7 @@ public class CharacterStats : MonoBehaviour
         {
             if (workReadiness != value)
             {
-                workReadiness = Mathf.Clamp(value, 0, 100);
+                workReadiness = Mathf.Clamp(value, 0, MaxStatValue);
                 OnAnyStatChanged?.Invoke(this);
             }
         }
@@ -142,7 +143,7 @@ public class CharacterStats : MonoBehaviour
         {
             if (trust != value)
             {
-                trust = Mathf.Clamp(value, 0, 100);
+                trust = Mathf.Clamp(value, 0, MaxStatValue);
                 OnAnyStatChanged?.Invoke(this);
             }
         }
@@ -155,7 +156,7 @@ public class CharacterStats : MonoBehaviour
         {
             if (nutrition != value)
             {
-                nutrition = Mathf.Clamp(value, 0, 100);
+                nutrition = Mathf.Clamp(value, 0, MaxStatValue);
                 OnAnyStatChanged?.Invoke(this);
             }
         }
@@ -168,7 +169,7 @@ public class CharacterStats : MonoBehaviour
         {
             if (hygiene != value)
             {
-                hygiene = Mathf.Clamp(value, 0, 100);
+                hygiene = Mathf.Clamp(value, 0, MaxStatValue);
                 OnAnyStatChanged?.Invoke(this);
             }
         }
@@ -181,7 +182,7 @@ public class CharacterStats : MonoBehaviour
         {
             if (energy != value)
             {
-                energy = Mathf.Clamp(value, 0, 100);
+                energy = Mathf.Clamp(value, 0, MaxStatValue);
                 OnAnyStatChanged?.Invoke(this);
             }
         }

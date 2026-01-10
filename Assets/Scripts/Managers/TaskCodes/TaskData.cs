@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "New Task", menuName = "Tasks/TaskData")]
-[System.Serializable]
 public class TaskData : ScriptableObject
 {
     public string taskDescription;
@@ -10,10 +9,6 @@ public class TaskData : ScriptableObject
     public int hour;
     public int minute;
     public List<StatEffect> statEffects;
-    public bool isActive = false;
-    public bool isCompleted = false;
-    public GameObject character;
-    public Interactable interactable;
     public string actionRequirement;
     
     
@@ -24,5 +19,5 @@ public class TaskData : ScriptableObject
         public CharacterStats.PrimaryAttribute attribute;
         public int amount;
     }
-    
 }
+

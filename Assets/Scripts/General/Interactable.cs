@@ -2,12 +2,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using UnityEngine.TextCore.Text;
 
 public class Interactable : MonoBehaviour
 {
     [Header("Outline Controller")]
-    private OutlineController outline;
+    private OutlineController _outline;
 
     [Header("Singleton Reference")]
     [SerializeField] private TimeManager timeManager;
@@ -21,6 +22,11 @@ public class Interactable : MonoBehaviour
 
     [Header("Who can Interact")]
     [SerializeField] private List<Transform> allowedCharacters;
+    
+    [Header("Task Integration")]
+    [SerializeField] private string interactionRequirement;
+    
+    public string InteractionRequirement => interactionRequirement;
 
     [System.Serializable]
     public class AtrributeList
@@ -49,20 +55,18 @@ public class Interactable : MonoBehaviour
     [SerializeField] private GameObject interactedBy;
 
     [Header("Interaction Event")]
-    public UnityEvent OnInteracted;
+    public UnityEvent onInteracted;
 
     [Header("Interaction Settings")]
     public InteractionType interactionType = InteractionType.None;
-    public string taskRequirement;
-
-
+    
     private void Awake()
     {
-        if(outline != null) return;
+        if(_outline != null) return;
         else
         {
-            outline = GetComponent<OutlineController>();
-            if (outline == null)
+            _outline = GetComponent<OutlineController>();
+            if (_outline == null)
             {
                 Debug.LogWarning($"Interactable {name} has no OutlineController!");
             }
@@ -95,15 +99,15 @@ public class Interactable : MonoBehaviour
     /// </summary>
     public void SetOutline(bool enabled)
     {
-        if (outline == null) return;
+        if (_outline == null) return;
 
         if (enabled)
         {
-            outline.EnableOutlineInteractable();
+            _outline.EnableOutlineInteractable();
         }
         else
         {
-            outline.DisableOutline();
+            _outline.DisableOutline();
         }
     }
 
@@ -135,7 +139,7 @@ public class Interactable : MonoBehaviour
 
     public void CallInteractEvent()
     {
-        OnInteracted?.Invoke();
+        onInteracted?.Invoke();
     }
 
     public void SetInteractedBy(GameObject character)
@@ -156,9 +160,9 @@ public class Interactable : MonoBehaviour
     public void InteractComplete()
     {
         Debug.Log($"{name} interaction complete.");
-        if (TaskManager.Instance != null && !string.IsNullOrEmpty(taskRequirement))
+        if (TaskManager.Instance != null && !string.IsNullOrEmpty(interactionRequirement))
         {
-            TaskManager.Instance.CompleteTaskByRequirement(taskRequirement);
+            TaskManager.Instance.CompleteTaskByRequirement(interactionRequirement);
         }
         ApplyEffect();
     }
@@ -177,26 +181,26 @@ public class Interactable : MonoBehaviour
         var characterStats = interactedBy.GetComponent<CharacterStats>();
         switch (interactionType)
         {
-            case Interactable.InteractionType.Harvest:
+            case InteractionType.Harvest:
                 Debug.Log("Harvest interaction completed.");
                 break;
-            case Interactable.InteractionType.Cook:
+            case InteractionType.Cook:
                 characterStats.ChangeWorkReadiness(5);
                 Debug.Log("Cook interaction completed.");
                 break;
-            case Interactable.InteractionType.Scavenge:
+            case InteractionType.Scavenge:
                 Debug.Log("Scavenge interaction completed.");
                 break;
-            case Interactable.InteractionType.Rest:
+            case InteractionType.Rest:
                 Debug.Log("Rest interaction completed.");
                 break;
-            case Interactable.InteractionType.Talk:
+            case InteractionType.Talk:
                 Debug.Log("Talk interaction completed.");
                 break;
-            case Interactable.InteractionType.Paint:
+            case InteractionType.Paint:
                 Debug.Log("Paint interaction completed.");
                 break;
-            case Interactable.InteractionType.Watering:
+            case InteractionType.Watering:
                 Debug.Log("Watering interaction completed.");
                 break;
             default:

@@ -112,33 +112,26 @@ public class InventoryUI : MonoBehaviour
     /// Toggles the state of the specified component or system between enabled and disabled.
     public void Toggle()
     {
-        if (inventoryPanel == null) return;
-
-        bool isActive = !inventoryPanel.activeSelf;
-        inventoryPanel.SetActive(isActive);
-
-        if (isActive)
+        if (UIManager.Instance != null)
         {
-            // When opening, hide other panels via UIManager
-            if (UIManager.Instance != null)
-            {
-                UIManager.Instance.OnInventoryOpened();
-            }
-            
-            // Force update when opening
-            UpdateInventoryDisplay(true);
-        }
-        else
-        {
-            // When closing, restore panels via UIManager
-            if (UIManager.Instance != null)
-            {
+            if (UIManager.Instance.CurrentState == UIManager.UIState.Inventory)
                 UIManager.Instance.OnInventoryClosed();
-            }
-
-            // Close details when inventory is closed
-            itemDetailPanel.SetActive(false);
+            else
+                UIManager.Instance.OnInventoryOpened();
         }
+    }
+
+    /// Handles operations to perform when the inventory is opened.
+    public void OnOpened()
+    {
+        UpdateInventoryDisplay(true);
+    }
+
+    /// Handles operations to perform when the inventory is closed.
+    public void OnClosed()
+    {
+        if (itemDetailPanel != null)
+            itemDetailPanel.SetActive(false);
     }
 
     /// Updates the display of a single resource in the user interface.
@@ -230,6 +223,9 @@ public class InventoryUI : MonoBehaviour
         {
             return;
         }
+
+        // Coroutines cannot be started on inactive GameObjects.
+        if (!gameObject.activeInHierarchy) return;
 
         if (_updateCoroutine != null) StopCoroutine(_updateCoroutine);
         _updateCoroutine = StartCoroutine(UpdateDisplayCoroutine());
