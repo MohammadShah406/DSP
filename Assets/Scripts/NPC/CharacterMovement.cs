@@ -343,19 +343,16 @@ public class CharacterMovement : MonoBehaviour
 
     private void HandleInteraction(Interactable interactable)
     {
-
         // If not currently interacting, nothing to interrupt
         if (!isInteracting || currentInteractable == null)
         {
             isInteracting = false;
-            Debug.Log("HandleInteraction: Not interacting currently.");
             return;
         }
 
         // 1) If a different interactable was selected while interacting, cancel current interaction
         if (interactable != null && interactable != currentInteractable)
         {
-            Debug.Log("HandleInteraction: Different Interactable");
             // Clear previous interactable state
             currentInteractable.ClearInteractedBy();
             currentInteractable = interactable;

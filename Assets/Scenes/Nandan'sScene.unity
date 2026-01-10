@@ -1351,6 +1351,10 @@ PrefabInstance:
       propertyPath: sets.Array.data[1].interactables.Array.size
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4358066015284002512, guid: b73a2c3460b671241ac62c619f8e8707, type: 3}
+      propertyPath: 'sets.Array.data[0].interactables.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4451387613728155949, guid: b73a2c3460b671241ac62c619f8e8707, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6938,6 +6942,7 @@ MonoBehaviour:
   canInteract: 0
   allowedCharacters:
   - {fileID: 791676597}
+  - {fileID: 372416830}
   interactedBy: {fileID: 0}
   OnInteracted:
     m_PersistentCalls:

@@ -8,7 +8,7 @@ public class TaskManager : MonoBehaviour
     public static TaskManager Instance { get; private set; }
 
     [SerializeField] private List<TaskData> allTasks;
-    private List<TaskData> currentDayTasks = new List<TaskData>();
+    [SerializeField] private List<TaskData> currentDayTasks = new List<TaskData>();
 
     public event Action OnTasksUpdated;
 
