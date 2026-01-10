@@ -119,6 +119,55 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &72546206
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 72546207}
+  - component: {fileID: 72546208}
+  m_Layer: 0
+  m_Name: DonationManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &72546207
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72546206}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1858440573}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &72546208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72546206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2935904304278404b89e623b2c1f6870, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allDonationsItemData:
+  - {fileID: 11400000, guid: c529607c872182449aa89b5446c7a8ae, type: 2}
+  allDonationsResource:
+  - resourceName: Curtain
+    quantity: 1
 --- !u!1 &80770357
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,6 +203,11 @@ Transform:
   - {fileID: 1144442965}
   m_Father: {fileID: 1429658191}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!1 &84296090 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 409135670434808628, guid: 0897a8856fa0bae47a8083cf9b4c9979, type: 3}
+  m_PrefabInstance: {fileID: 921647249}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &138238874 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6587183969536680949, guid: 8460c0ab450310746bdb8eeeb0f13c9c, type: 3}
@@ -5537,6 +5591,7 @@ Transform:
   - {fileID: 1970637765}
   - {fileID: 829402236}
   - {fileID: 545009052}
+  - {fileID: 72546207}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1877043654
@@ -6995,11 +7050,11 @@ PrefabInstance:
     - target: {fileID: 4265828883223752541, guid: 4ee892a467fd8814590d28f22a5da974, type: 3}
       propertyPath: 'characters.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 791676596}
     - target: {fileID: 4265828883223752541, guid: 4ee892a467fd8814590d28f22a5da974, type: 3}
       propertyPath: 'characters.Array.data[1]'
       value: 
-      objectReference: {fileID: 791676596}
+      objectReference: {fileID: 84296090}
     - target: {fileID: 7072935197748490789, guid: 4ee892a467fd8814590d28f22a5da974, type: 3}
       propertyPath: m_Name
       value: GameManager
