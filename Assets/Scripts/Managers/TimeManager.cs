@@ -283,16 +283,20 @@ public class TimeManager : MonoBehaviour
 
     public void SetTime(int h, int m, int? d = null)
     {
+        int oldDay = days;
         hours = Mathf.Clamp(h, 0, 23);
         minutes = Mathf.Clamp(m, 0, 59);
         if (d.HasValue) days = Mathf.Max(0, d.Value);
 
         ApplyActiveHourClamp(false);
         UpdateLighting();
+
+        if (days != oldDay) DayChanged?.Invoke(days);
     }
 
     public void SetTime(int d, float timeOfDay)
     {
+        int oldDay = days;
         days = Mathf.Max(0, d);
         float totalMinutes = Mathf.Clamp01(timeOfDay) * 24f * 60f;
         int h = Mathf.FloorToInt(totalMinutes / 60f);
@@ -301,6 +305,8 @@ public class TimeManager : MonoBehaviour
         minutes = m;
         ApplyActiveHourClamp(false);
         UpdateLighting();
+
+        if (days != oldDay) DayChanged?.Invoke(days);
     }
 
     public void AddMinutes(int mins)

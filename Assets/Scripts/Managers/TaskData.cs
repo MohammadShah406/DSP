@@ -8,7 +8,14 @@ public class TaskData : ScriptableObject
     public int day;
     public int hour;
     public int minute;
-
+    public List<StatEffect> statEffects;
+    public bool isActive = false;
+    public bool isCompleted = false;
+    public GameObject character;
+    public Interactable interactable;
+    public string actionRequirement;
+    
+    
     [System.Serializable]
     public struct StatEffect
     {
@@ -16,10 +23,5 @@ public class TaskData : ScriptableObject
         public CharacterStats.PrimaryAttribute attribute;
         public int amount;
     }
-
-    public List<StatEffect> statEffects;
-    public bool isCompleted;
-
-    // Optional: Reference to a specific interactable or action type if we want auto-completion
-    public string actionRequirement; 
+    
 }

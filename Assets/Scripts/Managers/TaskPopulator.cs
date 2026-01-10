@@ -87,27 +87,14 @@ public class TaskPopulator : MonoBehaviour
         tasks.Add(CreateTask("Sleep", 3, 20, 0, "Sleep3", null));
 
         // Add all to TaskManager
-        var field = typeof(TaskManager).GetField("allTasks", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        if (field != null)
-        {
-            field.SetValue(TaskManager.Instance, tasks);
-            Debug.Log($"[TaskPopulator] Successfully populated {tasks.Count} tasks into TaskManager.");
-        }
-        else
-        {
-            Debug.LogError("[TaskPopulator] Could not find 'allTasks' field in TaskManager via reflection!");
-        }
+        TaskManager.Instance.SetAllTasks(tasks);
+        Debug.Log($"[TaskPopulator] Successfully populated {tasks.Count} tasks into TaskManager.");
         
         // Trigger update
-        var method = typeof(TaskManager).GetMethod("UpdateDayTasks", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        if (method != null && TimeManager.Instance != null)
+        if (TaskManager.Instance != null && TimeManager.Instance != null)
         {
-            method.Invoke(TaskManager.Instance, new object[] { TimeManager.Instance.days });
+            TaskManager.Instance.UpdateDayTasks(TimeManager.Instance.days);
             Debug.Log($"[TaskPopulator] Triggered UpdateDayTasks for Day {TimeManager.Instance.days}.");
-        }
-        else
-        {
-            Debug.LogError("[TaskPopulator] Could not find 'UpdateDayTasks' method in TaskManager via reflection!");
         }
     }
 

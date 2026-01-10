@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
 
     // Event for resource changes
     public event Action OnResourcesChanged;
+    public event Action<string, int> OnResourceChanged; // name, newQuantity
 
     // Whether to load saved game on start
     public bool loadsavedgame = true;
@@ -59,15 +60,19 @@ public class GameManager : MonoBehaviour
     public void AddResource(string name, int amount)
     {
         ResourceData res = resources.Find(r => r.resourceName == name);
+        int newQuantity = 0;
         if (res != null)
         {
             res.quantity += amount;
+            newQuantity = res.quantity;
         }
         else
         {
+            newQuantity = amount;
             resources.Add(new ResourceData { resourceName = name, quantity = amount });
         }
         OnResourcesChanged?.Invoke();
+        OnResourceChanged?.Invoke(name, newQuantity);
     }
 
     /// <summary>
@@ -306,6 +311,7 @@ public class GameManager : MonoBehaviour
             foreach (var resData in PendingGameLoad.resources)
             {
                 ResourceData res = resources.Find(r => r.resourceName == resData.id);
+                int newQuantity = resData.quantity;
                 if (res != null)
                 {
                     res.quantity = resData.quantity;
@@ -314,6 +320,7 @@ public class GameManager : MonoBehaviour
                 {
                     resources.Add(new ResourceData { resourceName = resData.id, quantity = resData.quantity });
                 }
+                OnResourceChanged?.Invoke(resData.id, newQuantity);
             }
             PendingGameLoad.resources = null;
             OnResourcesChanged?.Invoke();

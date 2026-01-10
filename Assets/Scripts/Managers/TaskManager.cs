@@ -31,7 +31,12 @@ public class TaskManager : MonoBehaviour
         }
     }
 
-    private void UpdateDayTasks(int day)
+    public void SetAllTasks(List<TaskData> tasks)
+    {
+        allTasks = tasks;
+    }
+
+    public void UpdateDayTasks(int day)
     {
         if (allTasks == null)
         {
@@ -49,8 +54,9 @@ public class TaskManager : MonoBehaviour
 
     public List<TaskData> GetTasksForCurrentTime(int day, int hour, int minute)
     {
-        // For simplicity, let's say tasks are "active" if it's their hour or later and not completed
-        return currentDayTasks.Where(t => !t.isCompleted && (t.hour <= hour)).ToList();
+        if (allTasks == null) return new List<TaskData>();
+        // Filter by the provided day and ensure it's at or before the current hour
+        return allTasks.Where(t => t != null && t.day == day && !t.isCompleted && (t.hour <= hour)).ToList();
     }
 
     public void CompleteTask(string taskDescription)
