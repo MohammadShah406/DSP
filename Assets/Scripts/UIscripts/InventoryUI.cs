@@ -82,7 +82,6 @@ public class InventoryUI : MonoBehaviour
     /// Initiates the process or logic associated with starting the specified operation.
     private void Start()
     {
-        LayoutManager.SetupInventoryGrid(inventoryGrid, autoSetupGrid);
         
         if (GameManager.Instance != null)
         {
