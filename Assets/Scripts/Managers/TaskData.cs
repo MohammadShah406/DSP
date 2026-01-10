@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "New Task", menuName = "Tasks/TaskData")]
+[System.Serializable]
 public class TaskData : ScriptableObject
 {
     public string taskDescription;

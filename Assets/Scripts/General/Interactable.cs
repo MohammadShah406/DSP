@@ -22,6 +22,17 @@ public class Interactable : MonoBehaviour
     [Header("Who can Interact")]
     [SerializeField] private List<Transform> allowedCharacters;
 
+    [System.Serializable]
+    public class AtrributeList
+    {
+        public CharacterStats.PrimaryAttribute characterAttribute;
+        public int amount;
+    }
+
+    [Header("Effect on Character")]
+    public List<AtrributeList> characterEffectsList = new List<AtrributeList>();
+
+
     public enum InteractionType
     {
         None,
@@ -149,7 +160,7 @@ public class Interactable : MonoBehaviour
         {
             TaskManager.Instance.CompleteTaskByRequirement(taskRequirement);
         }
-        IncreaseStats();
+        ApplyEffect();
     }
 
     public void AddToInteractionManager()
@@ -192,7 +203,40 @@ public class Interactable : MonoBehaviour
                 // Default
                 break;
         }
+    }
 
-        
+
+    private void ApplyEffect()
+    {
+        var characterStats = interactedBy.GetComponent<CharacterStats>();
+
+        foreach (var attribute in characterEffectsList)
+        {
+            switch (attribute.characterAttribute)
+            {
+                case CharacterStats.PrimaryAttribute.Stability:
+                    characterStats.ChangeStability(attribute.amount);
+                    break;
+                case CharacterStats.PrimaryAttribute.Learning:
+                    characterStats.ChangeLearning(attribute.amount);
+                    break;
+                case CharacterStats.PrimaryAttribute.WorkReadiness:
+                    characterStats.ChangeWorkReadiness(attribute.amount);
+                    break;
+                case CharacterStats.PrimaryAttribute.Trust:
+                    characterStats.ChangeTrust(attribute.amount);
+                    break;
+                case CharacterStats.PrimaryAttribute.Nutrition:
+                    characterStats.ChangeNutrition(attribute.amount);
+                    break;
+                case CharacterStats.PrimaryAttribute.Hygiene:
+                    characterStats.ChangeHygiene(attribute.amount);
+                    break;
+                case CharacterStats.PrimaryAttribute.Energy:
+                    characterStats.ChangeEnergy(attribute.amount);
+                    break;
+            }
+
+        }
     }
 }

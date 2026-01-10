@@ -297,7 +297,7 @@ public class CameraBehaviour : MonoBehaviour
 
         if (InputManager.Instance.DeselectInput)
         {
-            DeselectCharacter();
+            //DeselectCharacter();
         }
     }
 
