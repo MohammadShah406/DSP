@@ -7564,7 +7564,7 @@ PrefabInstance:
       objectReference: {fileID: 1084058006}
     - target: {fileID: 4265828883223752541, guid: 4ee892a467fd8814590d28f22a5da974, type: 3}
       propertyPath: upgradesDone
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4265828883223752541, guid: 4ee892a467fd8814590d28f22a5da974, type: 3}
       propertyPath: loadsavedgame
