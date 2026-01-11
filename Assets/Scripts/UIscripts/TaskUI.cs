@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,14 +9,16 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private GameObject taskEntryPrefab;
     [SerializeField] private Transform taskListContainer;
+    [SerializeField] private float completionDisplayTime = 2f;
 
     public static bool IsMouseOver { get; private set; }
 
-    private RectTransform rectTransform;
+    private RectTransform _rectTransform;
+    private Dictionary<TaskInstance, GameObject> _activeTaskEntries = new Dictionary<TaskInstance, GameObject>();
 
     private void Start()
     {
-        rectTransform = GetComponent<RectTransform>();
+        _rectTransform = GetComponent<RectTransform>();
         
         // Ensure EventSystem exists
         if (EventSystem.current == null)
@@ -45,7 +48,7 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         if (TaskManager.Instance != null)
         {
-            TaskManager.Instance.OnTasksUpdated += RefreshTaskList;
+            TaskManager.Instance.OnTasksUpdated += OnTasksUpdated;
         }
 
         // TaskManager already triggers RefreshTaskList via OnTasksUpdated every minute now
@@ -62,10 +65,10 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private void UpdateMouseOver()
     {
-        if (rectTransform == null) return;
+        if (_rectTransform == null) return;
 
         // Check if mouse is within the bounds of this panel
-        IsMouseOver = RectTransformUtility.RectangleContainsScreenPoint(rectTransform, Input.mousePosition, null);
+        IsMouseOver = RectTransformUtility.RectangleContainsScreenPoint(_rectTransform, Input.mousePosition, null);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -302,7 +305,7 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         if (TaskManager.Instance != null)
         {
-            TaskManager.Instance.OnTasksUpdated -= RefreshTaskList;
+            TaskManager.Instance.OnTasksUpdated -= OnTasksUpdated;
         }
     }
 
@@ -328,27 +331,46 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
     }
 
-    private void RefreshTaskList()
-{
-    if (taskListContainer == null) return;
-
-    foreach (Transform child in taskListContainer)
+    private void OnTasksUpdated()
     {
-        Destroy(child.gameObject);
+        if (TaskManager.Instance == null) return;
+        
+        List<TaskInstance> currentTasks = TaskManager.Instance.GetActiveTasks();
+        
+        // Check for newly completed tasks
+        foreach (var kvp in new Dictionary<TaskInstance, GameObject>(_activeTaskEntries))
+        {
+            TaskInstance taskInstance = kvp.Key;
+            GameObject entry = kvp.Value;
+            
+            // If task is now completed, show completion state
+            if (taskInstance.isCompleted && entry != null)
+            {
+                UpdateTaskEntryToCompleted(entry, taskInstance);
+                StartCoroutine(RemoveTaskEntryAfterDelay(taskInstance, entry));
+            }
+        }
+        
+        // Add new tasks that appeared
+        foreach (var taskInstance in currentTasks)
+        {
+            if (!_activeTaskEntries.ContainsKey(taskInstance))
+            {
+                CreateTaskEntry(taskInstance);
+            }
+        }
     }
-
-    if (TaskManager.Instance == null) return;
-
-    List<TaskInstance> activeTasks = TaskManager.Instance.GetActiveTasks();
-
-    foreach (var task in activeTasks) // Variable is named "task"
+    
+    private void CreateTaskEntry(TaskInstance task)
     {
         if (taskEntryPrefab == null)
         {
             Debug.LogError("[TaskUI] Task Entry Prefab is missing!");
-            break;
+            return;
         }
+
         GameObject entry = Instantiate(taskEntryPrefab, taskListContainer);
+        _activeTaskEntries[task] = entry; // Track this entry
         
         entry.SetActive(true);
         entry.transform.localPosition = Vector3.zero;
@@ -369,7 +391,6 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             entryRect.anchorMin = new Vector2(0.5f, 1f);
             entryRect.anchorMax = new Vector2(0.5f, 1f);
             entryRect.pivot = new Vector2(0.5f, 1f);
-            
             entryRect.anchoredPosition3D = Vector3.zero;
             entryRect.sizeDelta = new Vector2(428f, 80f);
             entryRect.localScale = Vector3.one;
@@ -426,7 +447,7 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         
         if (toggle != null)
         {
-            toggle.isOn = task.isCompleted;
+            toggle.isOn = false; // Always start unchecked
             toggle.interactable = false;
             Image[] toggleImgs = toggle.GetComponentsInChildren<Image>();
             foreach(var timg in toggleImgs) timg.raycastTarget = false;
@@ -465,23 +486,109 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (descText == null && textComponents.Count > 1) descText = textComponents[1];
         if (descText == null && timeText != null) descText = timeText;
 
-        // FIXED: Changed "taskInstance" to "task"
         SetTextValue(timeText, $"{task.taskData.hour:00}:{task.taskData.minute:00}");
         if (timeText != null) timeText.raycastTarget = false;
-        if (task.isCompleted) ApplyStrikethrough(timeText);
 
         SetTextValue(descText, task.taskData.taskDescription);
         if (descText != null) descText.raycastTarget = false;
-        if (task.isCompleted) ApplyStrikethrough(descText);
 
         entry.transform.SetAsLastSibling();
     }
-
-    Canvas.ForceUpdateCanvases();
-    if (taskListContainer != null)
+    
+    private void UpdateTaskEntryToCompleted(GameObject entry, TaskInstance taskInstance)
     {
-        RectTransform containerRT = taskListContainer.GetComponent<RectTransform>();
-        LayoutRebuilder.ForceRebuildLayoutImmediate(containerRT);
+        if (entry == null) return;
+
+        Debug.Log($"[TaskUI] Marking task as completed: {taskInstance.taskData.taskDescription}");
+
+        Image backgroundImage = entry.GetComponent<Image>();
+        if (backgroundImage != null)
+        {
+            backgroundImage.color = new Color(0.5f, 1f, 0.5f, 0.3f);
+        }
+        
+        // Toggle the checkmark
+        Toggle toggle = entry.GetComponentInChildren<Toggle>();
+        if (toggle != null)
+        {
+            toggle.isOn = true;
+        }
+
+        // Apply strikethrough to text
+        List<Graphic> textComponents = new List<Graphic>();
+        textComponents.AddRange(entry.GetComponentsInChildren<TextMeshProUGUI>(true));
+        textComponents.AddRange(entry.GetComponentsInChildren<Text>(true));
+
+        foreach (var txt in textComponents)
+        {
+            ApplyStrikethrough(txt);
+        }
+
+        Canvas.ForceUpdateCanvases();
     }
-}
+    
+    private IEnumerator RemoveTaskEntryAfterDelay(TaskInstance taskInstance, GameObject entry)
+    {
+        yield return new WaitForSeconds(completionDisplayTime);
+        
+        CanvasGroup canvasGroup = entry.GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = entry.AddComponent<CanvasGroup>();
+        }
+    
+        float fadeTime = 0.5f;
+        float elapsed = 0f;
+    
+        while (elapsed < fadeTime)
+        {
+            elapsed += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsed / fadeTime);
+            yield return null;
+        }
+        
+        if (entry != null)
+        {
+            Destroy(entry);
+        }
+        
+        _activeTaskEntries.Remove(taskInstance);
+        
+        // Force layout rebuild
+        Canvas.ForceUpdateCanvases();
+        if (taskListContainer != null)
+        {
+            RectTransform containerRT = taskListContainer.GetComponent<RectTransform>();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(containerRT);
+        }
+    }
+    
+    private void RefreshTaskList()
+    {
+        // Clear everything
+        foreach (Transform child in taskListContainer)
+        {
+            Destroy(child.gameObject);
+        }
+        _activeTaskEntries.Clear();
+
+        if (TaskManager.Instance == null) return;
+
+        List<TaskInstance> activeTasks = TaskManager.Instance.GetActiveTasks();
+
+        foreach (var task in activeTasks)
+        {
+            if (!task.isCompleted)
+            {
+                CreateTaskEntry(task);
+            }
+        }
+
+        Canvas.ForceUpdateCanvases();
+        if (taskListContainer != null)
+        {
+            RectTransform containerRT = taskListContainer.GetComponent<RectTransform>();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(containerRT);
+        }
+    }
 }

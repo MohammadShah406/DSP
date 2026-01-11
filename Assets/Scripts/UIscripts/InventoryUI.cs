@@ -11,61 +11,25 @@ using UnityEngine.UI;
 /// </summary>
 public class InventoryUI : MonoBehaviour
 {
-    /// <summary>
-    /// The singleton instance of the class, providing global access to its functionality.
-    /// This property ensures that only one instance of the class exists throughout the application's lifecycle.
-    /// </summary>
-    public static InventoryUI Instance { get; private set; }
-
-    /// Represents the user interface panel for displaying inventory items.
-    [Header("Inventory Display")] public GameObject inventoryPanel;
-
     
-    //The grid representing the layout structure of the inventory items in the UI.
+    public static InventoryUI Instance { get; private set; }
+    
+    [Header("Inventory Display")] public GameObject inventoryPanel;
     public Transform inventoryGrid;
-
-    /// The prefab representing an individual inventory item within the inventory system.
     public GameObject inventoryItemPrefab;
-
-    // A flag indicating whether the grid setup should be automatically handled.
     public bool autoSetupGrid = true;
-
-    /// The panel responsible for displaying detailed information about a selected item.
+    
     [Header("Item Detail Panel")] public GameObject itemDetailPanel;
-
-    /// The text element displaying the name of the selected item in detail view.
     public TextMeshProUGUI detailItemNameText;
-
-    /// The icon representing the visual depiction of a detailed item.
     public Image detailItemIcon;
-
-    /// The text element displaying the quantity of a specific item in detail view.
     public TextMeshProUGUI detailItemQuantityText;
-
-    /// The text element that displays the description of a selected item in detail view.
     public TextMeshProUGUI detailItemDescriptionText;
-
-    /// A collection that holds the currently active items in the application or game.
+    public Button PlaceButton;
     private Dictionary<string, InventoryItemUI> _activeItems = new Dictionary<string, InventoryItemUI>();
-
-    /// A collection or pool of reusable item instances within the game.
     private Stack<InventoryItemUI> _itemPool = new Stack<InventoryItemUI>();
-
-    /// A collection of keys that are pending processing by the system.
     private List<string> _keysToProcess = new List<string>();
-
-    /// <summary>
-    /// The coroutine responsible for handling update operations over a period of time.
-    /// </summary>
-    /// <remarks>
-    /// This coroutine is used to execute tasks that require periodic or delayed
-    /// updates, such as animations, behavioral changes, or timed events. It allows
-    /// for asynchronous execution without blocking the main thread.
-    /// </remarks>
     private Coroutine _updateCoroutine;
-
-    /// Called when the script instance is being loaded.
-    /// Initializes references and sets up any required data or state before the object becomes active.
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -78,8 +42,7 @@ public class InventoryUI : MonoBehaviour
         inventoryPanel.SetActive(false);
         itemDetailPanel.SetActive(false);
     }
-
-    /// Initiates the process or logic associated with starting the specified operation.
+    
     private void Start()
     {
         
@@ -89,9 +52,7 @@ public class InventoryUI : MonoBehaviour
             GameManager.Instance.OnResourceChanged += OnResourceChanged;
         }
     }
-
-    /// Invoked when the object is destroyed. Handles cleanup operations or releasing resources
-    /// associated with the object before it is removed from the game or application.
+    
     private void OnDestroy()
     {
         if (GameManager.Instance != null)
@@ -100,16 +61,14 @@ public class InventoryUI : MonoBehaviour
             GameManager.Instance.OnResourceChanged -= OnResourceChanged;
         }
     }
-
-    /// Handles the event triggered when a resource value changes.
+    
     
     private void OnResourceChanged(string resourceName, int quantity)
     {
         if (!inventoryPanel.activeInHierarchy) return;
         UpdateSingleResourceDisplay(resourceName, quantity);
     }
-   
-    /// Toggles the state of the specified component or system between enabled and disabled.
+    
     public void Toggle()
     {
         if (UIManager.Instance != null)
@@ -120,21 +79,17 @@ public class InventoryUI : MonoBehaviour
                 UIManager.Instance.OnInventoryOpened();
         }
     }
-
-    /// Handles operations to perform when the inventory is opened.
+    
     public void OnOpened()
     {
         UpdateInventoryDisplay(true);
     }
-
-    /// Handles operations to perform when the inventory is closed.
+    
     public void OnClosed()
     {
         if (itemDetailPanel != null)
             itemDetailPanel.SetActive(false);
     }
-
-    /// Updates the display of a single resource in the user interface.
     
     private void UpdateSingleResourceDisplay(string resourceName, int quantity)
     {
@@ -165,7 +120,6 @@ public class InventoryUI : MonoBehaviour
         }
     }
     
-    /// Retrieves an available instance of the specified type from the object pool.
     private InventoryItemUI GetFromPool()
     {
         InventoryItemUI itemUI;
@@ -195,14 +149,12 @@ public class InventoryUI : MonoBehaviour
         return itemUI;
     }
     
-    /// Returns the given object instance back to its respective pool for reuse.
     private void ReturnToPool(InventoryItemUI itemUI)
     {
         itemUI.gameObject.SetActive(false);
         _itemPool.Push(itemUI);
     }
     
-    /// Rebuilds the layout of the user interface element to reflect any changes made to its structure or content.
     private void RebuildLayout()
     {
         Canvas.ForceUpdateCanvases();
@@ -212,8 +164,7 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-
-    // Updates the inventory display to reflect the current state of the player's inventory.
+    
     public void UpdateInventoryDisplay() => UpdateInventoryDisplay(false);
 
     // Updates the inventory display to reflect the current state of the player's inventory.    
@@ -270,11 +221,13 @@ public class InventoryUI : MonoBehaviour
     // Displays the details of a specified item to the user.
     public void ShowItemDetails(ItemData data, int quantity)
     {
+        
         itemDetailPanel.SetActive(true);
         detailItemNameText.text = data.itemName;
         detailItemIcon.sprite = data.icon; 
         detailItemIcon.enabled = true;
         detailItemQuantityText.text = $"Quantity: {quantity}";
         detailItemDescriptionText.text = data.description;
+        PlaceButton.gameObject.SetActive(data.itemType == ItemType.Placement);
     }
 }

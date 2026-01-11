@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43f9fef5d8cd4c5792e5731407daffdc, type: 3}
   m_Name: day1
   m_EditorClassIdentifier: 
-  taskDescription: 
+  taskDescription: cook food
   day: 1
   hour: 9
   minute: 10
