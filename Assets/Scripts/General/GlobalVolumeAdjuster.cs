@@ -10,10 +10,6 @@ public class GlobalVolumeAdjuster : MonoBehaviour
     [Header("Global Volume")]
     [SerializeField] private Volume globalVolume;
 
-    [Header("Hope Value (0–100+)")]
-    [Range(0, 100)]
-    public int hope;
-
     [Header("For Editor Only")]
     public bool SetVolume = false;
 
@@ -76,7 +72,7 @@ public class GlobalVolumeAdjuster : MonoBehaviour
             return;
 
         // Clamp to 0..100 for predictable blending
-        float h = Mathf.Clamp(hope, 0f, 100f);
+        float h = Mathf.Clamp(GameManager.Instance.Hope, 0f, 100f);
 
         // Targets: (saturation, temperature, vignette)
         Vector3 L0 = new Vector3(-100f, 0f, 0.4f);

@@ -162,7 +162,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -5123031036874870423, guid: d1180f850e05a0a47a7de74736ccbee1, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: ea7ccc83d73d99141ab3aef34398b463, type: 3}
+  m_Resource: {fileID: 8300000, guid: 54fb45c75e89eb24a99c3e4e6c7b8482, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -306,25 +306,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 73977237789306798, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
   m_PrefabInstance: {fileID: 4842795672433083609}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &324631066 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3778099830878653984, guid: 4e3c5bc65297c56408cecb874bc9f0f3, type: 3}
-  m_PrefabInstance: {fileID: 1690924086}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &324631067
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 324631066}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95f10fe7fc560834db53b7ecf69faec0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mouseSensitivitySlider: {fileID: 1485998217}
-  sensitivity: 1
 --- !u!1 &354085277
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,6 +456,7 @@ GameObject:
   - component: {fileID: 405671814}
   - component: {fileID: 405671813}
   - component: {fileID: 405671812}
+  - component: {fileID: 405671815}
   m_Layer: 5
   m_Name: Settings
   m_TagString: Untagged
@@ -525,7 +507,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.27735847, g: 0.51825684, b: 1, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -546,6 +528,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 405671815}
+        m_TargetAssemblyTypeName: PlayAudio, Assembly-CSharp
+        m_MethodName: PlayClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 2105736392}
         m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
         m_MethodName: HideAll
@@ -608,6 +602,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 405671810}
   m_CullTransparentMesh: 1
+--- !u!114 &405671815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405671810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 639fcb8af3e48094a90d5a55cb19afd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioName: 
+  audioClick: {fileID: 8300000, guid: 011c47327e65385499e48e92c350d2d9, type: 3}
+  audioHoverName: 
+  audioHover: {fileID: 8300000, guid: d44e1dc65466b95428b7c97d332334dc, type: 3}
 --- !u!114 &438622366 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9184551761683121666, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
@@ -917,10 +927,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329b38d3b7a1f5a4da5c7671529cf9ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiClick: {fileID: 0}
-  Cooking: {fileID: 0}
-  Harvesting: {fileID: 0}
-  Birds: {fileID: 0}
+  uiClickPrimary: {fileID: 0}
+  uiClickSecondary: {fileID: 0}
+  uiHover: {fileID: 0}
+  donationReceived: {fileID: 0}
+  resourceAdded: {fileID: 0}
+  upgradeDone: {fileID: 0}
+  cooking: {fileID: 0}
+  harvesting: {fileID: 0}
+  birds: {fileID: 0}
 --- !u!114 &645781928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -993,6 +1008,7 @@ GameObject:
   - component: {fileID: 1170987215}
   - component: {fileID: 1170987214}
   - component: {fileID: 1170987213}
+  - component: {fileID: 1170987216}
   m_Layer: 5
   m_Name: Exit
   m_TagString: Untagged
@@ -1042,9 +1058,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 0, b: 0, a: 1}
-    m_PressedColor: {r: 0.2784314, g: 0.5176471, b: 1, a: 1}
-    m_SelectedColor: {r: 1, g: 0, b: 0, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -1064,6 +1080,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1170987216}
+        m_TargetAssemblyTypeName: PlayAudio, Assembly-CSharp
+        m_MethodName: PlayClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 2105736392}
         m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
         m_MethodName: OnQuit
@@ -1114,6 +1142,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1170987211}
   m_CullTransparentMesh: 1
+--- !u!114 &1170987216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1170987211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 639fcb8af3e48094a90d5a55cb19afd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioName: 
+  audioClick: {fileID: 8300000, guid: 011c47327e65385499e48e92c350d2d9, type: 3}
+  audioHoverName: 
+  audioHover: {fileID: 8300000, guid: d44e1dc65466b95428b7c97d332334dc, type: 3}
 --- !u!1 &1179731154
 GameObject:
   m_ObjectHideFlags: 0
@@ -1264,6 +1308,7 @@ GameObject:
   - component: {fileID: 1306863256}
   - component: {fileID: 1306863255}
   - component: {fileID: 1306863254}
+  - component: {fileID: 1306863258}
   - component: {fileID: 1306863257}
   m_Layer: 5
   m_Name: Play
@@ -1336,6 +1381,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1306863258}
+        m_TargetAssemblyTypeName: PlayAudio, Assembly-CSharp
+        m_MethodName: PlayClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 2105736392}
         m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
         m_MethodName: PlayGame
@@ -1430,6 +1487,22 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   direction: 1
   angle: -5
+--- !u!114 &1306863258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306863252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 639fcb8af3e48094a90d5a55cb19afd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioName: 
+  audioClick: {fileID: 8300000, guid: 011c47327e65385499e48e92c350d2d9, type: 3}
+  audioHoverName: 
+  audioHover: {fileID: 8300000, guid: d44e1dc65466b95428b7c97d332334dc, type: 3}
 --- !u!1 &1360229699
 GameObject:
   m_ObjectHideFlags: 0
@@ -1592,17 +1665,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1424008867}
   m_CullTransparentMesh: 1
---- !u!114 &1485998217 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2699741376065267486, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
-  m_PrefabInstance: {fileID: 4842795672433083609}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1489088910
 GameObject:
   m_ObjectHideFlags: 0
@@ -1761,10 +1823,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3778099830878653984, guid: 4e3c5bc65297c56408cecb874bc9f0f3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 324631067}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e3c5bc65297c56408cecb874bc9f0f3, type: 3}
 --- !u!1 &1923156485
 GameObject:
@@ -2275,7 +2334,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -2283,14 +2342,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2105736392}
+      objectReference: {fileID: 4842795672433083611}
     - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 2105736392}
+    - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
       objectReference: {fileID: 2105736392}
     - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
@@ -2298,19 +2365,31 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: HideAll
+      value: PlayClickSound
       objectReference: {fileID: 0}
     - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: HideAll
+      objectReference: {fileID: 0}
+    - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
       value: ShowSpecific
       objectReference: {fileID: 0}
     - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: MainMenuManager, Assembly-CSharp
+      value: PlayAudio, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: MainMenuManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
       value: MainMenuManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
@@ -2320,6 +2399,10 @@ PrefabInstance:
     - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgument
+      value: 
       objectReference: {fileID: 118942470}
     - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -2327,6 +2410,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7929002768734180668, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.GameObject, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8440547220825909012, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
@@ -2352,9 +2439,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 8617406288859621569, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
+    - {fileID: 6321500366943437463, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 350739227861994482, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
+      insertIndex: 4
+      addedObject: {fileID: 4842795672433083611}
   m_SourcePrefab: {fileID: 100100000, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
+--- !u!1 &4842795672433083610 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 350739227861994482, guid: 526c21bb71d99f84bafdcfc8ba19fbb5, type: 3}
+  m_PrefabInstance: {fileID: 4842795672433083609}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4842795672433083611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4842795672433083610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 639fcb8af3e48094a90d5a55cb19afd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioName: 
+  audioClick: {fileID: 8300000, guid: 1be2271f8c0c6ee46821bd3a34cf9cc2, type: 3}
+  audioHoverName: 
+  audioHover: {fileID: 8300000, guid: d44e1dc65466b95428b7c97d332334dc, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -7,14 +7,22 @@ public class AudioLibrary : MonoBehaviour
 
     // Sound effect clips
      [Header("UI")]
-    public AudioClip uiClick;
+    public AudioClip uiClickPrimary;
+    public AudioClip uiClickSecondary;
+    public AudioClip uiHover;
+
+    [Header("Donation/Upgrades")]
+    public AudioClip donationReceived;
+    public AudioClip resourceAdded;
+    public AudioClip upgradeDone;
+
 
     [Header("Interactions")]
-    public AudioClip Cooking;
-    public AudioClip Harvesting;
+    public AudioClip cooking;
+    public AudioClip harvesting;
 
     [Header("Misc")]
-    public AudioClip Birds;
+    public AudioClip birds;
 
     private void Awake()
     {
@@ -34,12 +42,18 @@ public class AudioLibrary : MonoBehaviour
     {
         return sfxName.ToLower() switch
         {
-            "uiclick" => uiClick,
+            "uiclickprimary" => uiClickPrimary,
+            "uiclicksecondary" => uiClickSecondary,
+            "uihover" => uiHover,
 
-            "cooking" => Cooking,
-            "harvesting" => Harvesting,
+            "donationreceived" => donationReceived,
+            "resourceadded" => resourceAdded,
+            "upgradedone" => upgradeDone,
 
-            "birds" => Birds,
+            "cooking" => cooking,
+            "harvesting" => harvesting,
+
+            "birds" => birds,
 
             _ => null,
         };

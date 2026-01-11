@@ -459,8 +459,9 @@ public class UIManager : MonoBehaviour
         SwitchState(UIState.Gameplay);
     }
 
-    /// <summary>
-    /// Handles the event triggered when the "Quit" button is clicked.
-    /// </summary>
-    public void OnQuitButtonClicked() => Application.Quit();
+    public void LoadMainMenu()
+    {
+        // Load the main menu scene
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu");
+    }
 }
