@@ -19,9 +19,16 @@ public class GlobalVolumeAdjuster : MonoBehaviour
     private WhiteBalance whiteBalance;
     private Vignette vignette;
 
+    private GameManager gameManager;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (GameManager.Instance != null)
+        {
+            gameManager = GameManager.Instance;
+        }
+
         if (!globalVolume || !globalVolume.profile)
         {
             Debug.LogError("Global Volume or Volume Profile not assigned!");
@@ -59,6 +66,10 @@ public class GlobalVolumeAdjuster : MonoBehaviour
         {
             SetGlobalSettings();
             SetVolume = false;
+        }
+        if (gameManager)
+        {
+            SetGlobalSettings();
         }
     }
 

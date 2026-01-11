@@ -115,6 +115,8 @@ public class CameraBehaviour : MonoBehaviour
         // Cache initial rotation for locking
         if (vcam != null)
             lockedRotation = vcam.transform.rotation;
+
+        ApplyBoundsAndPushToTransposer();
     }
 
     private void Update()
@@ -451,6 +453,7 @@ public class CameraBehaviour : MonoBehaviour
             if(isManual == false)
             {
                 DeselectCharacter();
+                isManual = true;
             }
             isDragging = true;
         }

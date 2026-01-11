@@ -10,6 +10,9 @@ public class Interactable : MonoBehaviour
     [Header("Outline Controller")]
     private OutlineController _outline;
 
+    [Header("Icon Controller")]
+    [SerializeField] private GameObject iconGameObject;
+
     [Header("Singleton Reference")]
     [SerializeField] private TimeManager timeManager;
     [SerializeField] private InteractionManager interactionManager; 
@@ -241,6 +244,14 @@ public class Interactable : MonoBehaviour
                     break;
             }
 
+        }
+    }
+
+    public void SetIconActive(bool active)
+    {
+        if (iconGameObject != null)
+        {
+            iconGameObject.SetActive(active);
         }
     }
 }

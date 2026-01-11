@@ -57,10 +57,10 @@ public class InteractionManager : MonoBehaviour
 
     void Update()
     {
-        HandleOutline();
+        HandleOutlineAndIcon();
     }
 
-    private void HandleOutline()
+    private void HandleOutlineAndIcon()
     {
         // Update selected character from camera
         _selectedCharacter = (_cam != null) ? _cam.focussedTarget : null;
@@ -75,7 +75,10 @@ public class InteractionManager : MonoBehaviour
                 if (prevSet != null)
                 {
                     foreach (var inter in prevSet.interactables)
+                    {
                         inter.SetOutline(false);
+                        inter.SetIconActive(false);
+                    }
                 }
             }
 
@@ -94,7 +97,10 @@ public class InteractionManager : MonoBehaviour
 
         // Enable outlines for current character's interactables
         foreach (var inter in activeSet.interactables)
+        {
             inter.SetOutline(true);
+            inter.SetIconActive(true);
+        }
     }
 
     private CharacterInteractionSet GetSetForCharacter(Transform character)
