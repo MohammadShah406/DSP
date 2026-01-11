@@ -132,6 +132,7 @@ public class GameManager : MonoBehaviour
         }
 
         charStatsList = GetCharacterComponents();
+        SetUpgrades();
     }
 
     private void Update()
@@ -145,6 +146,17 @@ public class GameManager : MonoBehaviour
             TrySave();
         }
 
+    }
+
+    /// <summary>
+    /// Sets up the upgrade system by counting available upgrades.
+    /// </summary>
+    public void SetUpgrades()
+    {
+        if(DonationManager.instance != null)
+        {
+            totalUpgrades = DonationManager.instance.allDonationsItemData.Count;
+        }
     }
 
     /// <summary>

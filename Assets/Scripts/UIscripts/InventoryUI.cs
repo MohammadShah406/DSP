@@ -11,7 +11,6 @@ using UnityEngine.UI;
 /// </summary>
 public class InventoryUI : MonoBehaviour
 {
-    
     public static InventoryUI Instance { get; private set; }
     
     [Header("Inventory Display")] public GameObject inventoryPanel;
@@ -221,7 +220,6 @@ public class InventoryUI : MonoBehaviour
     // Displays the details of a specified item to the user.
     public void ShowItemDetails(ItemData data, int quantity)
     {
-        
         itemDetailPanel.SetActive(true);
         detailItemNameText.text = data.itemName;
         detailItemIcon.sprite = data.icon; 
@@ -229,5 +227,38 @@ public class InventoryUI : MonoBehaviour
         detailItemQuantityText.text = $"Quantity: {quantity}";
         detailItemDescriptionText.text = data.description;
         PlaceButton.gameObject.SetActive(data.itemType == ItemType.Placement);
+
+        // Avoid stacking listeners when opening details multiple times
+        PlaceButton.onClick.RemoveAllListeners();
+        PlaceButton.onClick.AddListener(() => PlaceItem(data));
+    }
+
+    public void PlaceItem(ItemData data)
+    {
+        // Trigger placement mode if available
+        if (DonationManager.instance != null)
+        {
+            DonationManager.instance.PlaceItem(data);
+        }
+
+        // Decrement the item from GameManager resources (and update UI via events)
+        if (GameManager.Instance != null && data != null && !string.IsNullOrEmpty(data.itemName))
+        {
+            // Use AddResource with a negative amount to remove one unit and fire change events
+            GameManager.Instance.AddResource(data.itemName, -1);
+        }
+
+        // If the item reaches zero, hide the detail panel
+        var res = GameManager.Instance?.resources.Find(r => r.resourceName == data.itemName);
+        if (res == null || res.quantity <= 0)
+        {
+            if (itemDetailPanel != null)
+                itemDetailPanel.SetActive(false);
+        }
+        else
+        {
+            // Update the quantity text to reflect the new count
+            detailItemQuantityText.text = $"Quantity: {res.quantity}";
+        }
     }
 }

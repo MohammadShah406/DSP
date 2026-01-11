@@ -7,8 +7,10 @@ public class DonationManager : MonoBehaviour
     public static DonationManager instance;
 
     [Header("Donation data")]
-    [SerializeField] private List<ItemData> allDonationsItemData = new();
+    [SerializeField] public List<ItemData> allDonationsItemData = new();
     [SerializeField] private List<ResourceData> allDonationsResource = new();
+
+    [SerializeField] private List<GameObject> donationGameObjects = new();
 
 
     private bool subscribed = false;
@@ -169,5 +171,25 @@ public class DonationManager : MonoBehaviour
             fired.Add(key);
             Debug.Log($"DonationManager: Loaded fired donation key: {key}");
         }
+    }
+
+    public void PlaceItem(ItemData data)
+    {
+        Debug.Log("DonationManager: PlaceItem called.");
+
+        foreach (GameObject obj in donationGameObjects)
+        {
+            if(obj.name == data.itemName)
+            {
+                Debug.Log($"DonationManager: Found matching donation GameObject for item '{data.itemName}'. Activating placement mode.");
+                obj.SetActive(true);
+                if(GameManager.Instance != null)
+                {
+                    GameManager.Instance.upgradesDone += 1;
+                }
+                return;
+            }
+        }
+
     }
 }
