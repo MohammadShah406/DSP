@@ -8,3 +8,12 @@ public class ItemData : ScriptableObject
     public Sprite icon;
     [TextArea] public string description;
 }
+
+public enum ItemType
+{
+    FoodIngredient,
+    Material,
+    Placement,
+    Food,
+    Other
+}
