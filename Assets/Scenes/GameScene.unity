@@ -119,55 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &72546206
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 72546207}
-  - component: {fileID: 72546208}
-  m_Layer: 0
-  m_Name: DonationManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &72546207
+--- !u!4 &72546207 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 5099914372227632778, guid: 8cb2ea4fa56670849b19b99d797b9f25, type: 3}
+  m_PrefabInstance: {fileID: 8223994330915556096}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 72546206}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1858440573}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &72546208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 72546206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2935904304278404b89e623b2c1f6870, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allDonationsItemData:
-  - {fileID: 11400000, guid: c529607c872182449aa89b5446c7a8ae, type: 2}
-  allDonationsResource:
-  - resourceName: Curtain
-    quantity: 1
 --- !u!1 &80770357
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,6 +740,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: TaskManager
       objectReference: {fileID: 0}
+    - target: {fileID: 1538871610696054869, guid: d6c0a4aa5fe717a48928f525ff93aaef, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2537227087894714672, guid: d6c0a4aa5fe717a48928f525ff93aaef, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6661618151669855137, guid: d6c0a4aa5fe717a48928f525ff93aaef, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6661618151669855137, guid: d6c0a4aa5fe717a48928f525ff93aaef, type: 3}
+      propertyPath: allTaskData.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6661618151669855137, guid: d6c0a4aa5fe717a48928f525ff93aaef, type: 3}
+      propertyPath: 'allTaskData.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 77637cc8c01714c4e895b532dc1a6892, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1338,6 +1314,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1858440573}
     m_Modifications:
+    - target: {fileID: 4358066015284002512, guid: b73a2c3460b671241ac62c619f8e8707, type: 3}
+      propertyPath: interactableParent
+      value: 
+      objectReference: {fileID: 374811029}
     - target: {fileID: 4358066015284002512, guid: b73a2c3460b671241ac62c619f8e8707, type: 3}
       propertyPath: sets.Array.data[0].character
       value: 
@@ -2002,6 +1982,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 654506262}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &675343472 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5288170754688373784, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
+  m_PrefabInstance: {fileID: 1584489813}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &766262481 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5350851338613174407, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
@@ -4772,6 +4757,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7075225186966690479, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 675343472}
     - target: {fileID: 7114904019194923860, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -6004,25 +5993,13 @@ MonoBehaviour:
   canInteract: 0
   allowedCharacters:
   - {fileID: 791676597}
+  interactionRequirement: 
   characterEffectsList: []
   interactedBy: {fileID: 0}
-  OnInteracted:
+  onInteracted:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2026227041}
-        m_TargetAssemblyTypeName: Interactable, Assembly-CSharp
-        m_MethodName: DebugMessage
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   interactionType: 2
-  taskRequirement: 
 --- !u!1 &2041689507 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8009412325043367391, guid: 4db8e66101180b048977a83d89a33c3b, type: 3}
@@ -6569,7 +6546,7 @@ PrefabInstance:
     - target: {fileID: 7702661167755043880, guid: eb642aab0d1ddab44bc89d4e8805f70f, type: 3}
       propertyPath: m_Resource
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8300000, guid: ea7ccc83d73d99141ab3aef34398b463, type: 3}
     - target: {fileID: 8488982790380737833, guid: eb642aab0d1ddab44bc89d4e8805f70f, type: 3}
       propertyPath: sfxSlider
       value: 
@@ -7048,6 +7025,18 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1084058006}
     - target: {fileID: 4265828883223752541, guid: 4ee892a467fd8814590d28f22a5da974, type: 3}
+      propertyPath: upgradesDone
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4265828883223752541, guid: 4ee892a467fd8814590d28f22a5da974, type: 3}
+      propertyPath: loadsavedgame
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4265828883223752541, guid: 4ee892a467fd8814590d28f22a5da974, type: 3}
+      propertyPath: totalUpgrades
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4265828883223752541, guid: 4ee892a467fd8814590d28f22a5da974, type: 3}
       propertyPath: 'characters.Array.data[0]'
       value: 
       objectReference: {fileID: 791676596}
@@ -7181,6 +7170,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8460c0ab450310746bdb8eeeb0f13c9c, type: 3}
+--- !u!1001 &8223994330915556096
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1858440573}
+    m_Modifications:
+    - target: {fileID: 807621197530661623, guid: 8cb2ea4fa56670849b19b99d797b9f25, type: 3}
+      propertyPath: m_Name
+      value: DonationManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5099914372227632778, guid: 8cb2ea4fa56670849b19b99d797b9f25, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5099914372227632778, guid: 8cb2ea4fa56670849b19b99d797b9f25, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5099914372227632778, guid: 8cb2ea4fa56670849b19b99d797b9f25, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5099914372227632778, guid: 8cb2ea4fa56670849b19b99d797b9f25, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5099914372227632778, guid: 8cb2ea4fa56670849b19b99d797b9f25, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5099914372227632778, guid: 8cb2ea4fa56670849b19b99d797b9f25, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5099914372227632778, guid: 8cb2ea4fa56670849b19b99d797b9f25, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5099914372227632778, guid: 8cb2ea4fa56670849b19b99d797b9f25, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5099914372227632778, guid: 8cb2ea4fa56670849b19b99d797b9f25, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5099914372227632778, guid: 8cb2ea4fa56670849b19b99d797b9f25, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8cb2ea4fa56670849b19b99d797b9f25, type: 3}
 --- !u!4 &8458377137385447103
 Transform:
   m_ObjectHideFlags: 0
@@ -7343,29 +7389,17 @@ MonoBehaviour:
   allowedCharacters:
   - {fileID: 791676597}
   - {fileID: 1531112953}
+  interactionRequirement: 
   characterEffectsList:
   - characterAttribute: 1
     amount: 10
   - characterAttribute: 2
     amount: 10
   interactedBy: {fileID: 0}
-  OnInteracted:
+  onInteracted:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 9177090000079760972}
-        m_TargetAssemblyTypeName: Interactable, Assembly-CSharp
-        m_MethodName: DebugMessage
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   interactionType: 2
-  taskRequirement: 
 --- !u!114 &9177090000079760973
 MonoBehaviour:
   m_ObjectHideFlags: 0

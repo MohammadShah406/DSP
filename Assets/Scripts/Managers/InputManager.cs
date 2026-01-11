@@ -17,6 +17,14 @@ public class InputManager : MonoBehaviour
     public bool PauseInput { get; private set; }
     public bool InventoryInput { get; private set; }
 
+    [Header("Mouse Settings")]
+    [SerializeField] private float mouseSensitivity = 1f;
+    public float MouseSensitivity
+    {
+        get { return mouseSensitivity; }
+        set { mouseSensitivity = value; }
+    }
+
 
     private PlayerInput _playerInput;
 
