@@ -132,6 +132,12 @@ public class DonationManager : MonoBehaviour
             // Add the donation item to the inventory
             GameManager.Instance.itemDatabase.Add(allDonationsItemData[donationIndex]);
             GameManager.Instance.resources.Add(allDonationsResource[donationIndex]);
+
+            if (AudioPlayer.Instance != null && AudioLibrary.Instance != null)
+            {
+                AudioPlayer.Instance.Play(AudioLibrary.Instance.GetSfx("donationreceived"));
+            }
+
         }
         else
         {
@@ -187,6 +193,11 @@ public class DonationManager : MonoBehaviour
                 {
                     GameManager.Instance.upgradesDone += 1;
                 }
+                if(AudioPlayer.Instance != null && AudioLibrary.Instance != null)
+                {
+                    AudioPlayer.Instance.Play(AudioLibrary.Instance.GetSfx("upgradedone"));
+                }
+
                 return;
             }
         }

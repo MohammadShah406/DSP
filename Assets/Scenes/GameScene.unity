@@ -6979,6 +6979,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1858440573}
     m_Modifications:
+    - target: {fileID: 1535659497297922014, guid: eb642aab0d1ddab44bc89d4e8805f70f, type: 3}
+      propertyPath: uiHover
+      value: 
+      objectReference: {fileID: 8300000, guid: d44e1dc65466b95428b7c97d332334dc, type: 3}
+    - target: {fileID: 1535659497297922014, guid: eb642aab0d1ddab44bc89d4e8805f70f, type: 3}
+      propertyPath: upgradeDone
+      value: 
+      objectReference: {fileID: 8300000, guid: dcb3981c3f9d4d5429e3de4b9302a1e8, type: 3}
+    - target: {fileID: 1535659497297922014, guid: eb642aab0d1ddab44bc89d4e8805f70f, type: 3}
+      propertyPath: resourceAdded
+      value: 
+      objectReference: {fileID: 8300000, guid: 957a381f89dfe7a4699902215e813733, type: 3}
+    - target: {fileID: 1535659497297922014, guid: eb642aab0d1ddab44bc89d4e8805f70f, type: 3}
+      propertyPath: uiClickPrimary
+      value: 
+      objectReference: {fileID: 8300000, guid: 011c47327e65385499e48e92c350d2d9, type: 3}
+    - target: {fileID: 1535659497297922014, guid: eb642aab0d1ddab44bc89d4e8805f70f, type: 3}
+      propertyPath: donationReceived
+      value: 
+      objectReference: {fileID: 8300000, guid: 5b94f3bea3754d9429529780f297bc3b, type: 3}
+    - target: {fileID: 1535659497297922014, guid: eb642aab0d1ddab44bc89d4e8805f70f, type: 3}
+      propertyPath: uiClickSecondary
+      value: 
+      objectReference: {fileID: 8300000, guid: 1be2271f8c0c6ee46821bd3a34cf9cc2, type: 3}
     - target: {fileID: 2031278910998419538, guid: eb642aab0d1ddab44bc89d4e8805f70f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
