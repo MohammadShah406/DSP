@@ -105,15 +105,22 @@ public class TaskPopulator : MonoBehaviour
         task.day = day;
         task.hour = hour;
         task.minute = minute;
-        task.actionRequirement = requirement;
+        task.actionRequirement = requirement; // ADD THIS LINE - Critical!
         task.statEffects = new List<TaskData.StatEffect>();
+    
         if (effects != null)
         {
             foreach (var e in effects)
             {
-                task.statEffects.Add(new TaskData.StatEffect { characterName = e.charName, attribute = e.attr, amount = e.amt });
+                task.statEffects.Add(new TaskData.StatEffect 
+                { 
+                    characterName = e.charName, 
+                    attribute = e.attr, 
+                    amount = e.amt 
+                });
             }
         }
+    
         return task;
     }
 }

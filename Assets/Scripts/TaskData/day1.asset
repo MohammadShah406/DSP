@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: day1
   m_EditorClassIdentifier: 
   taskDescription: 
-  day: 0
-  hour: 0
-  minute: 0
+  day: 1
+  hour: 9
+  minute: 10
   statEffects:
-  - characterName: 
-    attribute: 0
-    amount: 0
-  isCompleted: 0
-  actionRequirement: 
+  - characterName: Sahil
+    attribute: 1
+    amount: 10
+  - characterName: Sahil
+    attribute: 3
+    amount: 15
+  actionRequirement: Stove
