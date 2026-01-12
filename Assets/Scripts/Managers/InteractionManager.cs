@@ -167,8 +167,6 @@ public class InteractionManager : MonoBehaviour
     {
         if (TaskManager.Instance == null) return;
         
-        // Clear current interactables
-        ClearAllInteractables();
         
         // Get active tasks
         List<TaskInstance> activeTasks = TaskManager.Instance.GetActiveTasks();
