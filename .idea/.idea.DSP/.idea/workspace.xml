@@ -4,23 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bff7cc7c-cac8-4abf-ad0b-f0deaa34cb40" name="Changes" comment="Add task management system with task population and integration">
+    <list default="true" id="bff7cc7c-cac8-4abf-ad0b-f0deaa34cb40" name="Changes" comment="Add CharacterCarousel class and integrate with UIManager for character selection">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.DSP/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DSP/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/UI/TaskEntry.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/UI/TaskEntry.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/AssetArt/UI Icons/ResidentIcons/Bashir Icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/AssetArt/UI Icons/ResidentIcons/Bashir Icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/AssetArt/UI Icons/ResidentIcons/Sagar Icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/AssetArt/UI Icons/ResidentIcons/Sagar Icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Nandan'sScene.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Nandan'sScene.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Nandan'sScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Nandan'sScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/General/ItemData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/General/ItemData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/General/ItemType.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/General/ItemType.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/day1.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/TaskData/day1.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIscripts/InventoryItemUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIscripts/InventoryItemUI.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIscripts/InventoryUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIscripts/InventoryUI.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIscripts/TaskUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIscripts/TaskUI.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Anton SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Anton SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Bangers SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Bangers SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Oswald Bold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Oswald Bold SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Roboto-Bold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Roboto-Bold SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/General/Interactable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/General/Interactable.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Donation Box.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Donation Box.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/DonationManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/DonationManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/cooking.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/cooking.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/shower.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/shower.asset.meta" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,7 +25,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="38" />
+    <option name="cachedIndexableFilesCount" value="42" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -48,23 +45,37 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/25ce29052dfe4e49a635a42f7798806b1e0000/32/4d316c86/MonoBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/25ce29052dfe4e49a635a42f7798806b1e0000/37/e5f9803b/Object.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/25ce29052dfe4e49a635a42f7798806b1e0000/9c/39c6bea2/Transform.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/AssetArt/FontStyle.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Prefabs/Managers/UIManager.prefab" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scenes/Nandan'sScene.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scenes/Nandan'sScene.unity" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/General/CameraBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/General/Interactable.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/General/ItemData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Junk/QuestionableCode.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/GameManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/InteractionManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/LayoutManager.cs.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes/TaskData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes/TaskData.cs.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes/TaskPopulator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes/TaskPopulator.cs.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TaskManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TimeManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/UIManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/NPC/CharacterMovement.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/NPC/CharacterStats.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SaveStructure/SaveDataClasses.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UIscripts/CharacterCarousel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UIscripts/InventoryItemUI.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UIscripts/InventoryUI.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UIscripts/TaskUI.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Anton SDF.asset" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Bangers SDF.asset" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF.asset" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="McpProjectServerCommands">
     <commands />
@@ -155,7 +166,10 @@
       <workItem from="1768019539910" duration="6732000" />
       <workItem from="1768043558346" duration="3861000" />
       <workItem from="1768047719271" duration="16034000" />
-      <workItem from="1768136359149" duration="5988000" />
+      <workItem from="1768136359149" duration="6147000" />
+      <workItem from="1768181553750" duration="6365000" />
+      <workItem from="1768188051396" duration="1007000" />
+      <workItem from="1768226481217" duration="2513000" />
     </task>
     <task id="LOCAL-00001" summary="Fix: Restore UI stability and Camera functionality after rollback&#10;&#10;- CameraBehaviour: Resolved syntax error in HandleZoom caused by merge conflict.&#10;- CameraBehaviour: Updated IsMouseOverUI to correctly block clicks when interacting with topStatsHUD and taskPanel.&#10;- CharacterStats: Refactored UpdateHealth to use the Health property, ensuring stat changes correctly trigger UI update events.&#10;- UIManager: Restored critical null safety checks in UpdateCharacterStatsDisplay and UpdateTimeDisplay to prevent UI logic crashes from unassigned fields.&#10;- InventoryItemUI: Added null checks to Setup method for safer prefab instantiation.">
       <option name="closed" value="true" />
@@ -189,7 +203,31 @@
       <option name="project" value="LOCAL" />
       <updated>1768064280671</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Add layout management and item type definitions for inventory system.&#10;task addition and completion fully integrated with interaction manager">
+      <option name="closed" value="true" />
+      <created>1768148069995</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1768148069995</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Add CharacterCarousel class and integrate with UIManager for character selection">
+      <option name="closed" value="true" />
+      <created>1768187010153</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1768187010153</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Add CharacterCarousel class and integrate with UIManager for character selection">
+      <option name="closed" value="true" />
+      <created>1768188623943</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1768188623943</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -219,7 +257,9 @@
     <MESSAGE value="inventory code and UI working" />
     <MESSAGE value="Add inventory management features and UI enhancements" />
     <MESSAGE value="Add task management system with task population and integration" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add task management system with task population and integration" />
+    <MESSAGE value="Add layout management and item type definitions for inventory system.&#10;task addition and completion fully integrated with interaction manager" />
+    <MESSAGE value="Add CharacterCarousel class and integrate with UIManager for character selection" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add CharacterCarousel class and integrate with UIManager for character selection" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

@@ -130,7 +130,6 @@ public class TimeManager : MonoBehaviour
                 if (CurrentTotalMinutes() >= EndWindowTotalMinutes() && lastAutoPauseDay != days)
                 {
                     PauseAtEndOfWindow();
-                    ShowDayEndUI();
                     break; 
                 }
             }
@@ -360,23 +359,6 @@ public class TimeManager : MonoBehaviour
             return TimePeriod.Night;
         else
             return TimePeriod.Night;
-    }
-
-    private void ShowDayEndUI()
-    {
-        Debug.Log("Day has ended. TimeManager has auto-paused the game.");
-
-        if(UIManager.Instance != null)
-        {
-            UIManager.Instance.ShowDayEndUI();
-        }
-
-    }
-
-    public void Unpause()
-    {
-        isPaused = false;
-        UIManager.Instance.HideDayEndUI();
     }
 
 

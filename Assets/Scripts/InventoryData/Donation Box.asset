@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Donation Box
   m_EditorClassIdentifier: 
   itemName: Donation Box
-  itemType: 2
+  itemType: 4
   icon: {fileID: 21300000, guid: 083d2204c650839488b944c65dcf7bfc, type: 3}
   description: A simple wooden box, a plea to the humanity of strangers.

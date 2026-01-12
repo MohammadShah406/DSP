@@ -528,7 +528,8 @@ public class CameraBehaviour : MonoBehaviour
             if (result.gameObject.GetComponent<Button>() != null ||
                 result.gameObject.GetComponent<Slider>() != null ||
                 result.gameObject.GetComponent<Scrollbar>() != null ||
-                result.gameObject.GetComponent<TMP_InputField>() != null)
+                result.gameObject.GetComponent<TMP_InputField>() != null ||
+                result.gameObject.GetComponent<CharacterCarousel>() != null)
             {
                 return true;
             }
@@ -689,7 +690,7 @@ public class CameraBehaviour : MonoBehaviour
             vcam.Follow = defaultTarget;
     }
 
-    private void SetFocussed(GameObject go)
+    public void SetFocussed(GameObject go)
     {
         if (go == null) return;
 
