@@ -82,12 +82,20 @@ public class Interactable : MonoBehaviour
     {
         timeManager = TimeManager.Instance;
         interactionManager = InteractionManager.Instance;
+
+        if(!timeRestricted)
+        {
+            canInteract = true;
+            AddToInteractionManager();
+        }
     }
 
     private void Update()
     {
+
         if (timeRestricted && !canInteract && timeManager != null)
         {
+            Debug.Log($"Checking time for {name} interaction availability...");
             if (timeManager.hours >= afterHour && timeManager.minutes >= afterMinutes)
             {
                 canInteract = true;

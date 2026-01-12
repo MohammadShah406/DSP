@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43f9fef5d8cd4c5792e5731407daffdc, type: 3}
-  m_Name: day1
+  m_Name: cooking
   m_EditorClassIdentifier: 
   taskDescription: cook food
   day: 1
