@@ -19,7 +19,7 @@ public class UIManager : MonoBehaviour
     public GameObject taskPanel;
     public GameObject topStatsHUD;
     public GameObject mainHUD;
-    public CharacterCarousel characterCarousel;
+    public GameObject DayEndUI;
     
     [Header("HUD Elements")]
     public TextMeshProUGUI timeText;
@@ -28,6 +28,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI hopeText;
     
     [Header("Character Stats Display")]
+    public Image characterPicture;
     public TextMeshProUGUI characterNameText;
     public TextMeshProUGUI characterDescriptionText;
     
@@ -200,26 +201,13 @@ public class UIManager : MonoBehaviour
                 if (character != null)
                 {
                     _currentCharacter = character;
-                    UpdateCharacterStatsDisplay(_currentCharacter, false); // Allow lerping when selection changes
-                    
-                    if (characterCarousel != null)
-                    {
-                        characterCarousel.SetCurrentCharacter(_currentCharacter);
-                    }
-
+                    UpdateCharacterStatsDisplay(_currentCharacter, true); // Force immediate update of texts
                     SwitchState(UIState.CharacterStats);
                 }
             }
             else
             {
                 _currentCharacter = null;
-                UpdateCharacterStatsDisplay(null);
-                
-                if (characterCarousel != null)
-                {
-                    characterCarousel.SetCurrentCharacter(null);
-                }
-
                 if (_currentState == UIState.CharacterStats)
                 {
                     SwitchState(UIState.Gameplay);
@@ -381,24 +369,21 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// Updates the character's stats display on the user interface.
     /// </summary>
-    public void UpdateCharacterStatsDisplay(CharacterStats character, bool immediate = false)
+    private void UpdateCharacterStatsDisplay(CharacterStats character, bool immediate = false)
     {
-        if (character == null)
-        {
-            ClearCharacterStatsDisplay();
-            return;
-        }
-
-        _currentCharacter = character;
-
-        // Ensure the panel is active if we have a character
-        if (_currentState == UIState.Gameplay || _currentState == UIState.CharacterStats)
-        {
-            if (!statsPanel.activeSelf) SwitchState(UIState.CharacterStats);
-        }
+        if (character == null) return;
 
         // Update character info
         characterNameText.text = character.characterName;
+        if (character.characterIcon != null)
+        {
+            characterPicture.sprite = character.characterIcon;
+            characterPicture.enabled = true;
+        }
+        else
+        {
+            characterPicture.enabled = false;
+        }
 
         characterDescriptionText.text = character.description ?? "Refugee";
 
@@ -426,26 +411,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void ClearCharacterStatsDisplay()
-    {
-        // Hide the stats panel completely
-        statsPanel.SetActive(false);
-        topStatsHUD.SetActive(false);
-    
-        // Reset current character reference
-        _currentCharacter = null;
-    
-        // Reset all target values to 0
-        _targetHealth = 0;
-        _targetStability = 0;
-        _targetLearning = 0;
-        _targetWorkReadiness = 0;
-        _targetTrust = 0;
-        _targetNutrition = 0;
-        _targetHygiene = 0;
-        _targetEnergy = 0;
-    }
-    
     /// <summary>
     /// Toggles the inventory state between open and closed.
     /// </summary>
@@ -499,5 +464,38 @@ public class UIManager : MonoBehaviour
     {
         // Load the main menu scene
         UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu");
+    }
+
+    public void ShowDayEndUI()
+    {
+        // Show the Day End UI and hide all other panels/HUDs
+        Debug.Log("Day End UI is now visible.");
+        DayEndUI.SetActive(true);
+
+        // Hide other panels
+        pausePanel.SetActive(false);
+        statsPanel.SetActive(false);
+        topStatsHUD.SetActive(false);
+
+        // Hide inventory if present
+        if (inventoryUI != null && inventoryUI.inventoryPanel != null)
+        {
+            inventoryUI.inventoryPanel.SetActive(false);
+        }
+
+        // Hide gameplay HUD panels
+        mainHUD.SetActive(false);
+        taskPanel.SetActive(false);
+    }
+
+    public void HideDayEndUI()
+    {
+        // Hide the Day End UI and re-enable the normal HUD
+        Debug.Log("Day End UI is now hidden.");
+        DayEndUI.SetActive(false);
+
+        // Re-enable normal gameplay HUD panels
+        mainHUD.SetActive(true);
+        taskPanel.SetActive(true);
     }
 }
