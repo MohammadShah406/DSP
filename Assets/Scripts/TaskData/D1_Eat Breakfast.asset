@@ -10,17 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43f9fef5d8cd4c5792e5731407daffdc, type: 3}
-  m_Name: cooking
+  m_Name: D1_Eat Breakfast
   m_EditorClassIdentifier: 
-  taskDescription: cook food
+  taskDescription: Eat breakfast - Bashir
   day: 1
-  hour: 9
-  minute: 10
+  hour: 10
+  minute: 0
   statEffects:
-  - characterName: Sahil
-    attribute: 1
-    amount: 10
-  - characterName: Sahil
-    attribute: 3
-    amount: 15
+  - characterName: Bashir
+    attribute: 0
+    amount: 0
   actionRequirement: Stove

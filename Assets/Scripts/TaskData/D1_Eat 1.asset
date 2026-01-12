@@ -9,10 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4dac1cfa2d04c839ba1ccf3ed14f593, type: 3}
-  m_Name: Donation Box
+  m_Script: {fileID: 11500000, guid: 43f9fef5d8cd4c5792e5731407daffdc, type: 3}
+  m_Name: D1_Eat 1
   m_EditorClassIdentifier: 
-  itemName: Donation Box
-  itemType: 4
-  icon: {fileID: 21300000, guid: 083d2204c650839488b944c65dcf7bfc, type: 3}
-  description: A simple wooden box, a plea to the humanity of strangers.
+  taskDescription: Eat dinner- Sahil
+  day: 1
+  hour: 19
+  minute: 0
+  statEffects:
+  - characterName: Sahil
+    attribute: 0
+    amount: 0
+  actionRequirement: Fridge

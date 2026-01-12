@@ -26,10 +26,6 @@ public class Interactable : MonoBehaviour
     [Header("Who can Interact")]
     [SerializeField] private List<Transform> allowedCharacters;
     
-    [Header("Task Integration")]
-    [SerializeField] private string interactionRequirement;
-    
-    public string InteractionRequirement => interactionRequirement;
 
     [System.Serializable]
     public class AtrributeList
@@ -171,9 +167,9 @@ public class Interactable : MonoBehaviour
     public void InteractComplete()
     {
         Debug.Log($"{name} interaction complete.");
-        if (TaskManager.Instance != null && !string.IsNullOrEmpty(interactionRequirement))
+        if (TaskManager.Instance != null)
         {
-            TaskManager.Instance.CompleteTaskByRequirement(interactionRequirement);
+            TaskManager.Instance.CompleteTaskByRequirement(name);
         }
         ApplyEffect();
     }
