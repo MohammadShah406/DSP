@@ -10,9 +10,8 @@ public class DonationManager : MonoBehaviour
     [SerializeField] public List<ItemData> allDonationsItemData = new();
     [SerializeField] private List<ResourceData> allDonationsResource = new();
 
-    [Header("Placement Activation")]
-    [SerializeField] private Transform placementParent;
-    [SerializeField] private ObjectPlacementActivator placementActivator;
+    [SerializeField] private List<GameObject> donationGameObjects = new();
+
 
 
     private bool subscribed = false;
@@ -183,37 +182,27 @@ public class DonationManager : MonoBehaviour
 
     public void PlaceItem(ItemData data)
     {
-        if (data == null) return;
-        Debug.Log($"DonationManager: PlaceItem called for {data.itemName}");
+        Debug.Log("DonationManager: PlaceItem called.");
 
-        // If we have a dedicated activator, use it
-        if (placementActivator != null)
+        foreach (GameObject obj in donationGameObjects)
         {
-            placementActivator.ActivateItem(data.itemName);
-            return;
-        }
-
-        // Fallback to searching within placementParent if activator is not assigned
-        if (placementParent != null)
-        {
-            foreach (Transform child in placementParent)
+            if (obj.name == data.itemName)
             {
-                if (child.name.Equals(data.itemName, System.StringComparison.OrdinalIgnoreCase))
+                Debug.Log($"DonationManager: Found matching donation GameObject for item '{data.itemName}'. Activating placement mode.");
+                obj.SetActive(true);
+                if (GameManager.Instance != null)
                 {
-                    child.gameObject.SetActive(true);
-                    Debug.Log($"DonationManager: Activated {child.name} via placementParent search.");
-                    
-                    // Trigger standard placement effects
-                    if (GameManager.Instance != null) GameManager.Instance.upgradesDone += 1;
-                    if (AudioPlayer.Instance != null && AudioLibrary.Instance != null)
-                    {
-                        AudioPlayer.Instance.Play(AudioLibrary.Instance.GetSfx("upgradedone"));
-                    }
-                    return;
+                    GameManager.Instance.upgradesDone += 1;
                 }
+
+                if (AudioPlayer.Instance != null && AudioLibrary.Instance != null)
+                {
+                    AudioPlayer.Instance.Play(AudioLibrary.Instance.GetSfx("upgradedone"));
+                }
+
+                return;
             }
         }
-        
-        Debug.LogWarning($"DonationManager: Could not find placement object for {data.itemName}");
+
     }
 }

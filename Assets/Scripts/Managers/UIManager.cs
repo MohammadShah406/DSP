@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour
     public GameObject topStatsHUD;
     public GameObject mainHUD;
     public CharacterCarousel characterCarousel;
+    public GameObject DayEndUI;
 
     [Header("HUD Elements")]
     public TextMeshProUGUI timeText;
@@ -503,5 +504,38 @@ public class UIManager : MonoBehaviour
     {
         // Load the main menu scene
         UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu");
+    }
+
+    public void ShowDayEndUI()
+    {
+        // Show the Day End UI and hide all other panels/HUDs
+        Debug.Log("Day End UI is now visible.");
+        DayEndUI.SetActive(true);
+
+        // Hide other panels
+        pausePanel.SetActive(false);
+        statsPanel.SetActive(false);
+        topStatsHUD.SetActive(false);
+
+        // Hide inventory if present
+        if (inventoryUI != null && inventoryUI.inventoryPanel != null)
+        {
+            inventoryUI.inventoryPanel.SetActive(false);
+        }
+
+        // Hide gameplay HUD panels
+        mainHUD.SetActive(false);
+        taskPanel.SetActive(false);
+    }
+
+    public void HideDayEndUI()
+    {
+        // Hide the Day End UI and re-enable the normal HUD
+        Debug.Log("Day End UI is now hidden.");
+        DayEndUI.SetActive(false);
+
+        // Re-enable normal gameplay HUD panels
+        mainHUD.SetActive(true);
+        taskPanel.SetActive(true);
     }
 }

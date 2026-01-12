@@ -130,6 +130,7 @@ public class TimeManager : MonoBehaviour
                 if (CurrentTotalMinutes() >= EndWindowTotalMinutes() && lastAutoPauseDay != days)
                 {
                     PauseAtEndOfWindow();
+                    ShowDayEndUI();
                     break; 
                 }
             }
@@ -190,6 +191,8 @@ public class TimeManager : MonoBehaviour
         minutes = endTotal % 60;
         HourChanged?.Invoke(hours, minutes, days);
         MinuteChanged?.Invoke(hours, minutes, days);
+
+        Debug.Log("TimeManager: Auto-paused at the end of active hours. Current time is " + hours + ":" + minutes + " on day " + days + " paused state: " + isPaused);
     }
 
     private bool HasExceededActiveWindow()
@@ -359,6 +362,26 @@ public class TimeManager : MonoBehaviour
             return TimePeriod.Night;
         else
             return TimePeriod.Night;
+    }
+
+    private void ShowDayEndUI()
+    {
+        Debug.Log("Day has ended. TimeManager has auto-paused the game.");
+        
+
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ShowDayEndUI();
+        }
+
+    }
+
+    public void Unpause()
+    {
+        Debug.Log("TimeManager: Unpausing game from Day End UI. paused state: " + isPaused);
+        isPaused = false;
+        UIManager.Instance.HideDayEndUI();
+        Debug.Log("TimeManager: Game unpaused by player. pause state: " + isPaused);
     }
 
 
