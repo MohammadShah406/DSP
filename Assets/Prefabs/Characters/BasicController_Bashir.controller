@@ -160,7 +160,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BasicController
+  m_Name: BasicController_Bashir
   serializedVersion: 5
   m_AnimatorParameters: []
   m_AnimatorLayers:
@@ -295,7 +295,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 64f68707b2f2c7c41bbd647e8d2adeee, type: 2}
+  m_Motion: {fileID: 7400000, guid: 0cd169250e29844438ab8979c9ba3e25, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
