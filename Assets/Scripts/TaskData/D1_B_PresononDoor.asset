@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   taskType: 0
   requiredCharacter: 2
-  requirementTarget: Door
-  taskDescription: Talk to the person on the door
+  requirementTarget: Sahil
+  taskDescription: Talk to Sahil
   day: 1
   hour: 8
   minute: 0

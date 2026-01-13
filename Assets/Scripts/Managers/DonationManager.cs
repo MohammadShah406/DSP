@@ -113,7 +113,9 @@ public class DonationManager : MonoBehaviour
         Debug.Log($"DonationManager: Checking donations for Day {d}, Hour {h}, Minute {m}");
 
         TriggerOnce(d, h, m, donationIndex: 0, expectedDay: 1, expectedHour: 16, expectedMinute: 0);
-        TriggerOnce(d, h, m, donationIndex: 1, expectedDay: 2, expectedHour: 10, expectedMinute: 0);
+        TriggerOnce(d, h, m, donationIndex: 1, expectedDay: 2, expectedHour: 12, expectedMinute: 0);
+        TriggerOnce(d, h, m, donationIndex: 2, expectedDay: 2, expectedHour: 15, expectedMinute: 0);
+
     }
 
     public void TryCheckDonations()
@@ -153,7 +155,7 @@ public class DonationManager : MonoBehaviour
         for (int donationIndex = 0; donationIndex < TempInventoryItemData.Count; donationIndex++)
         {
             string donationKey = GetDonationKey(donationIndex);
-            if (fired.Contains(donationKey)) return;
+            if (fired.Contains(donationKey)) continue;
 
             Debug.Log($"DonationManager: Triggering donation #{donationIndex}");
 

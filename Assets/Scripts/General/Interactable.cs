@@ -25,7 +25,9 @@ public class Interactable : MonoBehaviour
 
     [Header("Who can Interact")]
     [SerializeField] private List<Transform> allowedCharacters;
-    
+
+    public bool interactOnce = false;
+    public bool isInteracted = false;
 
     [System.Serializable]
     public class AtrributeList
@@ -166,6 +168,12 @@ public class Interactable : MonoBehaviour
 
     public void InteractComplete()
     {
+        if(interactOnce)
+        {
+            isInteracted = true;
+            Debug.Log($"[Interactable] {name} set to interactOnce. Marking as interacted.");
+        }
+
         Debug.Log($"[Interactable] {name} interaction complete. Notifying TaskManager...");
         if (TaskManager.Instance != null)
         {
@@ -186,6 +194,15 @@ public class Interactable : MonoBehaviour
                 DonationManager.Instance.TryCheckDonations();
             }
         }   
+
+        if(gameObject.name == "KitchenWall")
+        {
+            MaterialManager.instance.UpgradeMaterials(3);
+        }
+        else if(gameObject.name == "LivingroomWall")
+        {
+            MaterialManager.instance.UpgradeMaterials(2);
+        }
     }
 
     public void AddToInteractionManager()

@@ -358,7 +358,20 @@ public class GameManager : MonoBehaviour
         charStatsList = GetCharacterComponents();
     }
 
-
+    public void EnableCharacter()
+    {
+        foreach (GameObject character in characters)
+        {
+            if (character != null)
+            {
+                if (!character.activeSelf)
+                {
+                    character.SetActive(true);
+                    return;
+                }
+            }
+        }
+    }
 }
 
 public static class PendingGameLoad

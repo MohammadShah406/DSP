@@ -11,6 +11,8 @@ public class MaterialManager : MonoBehaviour
 
     public List<GameObject> objectsToUpgrade;
 
+    public bool upgradedAll = false;
+
     private void Awake()
     {
         if (instance == null)
@@ -54,6 +56,14 @@ public class MaterialManager : MonoBehaviour
             for(int i = 0; i < objectsToUpgrade.Count; i++)
             {
                 UpgradeMaterials(i);
+            }
+        }
+        if(GameManager.Instance.Hope > 80)
+        {
+            if(!upgradedAll)
+            {
+                upgradedAll = true;
+                UpgradeAllMaterials();
             }
         }
     }

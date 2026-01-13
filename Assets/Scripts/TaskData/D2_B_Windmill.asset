@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   taskType: 1
   requiredCharacter: 2
-  requirementTarget: Tower
+  requirementTarget: Windmill
   taskDescription: Place windmill
   day: 2
   hour: 12

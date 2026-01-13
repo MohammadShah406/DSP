@@ -432,7 +432,7 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// Toggles the inventory state between open and closed.
     /// </summary>
-    private void ToggleInventory()
+    public void ToggleInventory()
     {
         if (_currentState == UIState.Inventory)
             OnInventoryClosed();

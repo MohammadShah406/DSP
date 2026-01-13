@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   taskType: 1
   requiredCharacter: 2
-  requirementTarget: Solar Panel
-  taskDescription: Check donation box
+  requirementTarget: Solar Panels
+  taskDescription: Place Solar Panel
   day: 1
   hour: 16
   minute: 0

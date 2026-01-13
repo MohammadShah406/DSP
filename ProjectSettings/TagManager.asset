@@ -8,6 +8,7 @@ TagManager:
   - Wall
   - Ground
   - Donation
+  - Door
   layers:
   - Default
   - TransparentFX

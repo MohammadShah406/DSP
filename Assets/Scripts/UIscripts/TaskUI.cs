@@ -535,35 +535,38 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         Canvas.ForceUpdateCanvases();
     }
-    
+
     private IEnumerator RemoveTaskEntryAfterDelay(TaskInstance taskInstance, GameObject entry)
     {
         yield return new WaitForSeconds(completionDisplayTime);
-        
+
+        // Entry may have been destroyed by RefreshTaskList or another update
+        if (entry == null)
+        {
+            _activeTaskEntries.Remove(taskInstance);
+            yield break;
+        }
+
         CanvasGroup canvasGroup = entry.GetComponent<CanvasGroup>();
         if (canvasGroup == null)
-        {
             canvasGroup = entry.AddComponent<CanvasGroup>();
-        }
-    
+
         float fadeTime = 0.5f;
         float elapsed = 0f;
-    
+
         while (elapsed < fadeTime)
         {
+            if (entry == null) yield break; // destroyed mid-fade
+
             elapsed += Time.deltaTime;
             canvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsed / fadeTime);
             yield return null;
         }
-        
-        if (entry != null)
-        {
-            Destroy(entry);
-        }
-        
+
+        if (entry != null) Destroy(entry);
+
         _activeTaskEntries.Remove(taskInstance);
-        
-        // Force layout rebuild
+
         Canvas.ForceUpdateCanvases();
         if (taskListContainer != null)
         {
@@ -571,7 +574,7 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             LayoutRebuilder.ForceRebuildLayoutImmediate(containerRT);
         }
     }
-    
+
     private void RefreshTaskList()
     {
         // Clear everything

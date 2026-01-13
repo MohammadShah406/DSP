@@ -351,6 +351,8 @@ public class CharacterMovement : MonoBehaviour
             isInteracting = false;
             return;
         }
+        else if (currentInteractable.isInteracted)
+            return;
 
         // 1) If a different interactable was selected while interacting, cancel current interaction
         if (interactable != null && interactable != currentInteractable)

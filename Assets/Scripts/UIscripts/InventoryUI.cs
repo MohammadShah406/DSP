@@ -235,6 +235,13 @@ public class InventoryUI : MonoBehaviour
 
     public void PlaceItem(ItemData data)
     {
+        //Close InventoryUI
+        if (inventoryPanel != null)
+        {
+            if (UIManager.Instance != null)
+                UIManager.Instance.ToggleInventory();
+        }
+
         // Trigger placement mode if available
         if (DonationManager.Instance != null)
         {

@@ -382,6 +382,11 @@ public class TimeManager : MonoBehaviour
         isPaused = false;
         UIManager.Instance.HideDayEndUI();
         Debug.Log("TimeManager: Game unpaused by player. pause state: " + isPaused);
+
+        if(GameManager.Instance != null)
+        {
+            GameManager.Instance.EnableCharacter();
+        }
     }
 
 
