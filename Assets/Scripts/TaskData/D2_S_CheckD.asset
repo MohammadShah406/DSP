@@ -10,25 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43f9fef5d8cd4c5792e5731407daffdc, type: 3}
-  m_Name: D1_Sleep
+  m_Name: D2_S_CheckD
   m_EditorClassIdentifier: 
   taskType: 0
-  requiredCharacter: 0
-  requirementTarget: Materac
-  taskDescription: Sleep
+  requiredCharacter: 1
+  requirementTarget: Donation Box
+  taskDescription: Check donation box
   day: 1
-  hour: 22
+  hour: 9
   minute: 0
   statEffects:
-  - characterName: 1
-    attribute: 7
-    amount: 100
   - characterName: 2
-    attribute: 7
-    amount: 100
-  - characterName: 3
-    attribute: 7
-    amount: 100
-  - characterName: 4
-    attribute: 7
-    amount: 100
+    attribute: 1
+    amount: 13

@@ -153,9 +153,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void SetUpgrades()
     {
-        if(DonationManager.instance != null)
+        if(DonationManager.Instance != null)
         {
-            totalUpgrades = DonationManager.instance.allDonationsItemData.Count;
+            totalUpgrades = DonationManager.Instance.allDonationsItemData.Count;
         }
     }
 

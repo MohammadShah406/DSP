@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 
 public class DonationManager : MonoBehaviour
 {
-    public static DonationManager instance;
+    public static DonationManager Instance;
 
     [Header("Donation data")]
     [SerializeField] public List<ItemData> allDonationsItemData = new();
@@ -14,16 +14,16 @@ public class DonationManager : MonoBehaviour
 
 
 
-    private bool subscribed = false;
+    private bool _subscribed = false;
 
     // Runtime cache
     private HashSet<string> fired = new HashSet<string>();
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             //LoadFiredDonations();
         }
         else
@@ -55,12 +55,12 @@ public class DonationManager : MonoBehaviour
     /// </summary>
     private void TrySubscribe()
     {
-        if (subscribed) return;
+        if (_subscribed) return;
 
         if (TimeManager.Instance == null) return;
 
         TimeManager.Instance.MinuteChanged += OnMinuteChanged;
-        subscribed = true;
+        _subscribed = true;
 
         // Initial check
         CheckCurrentDonations(TimeManager.Instance.days, TimeManager.Instance.hours, TimeManager.Instance.minutes);
@@ -71,11 +71,11 @@ public class DonationManager : MonoBehaviour
     /// </summary>
     private void Unsubscribe()
     {
-        if (!subscribed) return;
+        if (!_subscribed) return;
         if (TimeManager.Instance == null) return;
 
         TimeManager.Instance.MinuteChanged -= OnMinuteChanged;
-        subscribed = false;
+        _subscribed = false;
     }
 
     /// <summary>

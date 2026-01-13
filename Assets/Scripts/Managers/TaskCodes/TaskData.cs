@@ -27,7 +27,6 @@ public class TaskData : ScriptableObject
     public int hour;
     public int minute;
     public List<StatEffect> statEffects;
-    public string actionRequirement;
     
     
     [System.Serializable]
