@@ -4,17 +4,31 @@ using Unity.VisualScripting;
 
 public class MaterialManager : MonoBehaviour
 {
+    public static MaterialManager instance;
+
     public List<MaterialSettings> OldMaterialSettings;
     public List<MaterialSettings> upgradedMaterialSettings;
 
     public List<GameObject> objectsToUpgrade;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     public bool upgradeAll = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if(objectsToUpgrade.Count != OldMaterialSettings.Count || objectsToUpgrade.Count != upgradedMaterialSettings.Count)
+        if(objectsToUpgrade.Count != upgradedMaterialSettings.Count)
         {
             Debug.LogError("MaterialManager: The number of objects to upgrade does not match the number of material settings provided.");
         }

@@ -168,6 +168,20 @@ public class TaskManager : MonoBehaviour
             {
                 task.Complete();
                 ApplyStatEffects(task.taskData);
+
+                if (MaterialManager.instance != null)
+                {
+                    if (task.taskData.requirementTarget == "KitchenWall")
+                    {
+                        MaterialManager.instance.UpgradeMaterials(3);
+                    }
+                    else if (task.taskData.requirementTarget == "LivingroomWall")
+                    {
+                        MaterialManager.instance.UpgradeMaterials(2);
+                    }
+
+                }
+
                 OnTasksUpdated?.Invoke();
                 Debug.Log($"Task Completed by Requirement: {requirement}");
             }
