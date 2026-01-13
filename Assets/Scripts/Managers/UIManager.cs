@@ -29,7 +29,6 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI hopeText;
     
     [Header("Character Stats Display")]
-    public Image characterPicture;
     public TextMeshProUGUI characterNameText;
     public TextMeshProUGUI characterDescriptionText;
     

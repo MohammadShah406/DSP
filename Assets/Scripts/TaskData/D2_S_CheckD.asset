@@ -16,7 +16,7 @@ MonoBehaviour:
   requiredCharacter: 1
   requirementTarget: Donation Box
   taskDescription: Check donation box
-  day: 1
+  day: 2
   hour: 9
   minute: 0
   statEffects:

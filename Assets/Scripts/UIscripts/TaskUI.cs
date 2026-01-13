@@ -19,6 +19,7 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private void Start()
     {
         _rectTransform = GetComponent<RectTransform>();
+        Debug.Log("[TaskUI] Start called.");
         
         // Ensure EventSystem exists
         if (EventSystem.current == null)
@@ -48,12 +49,13 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         if (TaskManager.Instance != null)
         {
+            Debug.Log("[TaskUI] Subscribing to TaskManager.OnTasksUpdated.");
             TaskManager.Instance.OnTasksUpdated += OnTasksUpdated;
         }
-
-        // TaskManager already triggers RefreshTaskList via OnTasksUpdated every minute now
-        // so we don't strictly need to listen to TimeManager here if we want to avoid double calls,
-        // but it doesn't hurt much. To be clean, let's just rely on TaskManager.
+        else
+        {
+            Debug.LogError("[TaskUI] TaskManager.Instance is null in Start!");
+        }
 
         RefreshTaskList();
     }
@@ -336,6 +338,7 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (TaskManager.Instance == null) return;
         
         List<TaskInstance> currentTasks = TaskManager.Instance.GetActiveTasks();
+        Debug.Log($"[TaskUI] OnTasksUpdated received {currentTasks.Count} active tasks.");
         
         // Check for newly completed tasks
         foreach (var kvp in new Dictionary<TaskInstance, GameObject>(_activeTaskEntries))
@@ -356,6 +359,7 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         {
             if (!_activeTaskEntries.ContainsKey(taskInstance))
             {
+                Debug.Log($"[TaskUI] Creating entry for task: {taskInstance.taskData.taskDescription}");
                 CreateTaskEntry(taskInstance);
             }
         }
@@ -489,7 +493,12 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         SetTextValue(timeText, $"{task.taskData.hour:00}:{task.taskData.minute:00}");
         if (timeText != null) timeText.raycastTarget = false;
 
-        SetTextValue(descText, task.taskData.taskDescription);
+        string displayName = task.taskData.taskDescription;
+        if (task.taskData.requiredCharacter != TaskData.CharacterName.None)
+        {
+            displayName = $"{task.taskData.requiredCharacter}: {displayName}";
+        }
+        SetTextValue(descText, displayName);
         if (descText != null) descText.raycastTarget = false;
 
         entry.transform.SetAsLastSibling();

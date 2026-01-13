@@ -11,8 +11,12 @@ public class DonationManager : MonoBehaviour
     [SerializeField] private List<ResourceData> allDonationsResource = new();
 
     [SerializeField] private List<GameObject> donationGameObjects = new();
+    [SerializeField] private List<ItemData> TempInventoryItemData = new();
+    [SerializeField] private List<ResourceData> TempInventoryResourceData = new();
 
-
+    public int hours;
+    public int minutes;
+    public int days;
 
     private bool _subscribed = false;
 
@@ -85,6 +89,10 @@ public class DonationManager : MonoBehaviour
     {
         Debug.Log($"DonationManager: Time changed to Day {days}, Hour {hours}, Minute {minutes}");
         CheckCurrentDonations(days, hours, minutes);
+
+        this.hours = hours;
+        this.minutes = minutes;
+        this.days = days;
     }
 
     /// <summary>
@@ -108,6 +116,11 @@ public class DonationManager : MonoBehaviour
         TriggerOnce(d, h, m, donationIndex: 1, expectedDay: 2, expectedHour: 10, expectedMinute: 0);
     }
 
+    public void TryCheckDonations()
+    {
+        TryAddDonationToInventory();    
+    }
+
     /// <summary>
     /// Triggers a donation only once at the specified time
     /// </summary>
@@ -115,39 +128,59 @@ public class DonationManager : MonoBehaviour
                              int donationIndex, int expectedDay, int expectedHour, int expectedMinute)
     {
         if (currentDay != expectedDay || currentHour != expectedHour || currentMinute != expectedMinute)
+        { 
+            Debug.Log($"DonationManager: Not time for donation #{donationIndex + 1} yet. Current time: Day {currentDay}, {currentHour:00}:{currentMinute:00}. Expected time: Day {expectedDay}, {expectedHour:00}:{expectedMinute:00}");
             return;
+        }
 
-        string donationKey = GetDonationKey(donationIndex, expectedDay, expectedHour, expectedMinute);
-        if (fired.Contains(donationKey)) return;
-
-        Debug.Log($"DonationManager: Triggering donation #{donationIndex + 1} for Day {expectedDay} at {expectedHour:00}:{expectedMinute:00}");
-
-        // Mark as fired
-        fired.Add(donationKey);
-        PlayerPrefs.SetInt(donationKey, 1);
-        PlayerPrefs.Save();
-
-        if (donationIndex >= 0 && donationIndex < allDonationsItemData.Count && allDonationsItemData[donationIndex] != null)
+        if(TempInventoryItemData.Count > donationIndex)
         {
-            Debug.Log($"Get a donation! Donation #{donationIndex + 1} added to inventory.");
-            // Add the donation item to the inventory
-            GameManager.Instance.itemDatabase.Add(allDonationsItemData[donationIndex]);
-            GameManager.Instance.resources.Add(allDonationsResource[donationIndex]);
+            Debug.Log($"DonationManager: Donation #{donationIndex + 1} already triggered.");
+            return;
+        }
+
+        TempInventoryItemData.Add(allDonationsItemData[donationIndex]);
+        TempInventoryResourceData.Add(allDonationsResource[donationIndex]);
+    }
+    private string GetDonationKey(int donationIndex)
+    {
+        return $"donation_{donationIndex}";
+    }
+
+    public void TryAddDonationToInventory()
+    {
+
+        for (int donationIndex = 0; donationIndex < TempInventoryItemData.Count; donationIndex++)
+        {
+            string donationKey = GetDonationKey(donationIndex);
+            if (fired.Contains(donationKey)) return;
+
+            Debug.Log($"DonationManager: Triggering donation #{donationIndex}");
+
+            // Mark as fired
+            fired.Add(donationKey);
+            PlayerPrefs.SetInt(donationKey, 1);
+            PlayerPrefs.Save();
+
+            if (donationIndex >= 0 && donationIndex < allDonationsItemData.Count && allDonationsItemData[donationIndex] != null)
+            {
+                Debug.Log($"Get a donation! Donation #{donationIndex + 1} added to inventory.");
+                // Add the donation item to the inventory
+                GameManager.Instance.itemDatabase.Add(allDonationsItemData[donationIndex]);
+                GameManager.Instance.resources.Add(allDonationsResource[donationIndex]);
+            }
 
             if (AudioPlayer.Instance != null && AudioLibrary.Instance != null)
             {
                 AudioPlayer.Instance.Play(AudioLibrary.Instance.GetSfx("donationreceived"));
             }
 
+
+            else
+            {
+                Debug.LogWarning($"Donation index {donationIndex} is missing in allDonations list.");
+            }
         }
-        else
-        {
-            Debug.LogWarning($"Donation index {donationIndex} is missing in allDonations list.");
-        }
-    }
-    private string GetDonationKey(int donationIndex, int day, int hour, int minute)
-    {
-        return $"donation_{donationIndex}_day{day}_{hour:00}{minute:00}";
     }
 
     /// <summary>
@@ -172,7 +205,7 @@ public class DonationManager : MonoBehaviour
     /// </summary>
     private void TryLoadKey(int index, int day, int hour, int minute)
     {
-        string key = GetDonationKey(index, day, hour, minute);
+        string key = GetDonationKey(index);
         if (PlayerPrefs.GetInt(key, 0) == 1)
         {
             fired.Add(key);
