@@ -10,8 +10,13 @@ public class DonationManager : MonoBehaviour
     [SerializeField] public List<ItemData> allDonationsItemData = new();
     [SerializeField] private List<ResourceData> allDonationsResource = new();
 
+<<<<<<< Updated upstream
     [SerializeField] private List<GameObject> donationGameObjects = new();
 
+=======
+    [Header("Placement Activation")]
+    [SerializeField] private Transform placementParent;
+>>>>>>> Stashed changes
 
 
     private bool subscribed = false;
@@ -182,6 +187,7 @@ public class DonationManager : MonoBehaviour
 
     public void PlaceItem(ItemData data)
     {
+<<<<<<< Updated upstream
         Debug.Log("DonationManager: PlaceItem called.");
 
         foreach (GameObject obj in donationGameObjects)
@@ -204,5 +210,94 @@ public class DonationManager : MonoBehaviour
             }
         }
 
+=======
+        if (data == null) return;
+
+        if (placementParent == null)
+        {
+            Debug.LogError("[DonationManager] placementParent is not assigned!");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(data.itemName))
+        {
+            Debug.LogWarning("[DonationManager] Item name is null or empty!");
+            return;
+        }
+
+        Debug.Log($"DonationManager: PlaceItem called for {data.itemName}");
+
+        // Search through all children of the placementParent
+        foreach (Transform child in placementParent)
+        {
+            if (child.name.Equals(data.itemName, System.StringComparison.OrdinalIgnoreCase))
+            {
+                if (child.gameObject.activeSelf)
+                {
+                    Debug.Log($"[DonationManager] Object '{data.itemName}' is already active.");
+                    return;
+                }
+
+                child.gameObject.SetActive(true);
+                Debug.Log($"[DonationManager] Successfully activated object: {child.name}");
+
+                // Trigger standard placement effects
+                HandlePlacementSuccess();
+
+                // Get the currently selected character from InteractionManager
+                string characterName = "";
+                if (InteractionManager.Instance != null)
+                {
+                    characterName = InteractionManager.Instance.GetSelectedCharacterName();
+                }
+
+                // Notify TaskManager that an object has been activated
+                if (TaskManager.Instance != null)
+                {
+                    TaskManager.Instance.CheckObjectTasks(child.name, characterName);
+                }
+                return;
+            }
+        }
+
+        Debug.LogWarning($"[DonationManager] No object found with name '{data.itemName}' under '{placementParent.name}'.");
+    }
+
+    /// <summary>
+    /// Checks if a specific object under the placementParent is active.
+    /// </summary>
+    public bool IsObjectActive(string objectName)
+    {
+        if (placementParent == null || string.IsNullOrEmpty(objectName)) return false;
+
+        foreach (Transform child in placementParent)
+        {
+            if (child.name.Equals(objectName, System.StringComparison.OrdinalIgnoreCase))
+            {
+                return child.gameObject.activeSelf;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Handles the success effects after an item is placed.
+    /// </summary>
+    private void HandlePlacementSuccess()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.upgradesDone += 1;
+        }
+
+        if (AudioPlayer.Instance != null && AudioLibrary.Instance != null)
+        {
+            AudioClip clip = AudioLibrary.Instance.GetSfx("upgradedone");
+            if (clip != null)
+            {
+                AudioPlayer.Instance.Play(clip);
+            }
+        }
+>>>>>>> Stashed changes
     }
 }

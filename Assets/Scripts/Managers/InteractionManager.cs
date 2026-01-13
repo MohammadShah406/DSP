@@ -103,6 +103,13 @@ public class InteractionManager : MonoBehaviour
         }
     }
 
+    public string GetSelectedCharacterName()
+    {
+        if (_selectedCharacter == null) return "";
+        CharacterStats stats = _selectedCharacter.GetComponent<CharacterStats>();
+        return stats != null ? stats.characterName : _selectedCharacter.name;
+    }
+
     private CharacterInteractionSet GetSetForCharacter(Transform character)
     {
         foreach (var set in sets)
@@ -173,9 +180,9 @@ public class InteractionManager : MonoBehaviour
         
         foreach (var taskInstance in activeTasks)
         {
-            if (taskInstance.isActive && !taskInstance.isCompleted)
+            if (taskInstance.isActive && !taskInstance.isCompleted && taskInstance.taskData.taskType == TaskData.TaskType.Interaction)
             {
-                string requirement = taskInstance.taskData.actionRequirement;
+                string requirement = taskInstance.taskData.requirementTarget;
                 
                 if (string.IsNullOrEmpty(requirement)) continue;
                 
@@ -233,12 +240,25 @@ public class InteractionManager : MonoBehaviour
     {
         List<Transform> characters = new List<Transform>();
         
-        // Option 1: If task stat effects tell us which character
+        // Option 1: Explicitly required character
+        if (taskInstance.taskData.requiredCharacter != TaskData.CharacterName.None)
+        {
+            Transform character = FindCharacterByName(taskInstance.taskData.requiredCharacter.ToString());
+            if (character != null)
+            {
+                characters.Add(character);
+                return characters;
+            }
+        }
+
+        // Option 2: If task stat effects tell us which character
         if (taskInstance.taskData.statEffects.Count > 0)
         {
             foreach (var effect in taskInstance.taskData.statEffects)
             {
-                Transform character = FindCharacterByName(effect.characterName);
+                if (effect.characterName == TaskData.CharacterName.None) continue;
+
+                Transform character = FindCharacterByName(effect.characterName.ToString());
                 if (character != null && !characters.Contains(character))
                 {
                     characters.Add(character);

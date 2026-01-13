@@ -489,7 +489,12 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         SetTextValue(timeText, $"{task.taskData.hour:00}:{task.taskData.minute:00}");
         if (timeText != null) timeText.raycastTarget = false;
 
-        SetTextValue(descText, task.taskData.taskDescription);
+        string desc = task.taskData.taskDescription;
+        if (task.taskData.requiredCharacter != TaskData.CharacterName.None)
+        {
+            desc += $" ({task.taskData.requiredCharacter})";
+        }
+        SetTextValue(descText, desc);
         if (descText != null) descText.raycastTarget = false;
 
         entry.transform.SetAsLastSibling();
