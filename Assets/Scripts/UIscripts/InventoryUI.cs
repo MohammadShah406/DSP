@@ -236,9 +236,9 @@ public class InventoryUI : MonoBehaviour
     public void PlaceItem(ItemData data)
     {
         // Trigger placement mode if available
-        if (DonationManager.instance != null)
+        if (DonationManager.Instance != null)
         {
-            DonationManager.instance.PlaceItem(data);
+            DonationManager.Instance.PlaceItem(data);
         }
 
         // Decrement the item from GameManager resources (and update UI via events)

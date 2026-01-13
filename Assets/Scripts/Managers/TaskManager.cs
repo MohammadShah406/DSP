@@ -103,9 +103,9 @@ public class TaskManager : MonoBehaviour
             currentDayTaskInstances.Add(instance);
             
             // Index by requirement for quick lookup
-            if (!string.IsNullOrEmpty(taskData.actionRequirement))
+            if (!string.IsNullOrEmpty(taskData.requirementTarget))
             {
-                activeTasksByRequirement[taskData.actionRequirement] = instance;
+                activeTasksByRequirement[taskData.requirementTarget] = instance;
             }
         }
         

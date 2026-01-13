@@ -6,11 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="bff7cc7c-cac8-4abf-ad0b-f0deaa34cb40" name="Changes" comment="Add ObjectPlacementActivator class for dynamic object activation based on inventory items">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.DSP/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DSP/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/DonationManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/DonationManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/GameManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/InteractionManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/InteractionManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes/TaskData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes/TaskData.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes/TaskPopulator.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes/TaskPopulator.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/TaskManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/TaskManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIscripts/InventoryUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIscripts/InventoryUI.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +42,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/25ce29052dfe4e49a635a42f7798806b1e0000/32/4d316c86/MonoBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/25ce29052dfe4e49a635a42f7798806b1e0000/37/e5f9803b/Object.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/25ce29052dfe4e49a635a42f7798806b1e0000/52/0ddd64af/GameObject.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/25ce29052dfe4e49a635a42f7798806b1e0000/9c/39c6bea2/Transform.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/AssetArt/FontStyle.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Prefabs/Managers/UIManager.prefab" root0="FORCE_HIGHLIGHTING" />
@@ -54,8 +58,6 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes/TaskData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes/TaskData.cs.meta" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes/TaskPopulator.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes/TaskPopulator.cs.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TaskManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TimeManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/UIManager.cs" root0="FORCE_HIGHLIGHTING" />
@@ -164,7 +166,7 @@
       <workItem from="1768181553750" duration="6365000" />
       <workItem from="1768188051396" duration="1007000" />
       <workItem from="1768226481217" duration="2513000" />
-      <workItem from="1768277771141" duration="12210000" />
+      <workItem from="1768277771141" duration="14532000" />
     </task>
     <task id="LOCAL-00001" summary="Fix: Restore UI stability and Camera functionality after rollback&#10;&#10;- CameraBehaviour: Resolved syntax error in HandleZoom caused by merge conflict.&#10;- CameraBehaviour: Updated IsMouseOverUI to correctly block clicks when interacting with topStatsHUD and taskPanel.&#10;- CharacterStats: Refactored UpdateHealth to use the Health property, ensuring stat changes correctly trigger UI update events.&#10;- UIManager: Restored critical null safety checks in UpdateCharacterStatsDisplay and UpdateTimeDisplay to prevent UI logic crashes from unassigned fields.&#10;- InventoryItemUI: Added null checks to Setup method for safer prefab instantiation.">
       <option name="closed" value="true" />

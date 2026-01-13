@@ -175,7 +175,7 @@ public class InteractionManager : MonoBehaviour
         {
             if (taskInstance.isActive && !taskInstance.isCompleted)
             {
-                string requirement = taskInstance.taskData.actionRequirement;
+                string requirement = taskInstance.taskData.requirementTarget;
                 
                 if (string.IsNullOrEmpty(requirement)) continue;
                 
