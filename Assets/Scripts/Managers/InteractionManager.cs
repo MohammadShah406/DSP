@@ -160,13 +160,13 @@ public class InteractionManager : MonoBehaviour
     {
         if (TaskManager.Instance == null) return;
         
-        
         // Get active tasks
         List<TaskInstance> activeTasks = TaskManager.Instance.GetActiveTasks();
+        Debug.Log($"[InteractionManager] UpdateInteractablesFromTasks found {activeTasks.Count} active tasks.");
         
         foreach (var taskInstance in activeTasks)
         {
-            if (taskInstance.isActive && !taskInstance.isCompleted)
+            if (!taskInstance.isCompleted)
             {
                 string requirement = taskInstance.taskData.requirementTarget;
                 

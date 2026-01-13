@@ -37,7 +37,7 @@ public class TaskManager : MonoBehaviour
     
     [SerializeField] private List<TaskData> allTaskData; 
     private List<TaskInstance> currentDayTaskInstances = new List<TaskInstance>(); 
-    private Dictionary<string, TaskInstance> activeTasksByRequirement = new Dictionary<string, TaskInstance>();
+    private Dictionary<string, TaskInstance> activeTasksByRequirement = new Dictionary<string, TaskInstance>(StringComparer.OrdinalIgnoreCase);
     
     
     
@@ -59,7 +59,12 @@ public class TaskManager : MonoBehaviour
         {
             TimeManager.Instance.DayChanged += UpdateDayTasks;
             TimeManager.Instance.MinuteChanged += HandleMinuteChanged;
+            Debug.Log($"[TaskManager] Initializing tasks for day {TimeManager.Instance.days}");
             UpdateDayTasks(TimeManager.Instance.days);
+        }
+        else
+        {
+            Debug.LogError("[TaskManager] TimeManager.Instance is null in Start!");
         }
     }
 
@@ -91,11 +96,14 @@ public class TaskManager : MonoBehaviour
             return;
         }
 
+        Debug.Log($"[TaskManager] Updating tasks for Day {day}. Total tasks in database: {allTaskData.Count}");
+
         // Create new runtime instances for the day
         currentDayTaskInstances.Clear();
         activeTasksByRequirement.Clear();
         
         var dayTasks = allTaskData.Where(t => t != null && t.day == day).ToList();
+        Debug.Log($"[TaskManager] Found {dayTasks.Count} tasks for Day {day}");
         
         foreach (var taskData in dayTasks)
         {
@@ -105,7 +113,7 @@ public class TaskManager : MonoBehaviour
             // Index by requirement for quick lookup
             if (!string.IsNullOrEmpty(taskData.requirementTarget))
             {
-                activeTasksByRequirement[taskData.requirementTarget] = instance;
+                activeTasksByRequirement[taskData.requirementTarget.Trim()] = instance;
             }
         }
         
@@ -136,11 +144,14 @@ public class TaskManager : MonoBehaviour
         if (allTaskData == null) return new List<TaskInstance>();
         
         // Return instances that match the time criteria
-        return currentDayTaskInstances
+        var tasks = currentDayTaskInstances
             .Where(t => t.taskData.day == day && 
                        !t.isCompleted && 
                        t.taskData.hour <= hour)
             .ToList();
+
+        Debug.Log($"[TaskManager] GetTasksForCurrentTime(day={day}, hour={hour}, min={minute}) returned {tasks.Count} tasks.");
+        return tasks;
     }
 
     public void CompleteTask(string taskDescription)
@@ -161,8 +172,9 @@ public class TaskManager : MonoBehaviour
     public void CompleteTaskByRequirement(string requirement)
     {
         if (string.IsNullOrEmpty(requirement)) return;
+        string trimmedRequirement = requirement.Trim();
 
-        if (activeTasksByRequirement.TryGetValue(requirement, out TaskInstance task))
+        if (activeTasksByRequirement.TryGetValue(trimmedRequirement, out TaskInstance task))
         {
             if (!task.isCompleted)
             {
@@ -183,8 +195,12 @@ public class TaskManager : MonoBehaviour
                 }
 
                 OnTasksUpdated?.Invoke();
-                Debug.Log($"Task Completed by Requirement: {requirement}");
+                Debug.Log($"Task Completed by Requirement: {trimmedRequirement}");
             }
+        }
+        else
+        {
+            Debug.LogWarning($"[TaskManager] No active task found for requirement target: {trimmedRequirement}");
         }
     }
 
