@@ -155,13 +155,6 @@ public class InteractionManager : MonoBehaviour
         }
     }
     
-    private void ClearAllInteractables()
-    {
-        foreach (var set in sets)
-        {
-            set.interactables.Clear();
-        }
-    }
     
     private void UpdateInteractablesFromTasks()
     {
@@ -233,22 +226,17 @@ public class InteractionManager : MonoBehaviour
     {
         List<Transform> characters = new List<Transform>();
         
-        // Option 1: If task stat effects tell us which character
-        if (taskInstance.taskData.statEffects.Count > 0)
+        // Priority 1: Check requiredCharacter field
+        if (taskInstance.taskData.requiredCharacter != TaskData.CharacterName.None)
         {
-            foreach (var effect in taskInstance.taskData.statEffects)
+            Transform character = FindCharacterByName(taskInstance.taskData.requiredCharacter.ToString());
+            if (character != null)
             {
-                if (effect.characterName == TaskData.CharacterName.None) continue;
-
-                Transform character = FindCharacterByName(effect.characterName.ToString());
-                if (character != null && !characters.Contains(character))
-                {
-                    characters.Add(character);
-                }
+                characters.Add(character);
             }
         }
         
-        // Option 2: If no specific character, add to all characters
+        // Priority 2: If no specific character is required, add to all characters
         if (characters.Count == 0)
         {
             foreach (var set in sets)
