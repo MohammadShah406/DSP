@@ -169,16 +169,7 @@ public class Interactable : MonoBehaviour
         Debug.Log($"{name} interaction complete.");
         if (TaskManager.Instance != null)
         {
-            string characterName = "";
-            if (interactedBy != null)
-            {
-                var stats = interactedBy.GetComponent<CharacterStats>();
-                if (stats != null)
-                {
-                    characterName = stats.characterName;
-                }
-            }
-            TaskManager.Instance.CompleteTaskByRequirement(name, characterName);
+            TaskManager.Instance.CompleteTaskByRequirement(name);
         }
         ApplyEffect();
     }

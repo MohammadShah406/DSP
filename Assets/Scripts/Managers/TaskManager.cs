@@ -75,29 +75,9 @@ public class TaskManager : MonoBehaviour
     private void HandleMinuteChanged(int h, int m, int d)
     {
         CheckForTaskActivation(d, h, m);
-        CheckAllActiveObjectTasks();
         OnTasksUpdated?.Invoke();
     }
 
-    /// <summary>
-    /// Checks all active tasks that have an object requirement and completes them if the object is active.
-    /// </summary>
-    private void CheckAllActiveObjectTasks()
-    {
-        if (DonationManager.instance == null) return;
-
-        foreach (var task in currentDayTaskInstances)
-        {
-            if (task.isActive && !task.isCompleted && task.taskData.taskType == TaskData.TaskType.ObjectActivation && !string.IsNullOrEmpty(task.taskData.requirementTarget))
-            {
-                if (DonationManager.instance.IsObjectActive(task.taskData.requirementTarget))
-                {
-                    CompleteTask(task.taskData.taskDescription);
-                }
-            }
-        }
-    }
-    
     public void SetAllTasks(List<TaskData> tasks)
     {
         allTaskData = tasks;
@@ -123,9 +103,9 @@ public class TaskManager : MonoBehaviour
             currentDayTaskInstances.Add(instance);
             
             // Index by requirement for quick lookup
-            if (taskData.taskType == TaskData.TaskType.Interaction && !string.IsNullOrEmpty(taskData.requirementTarget))
+            if (!string.IsNullOrEmpty(taskData.actionRequirement))
             {
-                activeTasksByRequirement[taskData.requirementTarget] = instance;
+                activeTasksByRequirement[taskData.actionRequirement] = instance;
             }
         }
         
@@ -146,39 +126,8 @@ public class TaskManager : MonoBehaviour
                 {
                     taskInstance.Activate();
                     Debug.Log($"[TaskManager] Activated task: {taskInstance.taskData.taskDescription}");
-
-                    // Immediately check if this task is an "Object Active" task and if it's already fulfilled
-                    if (taskInstance.taskData.taskType == TaskData.TaskType.ObjectActivation && !string.IsNullOrEmpty(taskInstance.taskData.requirementTarget))
-                    {
-                        if (DonationManager.instance != null && 
-                            DonationManager.instance.IsObjectActive(taskInstance.taskData.requirementTarget))
-                        {
-                            CompleteTask(taskInstance.taskData.taskDescription);
-                        }
-                    }
                 }
             }
-        }
-    }
-    
-    /// <summary>
-    /// Checks all active tasks to see if any are waiting for a specific object to be activated.
-    /// </summary>
-    public void CheckObjectTasks(string objectName, string characterName = "")
-    {
-        if (string.IsNullOrEmpty(objectName)) return;
-
-        // Find all active, incomplete tasks that require this object
-        var tasksToComplete = currentDayTaskInstances
-            .Where(t => t.isActive && !t.isCompleted && 
-                       t.taskData.taskType == TaskData.TaskType.ObjectActivation &&
-                       !string.IsNullOrEmpty(t.taskData.requirementTarget) && 
-                       t.taskData.requirementTarget.Equals(objectName, StringComparison.OrdinalIgnoreCase))
-            .ToList();
-
-        foreach (var task in tasksToComplete)
-        {
-            CompleteTask(task.taskData.taskDescription, characterName);
         }
     }
     
@@ -194,7 +143,7 @@ public class TaskManager : MonoBehaviour
             .ToList();
     }
 
-    public void CompleteTask(string taskDescription, string characterName = "")
+    public void CompleteTask(string taskDescription)
     {
         TaskInstance task = currentDayTaskInstances.Find(t => 
             t.taskData.taskDescription.Equals(taskDescription, StringComparison.OrdinalIgnoreCase) 
@@ -202,17 +151,6 @@ public class TaskManager : MonoBehaviour
             
         if (task != null)
         {
-            // Check if there is a required character
-            if (task.taskData.requiredCharacter != TaskData.CharacterName.None)
-            {
-                string requiredName = task.taskData.requiredCharacter.ToString();
-                if (!requiredName.Equals(characterName, StringComparison.OrdinalIgnoreCase))
-                {
-                    Debug.Log($"[TaskManager] Task {taskDescription} requires {requiredName}, but was completed by {characterName}.");
-                    return;
-                }
-            }
-
             task.Complete();
             ApplyStatEffects(task.taskData);
             OnTasksUpdated?.Invoke();
@@ -220,7 +158,7 @@ public class TaskManager : MonoBehaviour
         }
     }
 
-    public void CompleteTaskByRequirement(string requirement, string characterName = "")
+    public void CompleteTaskByRequirement(string requirement)
     {
         if (string.IsNullOrEmpty(requirement)) return;
 
@@ -228,17 +166,6 @@ public class TaskManager : MonoBehaviour
         {
             if (!task.isCompleted)
             {
-                // Check if there is a required character
-                if (task.taskData.requiredCharacter != TaskData.CharacterName.None)
-                {
-                    string requiredName = task.taskData.requiredCharacter.ToString();
-                    if (!requiredName.Equals(characterName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        Debug.Log($"[TaskManager] Task {task.taskData.taskDescription} requires {requiredName}, but was completed by {characterName}.");
-                        return;
-                    }
-                }
-
                 task.Complete();
                 ApplyStatEffects(task.taskData);
                 OnTasksUpdated?.Invoke();
@@ -255,14 +182,8 @@ public class TaskManager : MonoBehaviour
 
         foreach (var effect in taskData.statEffects)
         {
-            // Skip if no character is assigned
-            if (effect.characterName == TaskData.CharacterName.None) continue;
-
-            // Convert enum to string (e.g., CharacterName.Sahil -> "Sahil")
-            string targetName = effect.characterName.ToString();
-
             CharacterStats target = characters.Find(c => 
-                c.characterName.Equals(targetName, StringComparison.OrdinalIgnoreCase));
+                c.characterName.Equals(effect.characterName, StringComparison.OrdinalIgnoreCase));
                 
             if (target != null)
             {
