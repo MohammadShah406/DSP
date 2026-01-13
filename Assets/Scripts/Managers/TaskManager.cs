@@ -182,8 +182,14 @@ public class TaskManager : MonoBehaviour
 
         foreach (var effect in taskData.statEffects)
         {
+            // Skip if no character is assigned
+            if (effect.characterName == TaskData.CharacterName.None) continue;
+
+            // Convert enum to string (e.g., CharacterName.Sahil -> "Sahil")
+            string targetName = effect.characterName.ToString();
+            
             CharacterStats target = characters.Find(c => 
-                c.characterName.Equals(effect.characterName, StringComparison.OrdinalIgnoreCase));
+                c.characterName.Equals(targetName, StringComparison.OrdinalIgnoreCase));
                 
             if (target != null)
             {

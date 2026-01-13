@@ -238,7 +238,9 @@ public class InteractionManager : MonoBehaviour
         {
             foreach (var effect in taskInstance.taskData.statEffects)
             {
-                Transform character = FindCharacterByName(effect.characterName);
+                if (effect.characterName == TaskData.CharacterName.None) continue;
+
+                Transform character = FindCharacterByName(effect.characterName.ToString());
                 if (character != null && !characters.Contains(character))
                 {
                     characters.Add(character);
