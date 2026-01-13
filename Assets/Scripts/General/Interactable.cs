@@ -166,22 +166,26 @@ public class Interactable : MonoBehaviour
 
     public void InteractComplete()
     {
-        Debug.Log($"{name} interaction complete.");
+        Debug.Log($"[Interactable] {name} interaction complete. Notifying TaskManager...");
         if (TaskManager.Instance != null)
         {
             TaskManager.Instance.CompleteTaskByRequirement(name);
         }
+        else
+        {
+            Debug.LogError("[Interactable] TaskManager.Instance is null! Cannot complete task.");
+        }
+        
         ApplyEffect();
 
         if(gameObject.tag == "Donation" )
         {
-            Debug.Log("Checking for donation completion...");
+            Debug.Log("[Interactable] Checking for donation completion...");
             if (DonationManager.Instance != null)
             {
                 DonationManager.Instance.TryCheckDonations();
             }
         }   
-        
     }
 
     public void AddToInteractionManager()

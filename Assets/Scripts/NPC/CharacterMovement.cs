@@ -189,11 +189,13 @@ public class CharacterMovement : MonoBehaviour
 
     private void StartInteraction()
     {
-        
-
         if (currentInteractable == null || animator == null) 
+        {
+            Debug.LogWarning($"[CharacterMovement] Cannot start interaction. Interactable: {currentInteractable}, Animator: {animator}");
             return;
+        }
 
+        Debug.Log($"[CharacterMovement] Starting interaction with {currentInteractable.name}");
         currentInteractable.OnInteract(gameObject);
 
         Transform t = currentInteractable.transform;
@@ -379,12 +381,19 @@ public class CharacterMovement : MonoBehaviour
             var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
             bool inInteractionState = stateInfo.IsTag("Interaction");
 
-            Debug.Log($"HandleInteraction: Interaction state: {inInteractionState}");
-
-            // When we're in the interaction state and its normalized time is >= 1, it's finished.
-            if (inInteractionState && stateInfo.normalizedTime >= 0.99f)
+            // Only log if state changed or periodically? Let's log if inInteractionState is true to see progress
+            if (inInteractionState)
             {
-                Debug.Log("HandleInteraction: Interaction animation complete.");
+                Debug.Log($"[CharacterMovement] HandleInteraction: In 'Interaction' state. NormalizedTime: {stateInfo.normalizedTime:F2}");
+            }
+
+            // When we're in the interaction state and its progress is near completion, it's finished.
+            // Using 0.95 to be more robust against frame rate and animation length.
+            if (inInteractionState && (stateInfo.normalizedTime % 1.0f >= 0.95f || (stateInfo.normalizedTime >= 0.95f && !stateInfo.loop)))
+            {
+                Debug.Log($"[CharacterMovement] HandleInteraction: Interaction animation complete at {stateInfo.normalizedTime:F2}");
+                
+                Debug.Log($"[CharacterMovement] HandleInteraction: Hello hello Interaction animation complete at {stateInfo.normalizedTime:F2}");
                 OnInteractionComplete();
             }
         }
