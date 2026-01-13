@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7715631107568995655
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7332456958398677362}
+  - component: {fileID: 4629196176718198928}
+  m_Layer: 0
+  m_Name: MaterialManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7332456958398677362
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7715631107568995655}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4629196176718198928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7715631107568995655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c104893cc723e4cb9d40832926fe87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OldMaterialSettings: []
+  upgradedMaterialSettings:
+  - name: Yard
+    material:
+    - {fileID: 2100000, guid: 47c5b409efa586a45afb5c116c6bc5cf, type: 2}
+  - name: Bathroom
+    material:
+    - {fileID: 2100000, guid: 4c17e3cbaa2979e4686fbe363591146f, type: 2}
+    - {fileID: 2100000, guid: 7bd1df03fc00c7749b61f4dd8729506d, type: 2}
+    - {fileID: 2100000, guid: 94ac242c3fb5a3b48a805935c1012e0e, type: 2}
+  - name: LivingRoom
+    material:
+    - {fileID: 2100000, guid: 6a13b02df4cd97a498c3c30311b3a727, type: 2}
+    - {fileID: 2100000, guid: 28bc9082cdc052f45a5dbf933f778db7, type: 2}
+    - {fileID: 2100000, guid: 28bc9082cdc052f45a5dbf933f778db7, type: 2}
+    - {fileID: 2100000, guid: dd46398fe186dba4b8776b253ca9c4e6, type: 2}
+  - name: Kitchen
+    material:
+    - {fileID: 2100000, guid: 189d964d566820940920cb8afdc4a748, type: 2}
+    - {fileID: 2100000, guid: bc1c5f61c420b804fb3a59181346a69d, type: 2}
+    - {fileID: 2100000, guid: dd46398fe186dba4b8776b253ca9c4e6, type: 2}
+  - name: Bedroom
+    material:
+    - {fileID: 2100000, guid: 4c17e3cbaa2979e4686fbe363591146f, type: 2}
+    - {fileID: 2100000, guid: 7bd1df03fc00c7749b61f4dd8729506d, type: 2}
+    - {fileID: 2100000, guid: 7bd1df03fc00c7749b61f4dd8729506d, type: 2}
+    - {fileID: 2100000, guid: dd46398fe186dba4b8776b253ca9c4e6, type: 2}
+  - name: Roof Top
+    material:
+    - {fileID: 2100000, guid: 76a26d1f8b43b654dacbdf801eb7ba75, type: 2}
+  objectsToUpgrade:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  upgradeAll: 0
