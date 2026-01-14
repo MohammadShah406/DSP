@@ -368,6 +368,16 @@ public class TimeManager : MonoBehaviour
     {
         Debug.Log("Day has ended. TimeManager has auto-paused the game.");
         
+        if(GameManager.Instance != null)
+        {
+            if(GameManager.Instance.Hope >= 80)
+            {
+                if (UIManager.Instance != null)
+                {
+                    UIManager.Instance.ShowGameEndUI();
+                }
+            }
+        }
 
         if (UIManager.Instance != null)
         {
@@ -381,6 +391,7 @@ public class TimeManager : MonoBehaviour
         Debug.Log("TimeManager: Unpausing game from Day End UI. paused state: " + isPaused);
         isPaused = false;
         UIManager.Instance.HideDayEndUI();
+        UIManager.Instance.HideGameEndUI();
         Debug.Log("TimeManager: Game unpaused by player. pause state: " + isPaused);
 
         if(GameManager.Instance != null)
