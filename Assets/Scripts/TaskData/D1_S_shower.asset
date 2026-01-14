@@ -13,10 +13,13 @@ MonoBehaviour:
   m_Name: D1_S_shower
   m_EditorClassIdentifier: 
   taskType: 0
-  requiredCharacter: 0
+  requiredCharacter: 1
   requirementTarget: Shower Head
   taskDescription: Take a shower
   day: 1
   hour: 10
   minute: 0
-  statEffects: []
+  statEffects:
+  - characterName: 1
+    attribute: 1
+    amount: 0

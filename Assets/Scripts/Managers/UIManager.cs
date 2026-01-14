@@ -272,8 +272,6 @@ public class UIManager : MonoBehaviour
         // mainHUD and taskPanel might have more complex visibility rules
         // For now, keep them mostly on except in Pause or Inventory if that's the current behavior
         bool hideMainHUD = (_currentState == UIState.Pause || _currentState == UIState.Inventory);
-        mainHUD.SetActive(!hideMainHUD);
-        taskPanel.SetActive(!hideMainHUD);
 
         // Time management
         Time.timeScale = (_currentState == UIState.Pause) ? 0f : 1f;

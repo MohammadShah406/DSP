@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   taskType: 0
   requiredCharacter: 2
-  requirementTarget: Door
+  requirementTarget: Aisha
   taskDescription: Talk to Aisha
   day: 2
   hour: 9

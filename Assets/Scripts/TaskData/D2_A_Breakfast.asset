@@ -19,4 +19,7 @@ MonoBehaviour:
   day: 2
   hour: 11
   minute: 0
-  statEffects: []
+  statEffects:
+  - characterName: 3
+    attribute: 1
+    amount: 0

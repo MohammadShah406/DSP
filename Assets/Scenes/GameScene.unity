@@ -2926,7 +2926,7 @@ PrefabInstance:
       objectReference: {fileID: 98706624}
     - target: {fileID: 4358066015284002512, guid: b73a2c3460b671241ac62c619f8e8707, type: 3}
       propertyPath: sets.Array.data[0].interactables.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4358066015284002512, guid: b73a2c3460b671241ac62c619f8e8707, type: 3}
       propertyPath: sets.Array.data[1].interactables.Array.size
@@ -12182,7 +12182,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8805957683915594413, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 5.9999843
+      value: 6.000926
       objectReference: {fileID: 0}
     - target: {fileID: 8806082279848277739, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
       propertyPath: m_IsActive
@@ -21213,7 +21213,7 @@ GameObject:
   - component: {fileID: 2133581463324234058}
   m_Layer: 0
   m_Name: Backyard Ground_AfterUpgrade
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -49765,7 +49765,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9180586396758026254, guid: 8cb2ea4fa56670849b19b99d797b9f25, type: 3}
       propertyPath: allDonationsResource.Array.data[2].resourceName
-      value: SewingMachine
+      value: Sewing Machine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
