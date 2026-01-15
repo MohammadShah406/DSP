@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     public CharacterCarousel characterCarousel;
     public GameObject DayEndUI;
     public GameObject gameEndUI;
+    public GameObject settingsUI;
 
     [Header("HUD Elements")]
     public TextMeshProUGUI timeText;
@@ -179,13 +180,21 @@ public class UIManager : MonoBehaviour
         {
             CameraBehaviour.Instance.DeselectCharacter();
         }
+        else if (settingsUI.activeSelf)
+        {
+            settingsUI.SetActive(false);
+            SwitchState(UIState.Pause);
+        }
         else if (_currentState == UIState.Pause)
         {
             SwitchState(UIState.Gameplay);
+            mainHUD.SetActive(!pausePanel.activeSelf);
         }
         else
         {
+
             SwitchState(UIState.Pause);
+            mainHUD.SetActive(!pausePanel.activeSelf);
         }
     }
 
