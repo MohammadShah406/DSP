@@ -11640,6 +11640,8 @@ MonoBehaviour:
   canInteract: 1
   allowedCharacters:
   - {fileID: 791676597}
+  - {fileID: 98706624}
+  - {fileID: 87414720}
   interactOnce: 0
   isInteracted: 0
   characterEffectsList:
@@ -12182,7 +12184,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8805957683915594413, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 6.0006914
+      value: 5.9999857
       objectReference: {fileID: 0}
     - target: {fileID: 8806082279848277739, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
       propertyPath: m_IsActive
@@ -53417,13 +53419,15 @@ MonoBehaviour:
   canInteract: 1
   allowedCharacters:
   - {fileID: 791676597}
+  - {fileID: 87414720}
+  - {fileID: 98706624}
   interactOnce: 0
   isInteracted: 0
   characterEffectsList:
   - characterAttribute: 3
-    amount: 20
+    amount: 5
   - characterAttribute: 2
-    amount: 20
+    amount: 5
   interactedBy: {fileID: 0}
   onInteracted:
     m_PersistentCalls:
