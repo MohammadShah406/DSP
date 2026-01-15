@@ -15,7 +15,7 @@ MonoBehaviour:
   taskType: 0
   requiredCharacter: 3
   requirementTarget: Sewing Machine
-  taskDescription: Sew curtain
+  taskDescription: Practice Sewing
   day: 2
   hour: 16
   minute: 0
