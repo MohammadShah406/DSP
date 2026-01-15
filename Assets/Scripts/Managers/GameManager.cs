@@ -5,6 +5,7 @@ using UnityEngine;
 using Unity.Hierarchy;
 using Unity.VisualScripting;
 using UnityEngine.TextCore.Text;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -59,6 +60,8 @@ public class GameManager : MonoBehaviour
 
     // Whether to load saved game on start
     public bool loadsavedgame = true;
+
+    public bool cheatHopeEnabled = false;
 
     /// <summary>
     /// Retrieves item data by name from the item database.
@@ -164,6 +167,11 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void CalculateHope()
     {
+        if(cheatHopeEnabled)
+        {
+            return;
+        }
+
         // Formula:
         // Upgrade Value (U) = (Upgrades Done / Total Available Upgrades)
         // Attribute Value (A) = Avg of each resident's attributes
@@ -370,6 +378,24 @@ public class GameManager : MonoBehaviour
                     return;
                 }
             }
+        }
+    }
+
+    public void ToggleCheatHope()
+    {
+        cheatHopeEnabled = !cheatHopeEnabled;
+        if (cheatHopeEnabled)
+        {
+            StartCoroutine(IncreaseHope());
+        }
+    }
+
+    private IEnumerator IncreaseHope()
+    {
+        while (cheatHopeEnabled)
+        {
+            Hope += 1;
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }

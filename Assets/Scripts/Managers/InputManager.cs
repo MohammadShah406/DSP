@@ -17,6 +17,8 @@ public class InputManager : MonoBehaviour
     public bool PauseInput { get; private set; }
     public bool InventoryInput { get; private set; }
     public bool SpeedInput { get; private set; }
+    public bool CheatSpeedInput { get; private set; }
+    public bool CheatHopeInput { get; private set; }
 
     [Header("Mouse Settings")]
     [SerializeField] private float mouseSensitivity = 1f;
@@ -42,6 +44,8 @@ public class InputManager : MonoBehaviour
     private InputAction Pause;
     private InputAction Inventory;
     private InputAction Speed;
+    private InputAction CheatSpeed;
+    private InputAction CheatHope;
 
     private void Awake()
     {
@@ -80,6 +84,8 @@ public class InputManager : MonoBehaviour
         Pause = _playerInput.actions["Pause"];
         Inventory = _playerInput.actions["Inventory"];
         Speed = _playerInput.actions["Speed"];
+        CheatSpeed = _playerInput.actions["CheatSpeed"];
+        CheatHope = _playerInput.actions["CheatHope"];
     }
 
     private void UpdateActions()
@@ -102,5 +108,7 @@ public class InputManager : MonoBehaviour
         PauseInput = Pause.triggered;
         InventoryInput = Inventory.triggered;
         SpeedInput = Speed.triggered;
+        CheatSpeedInput = CheatSpeed.triggered;
+        CheatHopeInput = CheatHope.triggered;
     }
 }
