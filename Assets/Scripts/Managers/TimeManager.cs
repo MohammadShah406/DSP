@@ -131,8 +131,7 @@ public class TimeManager : MonoBehaviour
         if (InputManager.Instance.SpeedInput)
         {
             Debug.Log("TimeManager: Toggling time speed. Current isFast state: " + isFast);
-            isFast = !isFast;
-            ApplyScale(isFast ? fastScale : normalScale);
+            ToggleSpeed();
         }
 
         minuteAccumulator += Time.deltaTime * gameMinutesPerSecond;
@@ -418,7 +417,18 @@ public class TimeManager : MonoBehaviour
         }
     }
 
-    private void ApplyScale(float scale)
+    public void ToggleSpeed()
+    {
+        // Toggle the boolean state
+        isFast = !isFast;
+    
+        // Apply the corresponding scale
+        float scaleToApply = isFast ? fastScale : normalScale;
+        ApplyScale(scaleToApply);
+        
+    }
+    
+    public void ApplyScale(float scale)
     {
         Time.timeScale = scale;
 

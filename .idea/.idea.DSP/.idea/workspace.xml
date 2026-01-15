@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="bff7cc7c-cac8-4abf-ad0b-f0deaa34cb40" name="Changes" comment="tasks data full generated">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.DSP/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DSP/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_A_Sew.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_A_Sew.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Bangers SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Bangers SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/TimeManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/TimeManager.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,7 +15,6 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="29" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -163,6 +162,7 @@
       <workItem from="1768277771141" duration="17498000" />
       <workItem from="1768319231919" duration="2829000" />
       <workItem from="1768446763046" duration="1342000" />
+      <workItem from="1768475353651" duration="939000" />
     </task>
     <task id="LOCAL-00001" summary="Fix: Restore UI stability and Camera functionality after rollback&#10;&#10;- CameraBehaviour: Resolved syntax error in HandleZoom caused by merge conflict.&#10;- CameraBehaviour: Updated IsMouseOverUI to correctly block clicks when interacting with topStatsHUD and taskPanel.&#10;- CharacterStats: Refactored UpdateHealth to use the Health property, ensuring stat changes correctly trigger UI update events.&#10;- UIManager: Restored critical null safety checks in UpdateCharacterStatsDisplay and UpdateTimeDisplay to prevent UI logic crashes from unassigned fields.&#10;- InventoryItemUI: Added null checks to Setup method for safer prefab instantiation.">
       <option name="closed" value="true" />
