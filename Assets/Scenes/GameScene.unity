@@ -14895,7 +14895,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8805957683915594413, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 6.0000043
+      value: 5.9999924
       objectReference: {fileID: 0}
     - target: {fileID: 8806082279848277739, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
       propertyPath: m_IsActive
@@ -42906,7 +42906,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a34d363f7b632f244a8008545aa5702c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lights: []
+  lights:
+  - {fileID: 2119201198}
+  - {fileID: 1277564576}
 --- !u!23 &5817502084367978139
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -55793,7 +55795,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a34d363f7b632f244a8008545aa5702c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lights: []
+  lights:
+  - {fileID: 250095144}
+  - {fileID: 31172281}
 --- !u!4 &8784646484482243231
 Transform:
   m_ObjectHideFlags: 0
