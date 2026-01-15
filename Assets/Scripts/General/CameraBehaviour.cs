@@ -83,6 +83,10 @@ public class CameraBehaviour : MonoBehaviour
 
     public static CameraBehaviour Instance { get; private set; }
 
+    [Header("Follow Proxy (Locks Target Z)")]
+    [SerializeField] private Transform followProxy;
+    private float _lockedFollowZ;
+
     private void Awake()
     {
         _mainCamera = Camera.main;
@@ -122,6 +126,21 @@ public class CameraBehaviour : MonoBehaviour
         if (vcam != null)
             lockedRotation = vcam.transform.rotation;
 
+        // Lock the follow Z so the camera never inherits target Z movement.
+        _lockedFollowZ = defaultTarget != null ? defaultTarget.position.z : 0f;
+
+        if (followProxy == null)
+        {
+            GameObject proxy = new GameObject("CameraFollowProxy_ZLocked");
+            followProxy = proxy.transform;
+        }
+
+        // Start proxy at default target
+        if (defaultTarget != null)
+        {
+            followProxy.position = new Vector3(defaultTarget.position.x, defaultTarget.position.y, _lockedFollowZ);
+        }
+
         ApplyBoundsAndPushToTransposer();
         focussedTarget = GameManager.Instance.characters[0].transform;
     }
@@ -134,7 +153,8 @@ public class CameraBehaviour : MonoBehaviour
         HandleDrag();
         HandleEdgeScroll();
         HandleZoom();
-        
+        UpdateFollowProxy();
+
         if (InputManager.Instance.NextCharacterInput)
             HandleCharacterScrollSelection(1);
 
@@ -155,6 +175,14 @@ public class CameraBehaviour : MonoBehaviour
         // After Cinemachine pipeline runs, force rotation back
         if (lockCameraRotation && vcam != null)
             vcam.transform.rotation = lockedRotation;
+    }
+
+    private void UpdateFollowProxy()
+    {
+        Transform src = focussedTarget != null ? focussedTarget : defaultTarget;
+        if (src == null || followProxy == null) return;
+
+        followProxy.position = new Vector3(src.position.x, src.position.y, _lockedFollowZ);
     }
 
     private void HandleClick()
@@ -702,12 +730,12 @@ public class CameraBehaviour : MonoBehaviour
 
     private void FollowOrNot()
     {
-        // Keep following the focussed target if one exists; only use default when none is focused.
-        if (focussedTarget != null)
-            vcam.Follow = focussedTarget;
-        else
-            vcam.Follow = defaultTarget;
+        if (vcam == null) return;
+        if (followProxy == null) return;
+
+        vcam.Follow = followProxy;
     }
+
 
     public void SetFocussed(GameObject go)
     {
