@@ -211,7 +211,6 @@ public class UIManager : MonoBehaviour
                         characterCarousel.SetCurrentCharacter(_currentCharacter);
                     }
 
-                    UpdateCharacterStatsDisplay(_currentCharacter, true); // Force immediate update of texts
                     SwitchState(UIState.CharacterStats);
                 }
             }
@@ -477,6 +476,17 @@ public class UIManager : MonoBehaviour
         _targetNutrition = 0;
         _targetHygiene = 0;
         _targetEnergy = 0;
+
+        // Reset sliders immediately when clearing
+        healthSlider.value = 0;
+        stabilitySlider.value = 0;
+        learningSlider.value = 0;
+        workReadinessSlider.value = 0;
+        trustSlider.value = 0;
+        nutritionSlider.value = 0;
+        hygieneSlider.value = 0;
+        energySlider.value = 0;
+        UpdateStatTexts();
     }
 
 
