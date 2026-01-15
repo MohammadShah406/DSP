@@ -29,9 +29,9 @@ public class AudioManager : MonoBehaviour
         }
 
         // Load saved values or default to 0dB
-        float master = PlayerPrefs.GetFloat("MasterVolume", 0f);
-        float music = PlayerPrefs.GetFloat("MusicVolume", 0f);
-        float sfx = PlayerPrefs.GetFloat("SfxVolume", 0f);
+        float master = PlayerPrefs.GetFloat("MasterVolume", 0.5f);
+        float music = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
+        float sfx = PlayerPrefs.GetFloat("SfxVolume", 0.5f);
 
         // Apply values
         ApplyVolumes(master, music, sfx);
