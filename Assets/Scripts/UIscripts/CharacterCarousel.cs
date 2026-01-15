@@ -16,11 +16,11 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [Header("References")]
     public RectTransform container; // The parent transform for character items
     public GameObject characterItemPrefab;
-    public GameObject nullCharacterPrefab;
+    //public GameObject nullCharacterPrefab;
 
     private List<CharacterStats> _characters;
     private readonly List<RectTransform> _spawnedItems = new List<RectTransform>();
-    private RectTransform _nullItem;
+    //private RectTransform _nullItem;
     private int _currentIndex = -1;
     private bool _isTransitioning = false;
     private bool _isMouseOver = false;
@@ -70,15 +70,6 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         if (_characters == null || _characters.Count == 0) return;
         
-        if (nullCharacterPrefab != null)
-        {
-            GameObject nullGo = Instantiate(nullCharacterPrefab, container);
-            if (nullGo.GetComponent<CanvasGroup>() == null)
-            {
-                nullGo.AddComponent<CanvasGroup>();
-            }
-            _nullItem = nullGo.GetComponent<RectTransform>();
-        }
         
         foreach (var character in _characters)
         {
@@ -137,12 +128,12 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         if (CameraBehaviour.Instance == null) return;
 
-        //if (_currentIndex == -1)
-        //{
-        //    // Deselect character in camera
-        //    CameraBehaviour.Instance.DeselectCharacter();
-        //}
-        if (_currentIndex >= 0 && _currentIndex < _characters.Count)
+        // if (_currentIndex == -1)
+        // {
+        //     // Deselect character in camera
+        //     CameraBehaviour.Instance.DeselectCharacter();
+        // }
+        else if (_currentIndex >= 0 && _currentIndex < _characters.Count)
         {
             // Focus on the selected character
             CharacterStats selectedChar = _characters[_currentIndex];
@@ -166,7 +157,7 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
         float duration = 1f / transitionSpeed;
 
         // Store starting states
-        int totalItems = _spawnedItems.Count + (_nullItem != null ? 1 : 0);
+        int totalItems = _spawnedItems.Count;
         Vector3[] startPos = new Vector3[totalItems];
         Vector3[] startScale = new Vector3[totalItems];
         float[] startAlpha = new float[totalItems];
@@ -179,14 +170,14 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
             startAlpha[i] = cg != null ? cg.alpha : 1f;
         }
 
-        if (_nullItem != null)
-        {
-            int nullIndex = _spawnedItems.Count;
-            startPos[nullIndex] = _nullItem.anchoredPosition;
-            startScale[nullIndex] = _nullItem.localScale;
-            CanvasGroup cg = _nullItem.GetComponent<CanvasGroup>();
-            startAlpha[nullIndex] = cg != null ? cg.alpha : 1f;
-        }
+        // if (_nullItem != null)
+        // {
+        //     int nullIndex = _spawnedItems.Count;
+        //     startPos[nullIndex] = _nullItem.anchoredPosition;
+        //     startScale[nullIndex] = _nullItem.localScale;
+        //     CanvasGroup cg = _nullItem.GetComponent<CanvasGroup>();
+        //     startAlpha[nullIndex] = cg != null ? cg.alpha : 1f;
+        // }
         
         while (elapsed < duration)
         {
@@ -205,16 +196,16 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
             }
 
             // Lerp null item
-            if (_nullItem != null)
-            {
-                int nullIndex = _spawnedItems.Count;
-                TargetState target = GetTargetStateForNull();
-                _nullItem.anchoredPosition = Vector3.Lerp(startPos[nullIndex], target.Pos, t);
-                _nullItem.localScale = Vector3.Lerp(startScale[nullIndex], target.Scale, t);
-                
-                CanvasGroup cg = _nullItem.GetComponent<CanvasGroup>();
-                if (cg != null) cg.alpha = Mathf.Lerp(startAlpha[nullIndex], target.Alpha, t);
-            }
+            // if (_nullItem != null)
+            // {
+            //     int nullIndex = _spawnedItems.Count;
+            //     TargetState target = GetTargetStateForNull();
+            //     _nullItem.anchoredPosition = Vector3.Lerp(startPos[nullIndex], target.Pos, t);
+            //     _nullItem.localScale = Vector3.Lerp(startScale[nullIndex], target.Scale, t);
+            //     
+            //     CanvasGroup cg = _nullItem.GetComponent<CanvasGroup>();
+            //     if (cg != null) cg.alpha = Mathf.Lerp(startAlpha[nullIndex], target.Alpha, t);
+            // }
 
             yield return null;
         }
@@ -229,11 +220,11 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
             {
                 UIManager.Instance.UpdateCharacterStatsDisplay(_characters[_currentIndex]);
             }
-            else if (_currentIndex == -1)
-            {
-                // Optionally call a clear method if UIManager needs to know
-                UIManager.Instance.UpdateCharacterStatsDisplay(null);
-            }
+            // else if (_currentIndex == -1)
+            // {
+            //     // Optionally call a clear method if UIManager needs to know
+            //     UIManager.Instance.UpdateCharacterStatsDisplay(null);
+            // }
         }
     }
 
@@ -254,17 +245,17 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
             if (i == _currentIndex) _spawnedItems[i].SetAsLastSibling();
         }
         
-        if (_nullItem != null)
-        {
-            TargetState target = GetTargetStateForNull();
-            _nullItem.anchoredPosition = target.Pos;
-            _nullItem.localScale = target.Scale;
-            
-            CanvasGroup cg = _nullItem.GetComponent<CanvasGroup>();
-            if (cg != null) cg.alpha = target.Alpha;
-
-            if (_currentIndex == -1) _nullItem.SetAsLastSibling();
-        }
+        // if (_nullItem != null)
+        // {
+        //     TargetState target = GetTargetStateForNull();
+        //     _nullItem.anchoredPosition = target.Pos;
+        //     _nullItem.localScale = target.Scale;
+        //     
+        //     CanvasGroup cg = _nullItem.GetComponent<CanvasGroup>();
+        //     if (cg != null) cg.alpha = target.Alpha;
+        //
+        //     if (_currentIndex == -1) _nullItem.SetAsLastSibling();
+        // }
         
     }
 
@@ -272,60 +263,47 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         TargetState state = new TargetState();
         
-        if (_currentIndex == -1)
-        {
-            // Null is selected, characters are positioned normally but offset
-            // Treat as if we're at position -1, so character 0 is at offset +1
-            int offset = characterIndex + 1;
-            state.Pos = new Vector2(offset * horizontalSpacing, 0);
-            state.Scale = Vector3.one * sideScale;
-            state.Alpha = sideAlpha;
-        }
-        else
-        {
-            // A character is selected
+       
             int offset = characterIndex - _currentIndex;
-            int count = _characters.Count + 1; // Include null slot in wrapping
-
-            // Circular wrapping
+            int count = characterIndex;
+            
             if (offset > count / 2) offset -= count;
             if (offset < -count / 2) offset += count;
 
             state.Pos = new Vector2(offset * horizontalSpacing, 0);
-            state.Scale = (offset == 0) ? Vector3.one * centerScale : Vector3.one * sideScale;
-            state.Alpha = (offset == 0) ? 1.0f : sideAlpha;
-        }
+            state.Scale = (offset == 0) ?Vector3.one * centerScale : Vector3.one * sideScale;
+            state.Alpha = (offset==0)? 1.0f :sideAlpha;
         
         return state;
     }
 
-    private TargetState GetTargetStateForNull()
-    {
-        TargetState state = new TargetState();
-        
-        if (_currentIndex == -1)
-        {
-            // Null is centered
-            state.Pos = Vector2.zero;
-            state.Scale = Vector3.one * centerScale;
-            state.Alpha = 1.0f;
-        }
-        else
-        {
-            // Null is to the left of character 0
-            int offset = -1 - _currentIndex;
-            int count = _characters.Count + 1;
-
-            if (offset > count / 2) offset -= count;
-            if (offset < -count / 2) offset += count;
-
-            state.Pos = new Vector2(offset * horizontalSpacing, 0);
-            state.Scale = Vector3.one * sideScale;
-            state.Alpha = sideAlpha;
-        }
-        
-        return state;
-    }
+    // private TargetState GetTargetStateForNull()
+    // {
+    //     TargetState state = new TargetState();
+    //     
+    //     if (_currentIndex == -1)
+    //     {
+    //         // Null is centered
+    //         state.Pos = Vector2.zero;
+    //         state.Scale = Vector3.one * centerScale;
+    //         state.Alpha = 1.0f;
+    //     }
+    //     else
+    //     {
+    //         // Null is to the left of character 0
+    //         int offset = -1 - _currentIndex;
+    //         int count = _characters.Count + 1;
+    //
+    //         if (offset > count / 2) offset -= count;
+    //         if (offset < -count / 2) offset += count;
+    //
+    //         state.Pos = new Vector2(offset * horizontalSpacing, 0);
+    //         state.Scale = Vector3.one * sideScale;
+    //         state.Alpha = sideAlpha;
+    //     }
+    //     
+    //     return state;
+    // }
 
     struct TargetState
     {
