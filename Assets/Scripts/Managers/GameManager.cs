@@ -134,7 +134,6 @@ public class GameManager : MonoBehaviour
             timeManager = TimeManager.Instance;
         }
 
-        CameraBehaviour.Instance.focussedTarget = characters[0].gameObject.transform;
         charStatsList = GetCharacterComponents();
         SetUpgrades();
     }

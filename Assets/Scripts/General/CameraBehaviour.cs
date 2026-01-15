@@ -47,6 +47,12 @@ public class CameraBehaviour : MonoBehaviour
     [Tooltip("Max cursor movement (in pixels) between clicks to still count as a double-click.")]
     public float doubleClickMaxPixels = 12f;
 
+    [Header("Ground Clamp")]
+    [Tooltip("Physics layers representing ground/stairs surfaces to clamp the camera above.")]
+    public LayerMask groundLayers;
+    [Tooltip("Minimum clearance above detected ground surface for the camera.")]
+    public float groundClearance = 0.5f;
+
     private CinemachineTransposer transposer;
     private Vector3 manualOffset;
     private bool isManual = false;
@@ -117,6 +123,7 @@ public class CameraBehaviour : MonoBehaviour
             lockedRotation = vcam.transform.rotation;
 
         ApplyBoundsAndPushToTransposer();
+        focussedTarget = GameManager.Instance.characters[0].transform;
     }
 
     private void Update()
@@ -134,14 +141,13 @@ public class CameraBehaviour : MonoBehaviour
         else if (InputManager.Instance.PreviousCharacterInput)
             HandleCharacterScrollSelection(-1);
 
-        
-
-
         if (isResetting && (Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.01f || Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.01f))
             isResetting = false;
 
         if (isResetting)
             SmoothResetMotion();
+
+        ApplyBoundsAndPushToTransposer();
     }
 
     private void LateUpdate()
@@ -335,7 +341,8 @@ public class CameraBehaviour : MonoBehaviour
 
     private void MoveDefaultTarget()
     {
-        if (focussedTarget == null || isManual)
+        // Only move the default target when nothing is focused.
+        if (focussedTarget == null)
         {
             if (_mainCamera != null && defaultTarget != null)
             {
@@ -349,6 +356,7 @@ public class CameraBehaviour : MonoBehaviour
         }
         else
         {
+            // Keep defaultTarget aligned with focussedTarget for consistency, if desired
             defaultTarget.position = focussedTarget.position;
         }
     }
@@ -400,16 +408,15 @@ public class CameraBehaviour : MonoBehaviour
 
     private void ActivateReset()
     {
-        
-
-        if (!isFollowing || focussedTarget == null)
+        // Keep camera following the focussed target if one exists; otherwise use default target.
+        if (focussedTarget != null)
         {
-            MoveDefaultTarget();
-            vcam.Follow = defaultTarget;
+            vcam.Follow = focussedTarget;
         }
         else
         {
-            vcam.Follow = focussedTarget;
+            MoveDefaultTarget();
+            vcam.Follow = defaultTarget;
         }
 
         isResetting = true;
@@ -573,6 +580,17 @@ public class CameraBehaviour : MonoBehaviour
         float clampedY = Mathf.Clamp(worldPos.y, mapBounds.yMin, mapBounds.yMax);
         Vector3 clampedWorldPos = new Vector3(clampedX, clampedY, worldPos.z);
 
+        // Ground clamp: raycast down from above the desired camera world position
+        // to prevent the camera from going under ground or stairs.
+        RaycastHit hit;
+        float rayStartY = clampedWorldPos.y + 100f; // start sufficiently above
+        Vector3 rayStart = new Vector3(clampedWorldPos.x, rayStartY, clampedWorldPos.z);
+        if (Physics.Raycast(rayStart, Vector3.down, out hit, 200f, groundLayers))
+        {
+            float minY = hit.point.y + groundClearance;
+            clampedWorldPos.y = Mathf.Max(clampedWorldPos.y, minY);
+        }
+
         if (vcam != null && vcam.Follow != null)
             manualOffset = clampedWorldPos - followPos;
         else
@@ -684,7 +702,8 @@ public class CameraBehaviour : MonoBehaviour
 
     private void FollowOrNot()
     {
-        if (isFollowing && focussedTarget != null)
+        // Keep following the focussed target if one exists; only use default when none is focused.
+        if (focussedTarget != null)
             vcam.Follow = focussedTarget;
         else
             vcam.Follow = defaultTarget;

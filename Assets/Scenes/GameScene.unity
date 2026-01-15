@@ -14895,7 +14895,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8805957683915594413, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 6.000987
+      value: 6.0000043
       objectReference: {fileID: 0}
     - target: {fileID: 8806082279848277739, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
       propertyPath: m_IsActive
@@ -35881,7 +35881,7 @@ PrefabInstance:
     - target: {fileID: 8515405428228870643, guid: 1902d8a4b37ae7a44a66d3df5e6e1742, type: 3}
       propertyPath: defaultTarget
       value: 
-      objectReference: {fileID: 87414720}
+      objectReference: {fileID: 1854896166}
     - target: {fileID: 8515405428228870643, guid: 1902d8a4b37ae7a44a66d3df5e6e1742, type: 3}
       propertyPath: allowEdgeScroll
       value: 0
