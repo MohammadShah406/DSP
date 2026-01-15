@@ -16,6 +16,7 @@ public class InputManager : MonoBehaviour
     public bool PreviousCharacterInput { get; private set; }
     public bool PauseInput { get; private set; }
     public bool InventoryInput { get; private set; }
+    public bool SpeedInput { get; private set; }
 
     [Header("Mouse Settings")]
     [SerializeField] private float mouseSensitivity = 1f;
@@ -40,6 +41,7 @@ public class InputManager : MonoBehaviour
     private InputAction PreviousCharacter;
     private InputAction Pause;
     private InputAction Inventory;
+    private InputAction Speed;
 
     private void Awake()
     {
@@ -77,6 +79,7 @@ public class InputManager : MonoBehaviour
         PreviousCharacter = _playerInput.actions["PreviousCharacter"];
         Pause = _playerInput.actions["Pause"];
         Inventory = _playerInput.actions["Inventory"];
+        Speed = _playerInput.actions["Speed"];
     }
 
     private void UpdateActions()
@@ -98,5 +101,6 @@ public class InputManager : MonoBehaviour
         PreviousCharacterInput = PreviousCharacter.triggered;
         PauseInput = Pause.triggered;
         InventoryInput = Inventory.triggered;
+        SpeedInput = Speed.triggered;
     }
 }

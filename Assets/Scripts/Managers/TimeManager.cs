@@ -16,6 +16,16 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private bool isPaused = false;
     private int lastAutoPauseDay = 0;
 
+    [Header("Time Scale")]
+    [SerializeField] private float normalScale = 1f;
+    [SerializeField] private float fastScale = 3f;
+    [Header("Current Speed State")]
+    [SerializeField]private bool isFast;
+
+    [Header("Physics")]
+    [SerializeField] private bool scaleFixedDeltaTime = true;
+
+
     [Header("Active Hours Clamp")]
     [SerializeField] private bool restrictToActiveHours = false;
     [SerializeField, Range(0, 23)] private int activeStartHour = 8;
@@ -52,6 +62,7 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private TimeRange evening = new TimeRange { startHour = 18, startMinute = 0, endHour = 21, endMinute = 59 };
     [SerializeField] private TimeRange night = new TimeRange { startHour = 22, startMinute = 0, endHour = 5, endMinute = 59 };
 
+    
     public enum TimePeriod
     {
         Morning,
@@ -115,6 +126,13 @@ public class TimeManager : MonoBehaviour
         {
             UpdateLighting();
             return;
+        }
+
+        if (InputManager.Instance.SpeedInput)
+        {
+            Debug.Log("TimeManager: Toggling time speed. Current isFast state: " + isFast);
+            isFast = !isFast;
+            ApplyScale(isFast ? fastScale : normalScale);
         }
 
         minuteAccumulator += Time.deltaTime * gameMinutesPerSecond;
@@ -400,6 +418,14 @@ public class TimeManager : MonoBehaviour
         }
     }
 
+    private void ApplyScale(float scale)
+    {
+        Time.timeScale = scale;
+
+        // Keeps physics stepping consistent when speeding up/slowing down
+        if (scaleFixedDeltaTime)
+            Time.fixedDeltaTime = 0.02f * scale; 
+    }
 
 #if UNITY_EDITOR
     private void OnValidate()
