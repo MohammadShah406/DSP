@@ -10,13 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43f9fef5d8cd4c5792e5731407daffdc, type: 3}
-  m_Name: D2_B_Breakfast
+  m_Name: D2_B_PersononDoor 1
   m_EditorClassIdentifier: 
   taskType: 0
   requiredCharacter: 2
-  requirementTarget: Fridge
-  taskDescription: Eat breakfast
+  requirementTarget: Aisha
+  taskDescription: Talk to Aisha
   day: 2
-  hour: 11
-  minute: 0
-  statEffects: []
+  hour: 8
+  minute: 30
+  statEffects:
+  - characterName: 2
+    attribute: 4
+    amount: 25
+  - characterName: 3
+    attribute: 4
+    amount: 50

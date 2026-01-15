@@ -452,7 +452,7 @@ public class CameraBehaviour : MonoBehaviour
         {
             if(isManual == false)
             {
-                DeselectCharacter();
+                //DeselectCharacter();
                 isManual = true;
             }
             isDragging = true;

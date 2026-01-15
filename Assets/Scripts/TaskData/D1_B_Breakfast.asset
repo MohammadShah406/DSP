@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   taskType: 0
   requiredCharacter: 2
-  requirementTarget: Stove
+  requirementTarget: Fridge
   taskDescription: Eat breakfast
   day: 1
   hour: 10

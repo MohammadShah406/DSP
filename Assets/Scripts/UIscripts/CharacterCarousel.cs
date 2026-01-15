@@ -39,7 +39,7 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
             
             if (UIManager.Instance != null && UIManager.Instance.CurrentState != UIManager.UIState.CharacterStats)
             {
-                _currentIndex = -1;
+                _currentIndex = 0;
             }
             
             UpdateLayout(true); // Immediate snap on start
@@ -109,7 +109,7 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
         _currentIndex++;
         if (_currentIndex >= _characters.Count)
         {
-            _currentIndex = -1;
+            _currentIndex = 0;
         }
 
         StartCoroutine(TransitionLayout());
@@ -122,7 +122,7 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
         
         // Cycle backwards: -1 (null) -> count-1 -> ... -> 1 -> 0 -> -1
         _currentIndex--;
-        if (_currentIndex < -1)
+        if (_currentIndex < 0)
         {
             _currentIndex = _characters.Count - 1;
         }
@@ -137,12 +137,12 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         if (CameraBehaviour.Instance == null) return;
 
-        if (_currentIndex == -1)
-        {
-            // Deselect character in camera
-            CameraBehaviour.Instance.DeselectCharacter();
-        }
-        else if (_currentIndex >= 0 && _currentIndex < _characters.Count)
+        //if (_currentIndex == -1)
+        //{
+        //    // Deselect character in camera
+        //    CameraBehaviour.Instance.DeselectCharacter();
+        //}
+        if (_currentIndex >= 0 && _currentIndex < _characters.Count)
         {
             // Focus on the selected character
             CharacterStats selectedChar = _characters[_currentIndex];

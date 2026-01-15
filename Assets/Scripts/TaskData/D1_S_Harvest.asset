@@ -10,13 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43f9fef5d8cd4c5792e5731407daffdc, type: 3}
-  m_Name: D2_B_Breakfast
+  m_Name: D1_S_Harvest
   m_EditorClassIdentifier: 
   taskType: 0
-  requiredCharacter: 2
-  requirementTarget: Fridge
-  taskDescription: Eat breakfast
+  requiredCharacter: 1
+  requirementTarget: Bed_low
+  taskDescription: Harvest Crops
   day: 2
-  hour: 11
+  hour: 18
   minute: 0
-  statEffects: []
+  statEffects:
+  - characterName: 1
+    attribute: 3
+    amount: 35
+  - characterName: 1
+    attribute: 2
+    amount: 50

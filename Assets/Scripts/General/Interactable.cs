@@ -203,6 +203,10 @@ public class Interactable : MonoBehaviour
         {
             MaterialManager.instance.UpgradeMaterials(2);
         }
+        else if (gameObject.name == "Art Canvas")
+        {
+            MaterialManager.instance.UpgradeMaterials(6);
+        }
     }
 
     public void AddToInteractionManager()

@@ -16,9 +16,9 @@ MonoBehaviour:
   requiredCharacter: 2
   requirementTarget: Aisha
   taskDescription: Talk to Aisha
-  day: 2
-  hour: 9
-  minute: 0
+  day: 1
+  hour: 8
+  minute: 30
   statEffects:
   - characterName: 2
     attribute: 4
