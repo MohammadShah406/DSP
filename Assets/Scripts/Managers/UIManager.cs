@@ -62,7 +62,8 @@ public class UIManager : MonoBehaviour
         Gameplay,
         Pause,
         Inventory,
-        CharacterStats
+        CharacterStats,
+        Settings
     }
 
     public UIState CurrentState => _currentState;
@@ -188,13 +189,11 @@ public class UIManager : MonoBehaviour
         else if (_currentState == UIState.Pause)
         {
             SwitchState(UIState.Gameplay);
-            mainHUD.SetActive(!pausePanel.activeSelf);
         }
         else
         {
 
             SwitchState(UIState.Pause);
-            mainHUD.SetActive(!pausePanel.activeSelf);
         }
     }
 
@@ -252,6 +251,7 @@ public class UIManager : MonoBehaviour
         pausePanel.SetActive(_currentState == UIState.Pause);
         statsPanel.SetActive(_currentState == UIState.CharacterStats);
         topStatsHUD.SetActive(_currentState == UIState.CharacterStats);
+        settingsUI.SetActive(_currentState == UIState.Settings);
 
         // Ensure inventory panel is in sync with state
         if (inventoryUI != null && inventoryUI.inventoryPanel != null)
@@ -279,10 +279,13 @@ public class UIManager : MonoBehaviour
         
         // mainHUD and taskPanel might have more complex visibility rules
         // For now, keep them mostly on except in Pause or Inventory if that's the current behavior
-        bool hideMainHUD = (_currentState == UIState.Pause || _currentState == UIState.Inventory);
-
+        bool hideMainHUD = (_currentState == UIState.Pause || _currentState == UIState.Settings);
+        if (mainHUD != null)
+        {
+            mainHUD.SetActive(!hideMainHUD);
+        }
         // Time management
-        Time.timeScale = (_currentState == UIState.Pause) ? 0f : 1f;
+        Time.timeScale = (_currentState == UIState.Pause || _currentState == UIState.Settings) ? 0f : 1f;
         IsPaused = (_currentState == UIState.Pause);
     }
 
@@ -593,4 +596,16 @@ public class UIManager : MonoBehaviour
         mainHUD.SetActive(true);
         taskPanel.SetActive(true);
     }
+
+    public void SettingState()
+    {
+        SwitchState(UIState.Settings);
+    }
+
+    public void ApplyForSettings()
+    {
+        SwitchState(UIState.Pause);
+    }
+        
 }
+
