@@ -122,6 +122,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "CheatSpeed",
+                    "type": "Button",
+                    "id": "b70ff0ab-0e80-499f-a319-74371befbef7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CheatHope",
+                    "type": "Button",
+                    "id": "3019a554-42cb-4f7c-8f10-38882e2b7f02",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -452,6 +470,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Speed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ce70772c-fcec-4c1d-8230-9c0e9babc744",
+                    "path": "<Keyboard>/f7",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CheatSpeed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f601ccfa-5938-4e53-998d-eb07340581f9",
+                    "path": "<Keyboard>/f8",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CheatHope",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

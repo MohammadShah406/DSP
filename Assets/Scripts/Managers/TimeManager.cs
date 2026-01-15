@@ -16,11 +16,16 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private bool isPaused = false;
     private int lastAutoPauseDay = 0;
 
-    [Header("Time Scale")]
+    [Header("Time Scale Button Values")]
     [SerializeField] private float normalScale = 1f;
     [SerializeField] private float fastScale = 3f;
     [Header("Current Speed State")]
     [SerializeField]private bool isFast;
+
+    [Header("Time Scale Cheat Values")]
+    [SerializeField] private float cheatScale = 10f;
+    [Header("Current Cheat Speed State")]
+    [SerializeField] private bool isCheatFast;
 
     [Header("Physics")]
     [SerializeField] private bool scaleFixedDeltaTime = true;
@@ -435,6 +440,13 @@ public class TimeManager : MonoBehaviour
         // Keeps physics stepping consistent when speeding up/slowing down
         if (scaleFixedDeltaTime)
             Time.fixedDeltaTime = 0.02f * scale; 
+    }
+
+    public void ToggleCheatSpeed()
+    {
+        isCheatFast = !isCheatFast;
+        ApplyScale(isCheatFast ? cheatScale : normalScale);
+        Debug.Log("TimeManager: Toggling cheat speed. Current isCheatFast state: " + isCheatFast);
     }
 
 #if UNITY_EDITOR
