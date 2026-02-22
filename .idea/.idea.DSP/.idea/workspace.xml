@@ -5,16 +5,287 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bff7cc7c-cac8-4abf-ad0b-f0deaa34cb40" name="Changes" comment="tasks data full generated">
+      <change afterPath="$PROJECT_DIR$/Assets/AssetArt/Sahil Animations/T Pose/fbx.fbx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/AssetArt/Sahil Animations/T Pose/fbx.fbx.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Aloo Gobi.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Aloo Gobi.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Art Canvas.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Art Canvas.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Curtain.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Curtain.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Daal Chawal.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Daal Chawal.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Donation Box.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Donation Box.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Easel.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Easel.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Fabric.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Fabric.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Flour.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Flour.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Khichdi.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Khichdi.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Lentils.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Lentils.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Metal.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Metal.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Paint Brush.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Paint Brush.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Rice.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Rice.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Roti &amp; Daal.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Roti &amp; Daal.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Seeds.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Seeds.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Sewing Machine.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Sewing Machine.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Solar Panels.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Solar Panels.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Vegetables.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Vegetables.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Wall Paint.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Wall Paint.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Windmill.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Windmill.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Wood.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/InventoryData/Wood.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/RecipieData.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/RecipieData/Cooking.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/RecipieData/Crafting.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/RecipieData/Crafting/Recipes.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/RecipieData/Crafting/Recipes.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_B_Breakfast.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_B_Breakfast.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_B_ChackD.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_B_ChackD.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_B_Dinner.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_B_Dinner.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_B_Donationcheck.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_B_Donationcheck.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_B_Paint Canvas.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_B_Paint Canvas.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_B_Paint.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_B_Paint.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_B_PresononDoor.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_B_PresononDoor.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_B_SolarPanel.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_B_SolarPanel.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_S_CheckD.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_S_CheckD.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_S_Harvest.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_S_Harvest.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_S_Paintwall Bathroom.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_S_Paintwall Bathroom.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_S_Paintwall Bedroom.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_S_Paintwall Bedroom.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_S_Paintwall.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_S_Paintwall.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_S_Watering.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_S_Watering.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_S_seed.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_S_seed.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_S_shower.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_S_shower.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_Sleep.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D1_Sleep.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_A_Breakfast.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_A_Breakfast.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_A_Sew.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_A_Sew.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_A_Watering.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_A_Watering.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_B_DCheck.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_B_DCheck.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_B_PersononDoor 1.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_B_PersononDoor 1.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_B_PersononDoor.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_B_PersononDoor.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_B_Windmill.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_B_Windmill.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_S_CheckD.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_S_CheckD.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_S_Dinner.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_S_Dinner.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_S_DonationCheck.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_S_DonationCheck.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_S_PlaceMachine.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Datas/TaskData/D2_S_PlaceMachine.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/ScriptableCodes.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/ScriptableCodes/Recipes.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/ScriptableCodes/Recipes.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/ScriptableCodes/TaskData.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/ScriptableCodes/TaskData.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/ScriptableCodes/TaskDataEditor.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/ScriptableCodes/TaskDataEditor.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Unity.VisualScripting.Generated.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Unity.VisualScripting.Generated/VisualScripting.Flow.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ProjectSettings/VisualScriptingSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.DSP/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DSP/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Characters/BasicController.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Characters/BasicController.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Characters/BasicController_Bashir.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Characters/BasicController_Bashir.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Managers/UIManager.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Managers/UIManager.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/General/CameraBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/General/CameraBehaviour.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/General/Interactable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/General/Interactable.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/General/PlacableObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/General/PlacableObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Aloo Gobi.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Aloo Gobi.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Art Canvas.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Art Canvas.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Curtain.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Curtain.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Daal Chawal.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Daal Chawal.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Donation Box.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Donation Box.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Easel.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Easel.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Fabric.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Fabric.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Flour.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Flour.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Khichdi.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Khichdi.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Lentils.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Lentils.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Metal.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Metal.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Paint Brush.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Paint Brush.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Rice.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Rice.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Roti &amp; Daal.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Roti &amp; Daal.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Seeds.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Seeds.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Sewing Machine.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Sewing Machine.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Solar Panels.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Solar Panels.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Vegetables.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Vegetables.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Wall Paint.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Wall Paint.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Windmill.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Windmill.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Wood.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InventoryData/Wood.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/InteractionManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/InteractionManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes/TaskData.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes/TaskData.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/TaskManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/TaskManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/TimeManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/TimeManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/UIManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/UIManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/NPC/CharacterStats.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/NPC/CharacterStats.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_Breakfast.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_Breakfast.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_ChackD.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_ChackD.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_Dinner.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_Dinner.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_Donationcheck.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_Donationcheck.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_Paint Canvas.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_Paint Canvas.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_Paint.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_Paint.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_PresononDoor.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_PresononDoor.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_SolarPanel.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_SolarPanel.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_Breakfast.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_Breakfast.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_CheckD.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_CheckD.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_Dinner.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_Dinner.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_Harvest.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_Harvest.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_Paintwall Bathroom.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_Paintwall Bathroom.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_Paintwall Bedroom.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_Paintwall Bedroom.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_Paintwall.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_Paintwall.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_Watering.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_Watering.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_seed.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_seed.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_shower.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_S_shower.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_Sleep.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D1_Sleep.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_A_Breakfast.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_A_Breakfast.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_A_Dinner.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_A_Dinner.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_A_Sew.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_A_Sew.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_A_Watering.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_A_Watering.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_B_Breakfast.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_B_Breakfast.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_B_DCheck.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_B_DCheck.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_B_Dinner.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_B_Dinner.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_B_PersononDoor 1.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_B_PersononDoor 1.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_B_PersononDoor.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_B_PersononDoor.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_B_Windmill.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_B_Windmill.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_S_Breakfast.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_S_Breakfast.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_S_CheckD.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_S_CheckD.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_S_Dinner.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_S_Dinner.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_S_DonationCheck.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_S_DonationCheck.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_S_PlaceMachine.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TaskData/D2_S_PlaceMachine.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIscripts/ButtonGradient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIscripts/ButtonGradient.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIscripts/CharacterCarousel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIscripts/CharacterCarousel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIscripts/InventoryUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIscripts/InventoryUI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIscripts/RoundCorners.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIscripts/RoundCorners.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIscripts/TaskUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIscripts/TaskUI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIscripts/Trapezoid.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIscripts/Trapezoid.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Bangers SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Bangers SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Oswald Bold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Oswald Bold SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.sequences/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.sequences/Settings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_D:/Unity Projects/DSP" value="37BcH4VuEvBhaIp6lxYKkt5Kj3R" />
+      <entry key="_F:/Unity Projects/DSP" value="39UGbFdZ0YQZCyAGx1uKFOhnX79" />
+    </persistenceIdMap>
+  </component>
+  <component name="CopilotUserSelectedModel">
+    <selectedModels>
+      <entry key="chat-panel" value="Claude Haiku 4.5" />
+      <entry key="agent-panel" value="Claude Haiku 4.5" />
+      <entry key="edit-panel" value="GPT-5 mini" />
+    </selectedModels>
+  </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="28" />
+    <option name="cachedIndexableFilesCount" value="1" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -28,7 +299,7 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/MohammadShah406/DSP.git&quot;,
+    &quot;url&quot;: &quot;https://github.com/MohammadShah406/Umeed.git&quot;,
     &quot;accountId&quot;: &quot;5207614c-0805-4119-8b85-dc7eaf61a817&quot;
   }
 }</component>
@@ -36,7 +307,9 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/25ce29052dfe4e49a635a42f7798806b1e0000/32/4d316c86/MonoBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/25ce29052dfe4e49a635a42f7798806b1e0000/37/e5f9803b/Object.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/25ce29052dfe4e49a635a42f7798806b1e0000/52/0ddd64af/GameObject.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/25ce29052dfe4e49a635a42f7798806b1e0000/9b/15941dad/Component.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/25ce29052dfe4e49a635a42f7798806b1e0000/9c/39c6bea2/Transform.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/d7/c7e9543c/Action`1.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/AssetArt/FontStyle.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Prefabs/Managers/UIManager.prefab" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scenes/Nandan'sScene.meta" root0="FORCE_HIGHLIGHTING" />
@@ -44,33 +317,38 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/General/CameraBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/General/Interactable.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/General/ItemData.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Junk/QuestionableCode.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/GameManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/InteractionManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/LayoutManager.cs.meta" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes.meta" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes/TaskData.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TaskCodes/TaskData.cs.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/ScriptableCodes/Recipes.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/ScriptableCodes/TaskData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TaskManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/TimeManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Managers/UIManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/NPC/CharacterMovement.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/NPC/CharacterStats.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SaveStructure/SaveDataClasses.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/TaskData/D1_B_Breakfast.asset" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UIscripts/ButtonGradient.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UIscripts/CharacterCarousel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UIscripts/InventoryItemUI.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UIscripts/InventoryUI.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UIscripts/RoundCorners.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UIscripts/TaskUI.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UIscripts/Trapezoid.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Anton SDF.asset" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Bangers SDF.asset" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF.asset" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@2a2241f53fcd/Shaders/Lit.shader" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.visualscripting@6279e2b7c485/Editor/VisualScripting.Flow/Options/UnitBase.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
@@ -95,7 +373,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.tabs&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;power.mode.ii&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -164,6 +442,17 @@
       <workItem from="1768446763046" duration="1342000" />
       <workItem from="1768475353651" duration="939000" />
       <workItem from="1768480062525" duration="1143000" />
+      <workItem from="1769683759699" duration="2247000" />
+      <workItem from="1769707620043" duration="1443000" />
+      <workItem from="1770743310357" duration="29000" />
+      <workItem from="1770757460117" duration="4000" />
+      <workItem from="1770924558707" duration="797000" />
+      <workItem from="1770925391964" duration="210000" />
+      <workItem from="1770925617387" duration="2214000" />
+      <workItem from="1771163305533" duration="14094000" />
+      <workItem from="1771372178476" duration="893000" />
+      <workItem from="1771455076125" duration="3278000" />
+      <workItem from="1771767340604" duration="10246000" />
     </task>
     <task id="LOCAL-00001" summary="Fix: Restore UI stability and Camera functionality after rollback&#10;&#10;- CameraBehaviour: Resolved syntax error in HandleZoom caused by merge conflict.&#10;- CameraBehaviour: Updated IsMouseOverUI to correctly block clicks when interacting with topStatsHUD and taskPanel.&#10;- CharacterStats: Refactored UpdateHealth to use the Health property, ensuring stat changes correctly trigger UI update events.&#10;- UIManager: Restored critical null safety checks in UpdateCharacterStatsDisplay and UpdateTimeDisplay to prevent UI logic crashes from unassigned fields.&#10;- InventoryItemUI: Added null checks to Setup method for safer prefab instantiation.">
       <option name="closed" value="true" />

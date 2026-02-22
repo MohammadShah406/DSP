@@ -8,10 +8,7 @@ public class PlacableObject : MonoBehaviour
 
     private void OnEnable()
     {
-        if(TaskManager.Instance != null)
-        {
-            TaskManager.Instance.CompleteTaskByRequirement(gameObject.name);
-        }
+        TaskManager.Instance.CompleteTaskByRequirement(gameObject.name);
         foreach (GameObject light in lights)
         {
             if (light != null)

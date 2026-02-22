@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class RoundCorners : MonoBehaviour, IMeshModifier
 {
     [Header("Corner Settings")]
-    public Vector4 cornerRadius = new Vector4(20, 20, 20, 20); // Top-Left, Top-Right, Bottom-Right, Bottom-Left
+    public Vector4 cornerRadius = new Vector4(20, 20, 20, 20);
     [Range(4, 32)]
     public int cornerSegments = 8;
 
@@ -44,30 +44,25 @@ public class RoundCorners : MonoBehaviour, IMeshModifier
         float height = r.height;
 
         Color32 color = _graphic != null ? _graphic.color : Color.white;
-
-        // Clamp radii
+        
         float tl = Mathf.Min(cornerRadius.x, width / 2f, height / 2f);
         float tr = Mathf.Min(cornerRadius.y, width / 2f, height / 2f);
         float br = Mathf.Min(cornerRadius.z, width / 2f, height / 2f);
         float bl = Mathf.Min(cornerRadius.w, width / 2f, height / 2f);
-
-        // We'll create the shape by adding 4 corner arcs and a center vertex
+        
         Vector2 center = r.center;
         vh.AddVert(center, color, Vector2.zero); // Index 0
-
-        // Corner centers
+        
         Vector2 tlCenter = new Vector2(r.xMin + tl, r.yMax - tl);
         Vector2 trCenter = new Vector2(r.xMax - tr, r.yMax - tr);
         Vector2 brCenter = new Vector2(r.xMax - br, r.yMin + br);
         Vector2 blCenter = new Vector2(r.xMin + bl, r.yMin + bl);
-
-        // Add arc vertices
+        
         AddArc(vh, trCenter, tr, 0, 90, color);
         AddArc(vh, tlCenter, tl, 90, 180, color);
         AddArc(vh, blCenter, bl, 180, 270, color);
         AddArc(vh, brCenter, br, 270, 360, color);
-
-        // Triangulate
+        
         int count = vh.currentVertCount;
         for (int i = 1; i < count; i++)
         {

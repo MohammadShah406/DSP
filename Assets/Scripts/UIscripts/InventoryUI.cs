@@ -136,7 +136,6 @@ public class InventoryUI : MonoBehaviour
         itemUI.transform.SetParent(inventoryGrid, false);
         itemUI.transform.localScale = Vector3.one;
         
-        // Ensure the item's pivot and anchors don't fight the layout group
         RectTransform itemRT = itemUI.GetComponent<RectTransform>();
         if (itemRT != null)
         {
@@ -165,29 +164,24 @@ public class InventoryUI : MonoBehaviour
 
     
     public void UpdateInventoryDisplay() => UpdateInventoryDisplay(false);
-
-    // Updates the inventory display to reflect the current state of the player's inventory.    
+    
     public void UpdateInventoryDisplay(bool force)
     {
         if (!force && !inventoryPanel.activeInHierarchy) 
         {
             return;
         }
-
-        // Coroutines cannot be started on inactive GameObjects.
+        
         if (!gameObject.activeInHierarchy) return;
 
         if (_updateCoroutine != null) StopCoroutine(_updateCoroutine);
         _updateCoroutine = StartCoroutine(UpdateDisplayCoroutine());
     }
     
-    // Updates the user interface display over time as part of a coroutine.
     private System.Collections.IEnumerator UpdateDisplayCoroutine()
     {
-        // Cache current resources to avoid modification during iteration
         var currentResources = GameManager.Instance != null ? new List<ResourceData>(GameManager.Instance.resources) : new List<ResourceData>();
         
-        // Track which items are still valid
         HashSet<string> validResources = new HashSet<string>();
 
         foreach (var res in currentResources)
@@ -196,11 +190,10 @@ public class InventoryUI : MonoBehaviour
             {
                 validResources.Add(res.resourceName);
                 UpdateSingleResourceDisplay(res.resourceName, res.quantity);
-                yield return null; // Spread over frames
+                yield return null;
             }
         }
-
-        // Clean up items that are no longer in resources or have 0 quantity
+        
         _keysToProcess.Clear();
         _keysToProcess.AddRange(_activeItems.Keys);
         
@@ -217,7 +210,6 @@ public class InventoryUI : MonoBehaviour
         _updateCoroutine = null;
     }
     
-    // Displays the details of a specified item to the user.
     public void ShowItemDetails(ItemData data, int quantity)
     {
         itemDetailPanel.SetActive(true);
@@ -227,35 +219,29 @@ public class InventoryUI : MonoBehaviour
         detailItemQuantityText.text = $"Quantity: {quantity}";
         detailItemDescriptionText.text = data.description;
         PlaceButton.gameObject.SetActive(data.itemType == ItemType.Placement);
-
-        // Avoid stacking listeners when opening details multiple times
+        
         PlaceButton.onClick.RemoveAllListeners();
         PlaceButton.onClick.AddListener(() => PlaceItem(data));
     }
 
     public void PlaceItem(ItemData data)
     {
-        //Close InventoryUI
         if (inventoryPanel != null)
         {
             if (UIManager.Instance != null)
                 UIManager.Instance.ToggleInventory();
         }
-
-        // Trigger placement mode if available
+        
         if (DonationManager.Instance != null)
         {
             DonationManager.Instance.PlaceItem(data);
         }
-
-        // Decrement the item from GameManager resources (and update UI via events)
+        
         if (GameManager.Instance != null && data != null && !string.IsNullOrEmpty(data.itemName))
         {
-            // Use AddResource with a negative amount to remove one unit and fire change events
             GameManager.Instance.AddResource(data.itemName, -1);
         }
-
-        // If the item reaches zero, hide the detail panel
+        
         var res = GameManager.Instance?.resources.Find(r => r.resourceName == data.itemName);
         if (res == null || res.quantity <= 0)
         {
@@ -264,7 +250,6 @@ public class InventoryUI : MonoBehaviour
         }
         else
         {
-            // Update the quantity text to reflect the new count
             detailItemQuantityText.text = $"Quantity: {res.quantity}";
         }
     }

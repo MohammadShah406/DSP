@@ -14,48 +14,37 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public static bool IsMouseOver { get; private set; }
 
     private RectTransform _rectTransform;
-    private Dictionary<TaskInstance, GameObject> _activeTaskEntries = new Dictionary<TaskInstance, GameObject>();
+    private readonly Dictionary<TaskInstance, GameObject> _activeTaskEntries = new Dictionary<TaskInstance, GameObject>();
 
     private void Start()
     {
         _rectTransform = GetComponent<RectTransform>();
         Debug.Log("[TaskUI] Start called.");
         
-        // Ensure EventSystem exists
         if (EventSystem.current == null)
         {
             Debug.LogWarning("[TaskUI] No EventSystem found in scene. Creating one.");
             GameObject eventSystem = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
         }
-
-        // Ensure GraphicRaycaster exists on parent Canvas
+        
         Canvas canvas = GetComponentInParent<Canvas>();
         if (canvas != null && canvas.GetComponent<GraphicRaycaster>() == null)
         {
             Debug.LogWarning($"[TaskUI] No GraphicRaycaster found on Canvas '{canvas.name}'. Adding one.");
             canvas.gameObject.AddComponent<GraphicRaycaster>();
         }
-
-        // Ensure we can receive pointer events
+        
         Image img = GetComponent<Image>();
         if (img == null)
         {
             img = gameObject.AddComponent<Image>();
-            img.color = new Color(0, 0, 0, 0); // Transparent
+            img.color = new Color(0, 0, 0, 0);
         }
         img.raycastTarget = true;
 
         SetupContainer();
 
-        if (TaskManager.Instance != null)
-        {
-            Debug.Log("[TaskUI] Subscribing to TaskManager.OnTasksUpdated.");
-            TaskManager.Instance.OnTasksUpdated += OnTasksUpdated;
-        }
-        else
-        {
-            Debug.LogError("[TaskUI] TaskManager.Instance is null in Start!");
-        }
+        TaskManager.Instance.OnTasksUpdated += OnTasksUpdated;
 
         RefreshTaskList();
     }
@@ -68,38 +57,35 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private void UpdateMouseOver()
     {
         if (_rectTransform == null) return;
-
-        // Check if mouse is within the bounds of this panel
+        
         IsMouseOver = RectTransformUtility.RectangleContainsScreenPoint(_rectTransform, Input.mousePosition, null);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Keep for compatibility but UpdateMouseOver is more reliable
         IsMouseOver = true;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        // UpdateMouseOver will handle the false state
+        
     }
+    
 
     private void OnDisable()
     {
         IsMouseOver = false;
     }
-
+    
     private void SetupContainer()
     {
-        // If we already have a ScrollRect, we just need to ensure its settings are correct
         ScrollRect existingScrollRect = GetComponent<ScrollRect>();
         if (existingScrollRect != null)
         {
             existingScrollRect.horizontal = false;
             existingScrollRect.vertical = true;
-            existingScrollRect.scrollSensitivity = 100f; // Increased sensitivity
+            existingScrollRect.scrollSensitivity = 100f;
             
-            // Link viewport and content if they are assigned or findable
             if (existingScrollRect.viewport == null)
             {
                 Transform vp = transform.Find("Viewport");
@@ -114,17 +100,15 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             {
                 taskListContainer = existingScrollRect.content;
             }
-
-            // Ensure viewport has raycast target to catch scrolling
+            
             if (existingScrollRect.viewport != null)
             {
                 Image vpImg = existingScrollRect.viewport.GetComponent<Image>();
                 if (vpImg == null) vpImg = existingScrollRect.viewport.gameObject.AddComponent<Image>();
-                vpImg.color = new Color(0, 0, 0, 0.03f); // Increased alpha for Mask reliability (approx 8/255)
+                vpImg.color = new Color(0, 0, 0, 0.03f);
                 vpImg.raycastTarget = true;
             }
-
-            // Find and link vertical scrollbar if missing
+            
             if (existingScrollRect.verticalScrollbar == null)
             {
                 Scrollbar sb = GetComponentInChildren<Scrollbar>(true);
@@ -138,7 +122,6 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             if (existingScrollRect.verticalScrollbar != null)
             {
                 Scrollbar sb = existingScrollRect.verticalScrollbar;
-                // Ensure scrollbar is interactive
                 sb.interactable = true;
                 Image[] sbImgs = sb.GetComponentsInChildren<Image>();
                 foreach (var simg in sbImgs) simg.raycastTarget = true;
@@ -162,8 +145,7 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                 
                 csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
                 csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
-
-                // Ensure content and viewport scales are 1
+                
                 taskListContainer.localScale = Vector3.one;
                 if (existingScrollRect.viewport != null) existingScrollRect.viewport.localScale = Vector3.one;
             }
@@ -171,24 +153,21 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
 
         if (taskListContainer == null) return;
-
-        // 1. Setup ScrollRect on the main TaskUI panel
+        
         ScrollRect scrollRect = GetComponent<ScrollRect>();
         if (scrollRect == null)
         {
             scrollRect = gameObject.AddComponent<ScrollRect>();
         }
-
-        // Configuration for the scroll panel
+        
         scrollRect.horizontal = false; 
         scrollRect.vertical = true;
         scrollRect.scrollSensitivity = 100f; 
         scrollRect.movementType = ScrollRect.MovementType.Clamped;
-        scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.Permanent; // Avoid issues with missing scrollbar
+        scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.Permanent;
         scrollRect.inertia = true; 
         scrollRect.decelerationRate = 0.135f;
-
-        // Find and link a vertical scrollbar if it exists in the hierarchy
+        
         if (scrollRect.verticalScrollbar == null)
         {
             Scrollbar sb = GetComponentInChildren<Scrollbar>(true);
@@ -200,8 +179,7 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                 foreach (var simg in sbImgs) simg.raycastTarget = true;
             }
         }
-
-        // 2. Setup a Viewport if it doesn't exist
+        
         Transform viewport = transform.Find("Viewport");
         if (viewport == null)
         {
@@ -213,16 +191,15 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             vpRect.anchorMin = Vector2.zero;
             vpRect.anchorMax = Vector2.one;
             vpRect.sizeDelta = Vector2.zero;
-            vpRect.pivot = new Vector2(0.5f, 0.5f); // Center pivot for viewport is safer
+            vpRect.pivot = new Vector2(0.5f, 0.5f);
             vpRect.localScale = Vector3.one; 
             
             Image vpImg = vpObj.GetComponent<Image>();
-            vpImg.color = new Color(0, 0, 0, 0.03f); // Increased alpha for Mask reliability (approx 8/255)
+            vpImg.color = new Color(0, 0, 0, 0.03f);
             vpImg.raycastTarget = true; 
         }
         else
         {
-            // Use standard Mask instead of RectMask2D for better compatibility if issues occur
             if (viewport.GetComponent<Mask>() == null)
             {
                 RectMask2D rm = viewport.GetComponent<RectMask2D>();
@@ -231,23 +208,21 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                 viewport.gameObject.AddComponent<Mask>();
                 Image vpImg = viewport.GetComponent<Image>();
                 if (vpImg == null) vpImg = viewport.gameObject.AddComponent<Image>();
-                vpImg.color = new Color(0, 0, 0, 0.03f); // Increased alpha for Mask reliability (approx 8/255)
+                vpImg.color = new Color(0, 0, 0, 0.03f);
                 vpImg.raycastTarget = true;
             }
             viewport.localScale = Vector3.one; 
         }
 
         scrollRect.viewport = viewport.GetComponent<RectTransform>();
-
-        // 3. Ensure the taskListContainer is inside the Viewport and configured correctly
+        
         if (taskListContainer.parent != viewport)
         {
             taskListContainer.SetParent(viewport, false);
         }
 
         scrollRect.content = taskListContainer.GetComponent<RectTransform>();
-
-        // 4. Setup Vertical Layout Group on the container
+        
         VerticalLayoutGroup layout = taskListContainer.GetComponent<VerticalLayoutGroup>();
         if (layout == null)
         {
@@ -261,12 +236,10 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         layout.childForceExpandHeight = false;
         layout.childForceExpandWidth = false;
         layout.childAlignment = TextAnchor.UpperCenter;
-
-        // Force positions to be managed by a layout group
+        
         layout.enabled = false;
         layout.enabled = true;
-
-        // 5. Setup Content Size Fitter
+        
         ContentSizeFitter fitter = taskListContainer.GetComponent<ContentSizeFitter>();
         if (fitter == null)
         {
@@ -274,26 +247,23 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
         fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
-
-            // 6. Anchor the container to the TOP so it grows downward
+        
             RectTransform containerRect = taskListContainer.GetComponent<RectTransform>();
-            containerRect.localScale = Vector3.one; // Ensure scale is 1
-            containerRect.anchorMin = new Vector2(0f, 1f); // Top-Left
-            containerRect.anchorMax = new Vector2(1f, 1f); // Top-Right
-            containerRect.pivot = new Vector2(0.5f, 1f);   // Pivot at top-center
+            containerRect.localScale = Vector3.one;
+            containerRect.anchorMin = new Vector2(0f, 1f);
+            containerRect.anchorMax = new Vector2(1f, 1f);
+            containerRect.pivot = new Vector2(0.5f, 1f);
             
-            // Ensure width is stretched to viewport (sizeDelta.x = 0)
+            
             containerRect.sizeDelta = new Vector2(0f, containerRect.sizeDelta.y);
-            containerRect.anchoredPosition3D = Vector3.zero; // Force Z to 0 and position to 0
-
-            // Important: Force the VerticalLayoutGroup to control the child sizes
+            containerRect.anchoredPosition3D = Vector3.zero;
+            
             layout.childControlHeight = true;
             layout.childControlWidth = true;
             layout.childForceExpandHeight = false;
             layout.childForceExpandWidth = false;
             layout.childAlignment = TextAnchor.UpperCenter;
-
-        // 7. Ensure the TaskUI panel itself has a transparent image to catch scroll events
+            
         Image mainImg = GetComponent<Image>();
         if (mainImg == null)
         {
@@ -305,10 +275,7 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private void OnDestroy()
     {
-        if (TaskManager.Instance != null)
-        {
-            TaskManager.Instance.OnTasksUpdated -= OnTasksUpdated;
-        }
+        TaskManager.Instance.OnTasksUpdated -= OnTasksUpdated;
     }
 
     private void SetTextValue(Graphic textGraphic, string value)
@@ -317,14 +284,13 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (textGraphic is Text t) t.text = value;
         else if (textGraphic is TextMeshProUGUI tmp) tmp.text = value;
     }
-
+    
     private void ApplyStrikethrough(Graphic textGraphic)
     {
         if (textGraphic == null) return;
         if (textGraphic is Text t)
         {
             t.color = Color.gray;
-            // Standard UI Text doesn't have a native strikethrough property without a custom shader
         }
         else if (textGraphic is TextMeshProUGUI tmp)
         {
@@ -332,35 +298,82 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             tmp.fontStyle = FontStyles.Strikethrough;
         }
     }
-
+    
     private void OnTasksUpdated()
     {
-        if (TaskManager.Instance == null) return;
-        
         List<TaskInstance> currentTasks = TaskManager.Instance.GetActiveTasks();
         Debug.Log($"[TaskUI] OnTasksUpdated received {currentTasks.Count} active tasks.");
         
-        // Check for newly completed tasks
         foreach (var kvp in new Dictionary<TaskInstance, GameObject>(_activeTaskEntries))
         {
             TaskInstance taskInstance = kvp.Key;
             GameObject entry = kvp.Value;
             
-            // If task is now completed, show completion state
             if (taskInstance.isCompleted && entry != null)
             {
                 UpdateTaskEntryToCompleted(entry, taskInstance);
                 StartCoroutine(RemoveTaskEntryAfterDelay(taskInstance, entry));
+                continue;
             }
+            
+            if (taskInstance.isFailed || !currentTasks.Contains(taskInstance))
+            {
+                if (entry != null) Destroy(entry);
+                _activeTaskEntries.Remove(taskInstance);
+                continue;
+            }
+            
+            UpdateTaskEntryText(taskInstance);
         }
         
-        // Add new tasks that appeared
         foreach (var taskInstance in currentTasks)
         {
             if (!_activeTaskEntries.ContainsKey(taskInstance))
             {
                 Debug.Log($"[TaskUI] Creating entry for task: {taskInstance.taskData.taskDescription}");
                 CreateTaskEntry(taskInstance);
+            }
+        }
+    }
+
+    private void UpdateTaskEntryText(TaskInstance task)
+    {
+        if (_activeTaskEntries.TryGetValue(task, out GameObject entry))
+        {
+            List<Graphic> textComponents = new List<Graphic>();
+            textComponents.AddRange(entry.GetComponentsInChildren<TextMeshProUGUI>(true));
+            textComponents.AddRange(entry.GetComponentsInChildren<Text>(true));
+
+            Graphic descText = null;
+            foreach (var txt in textComponents)
+            {
+                string lowerName = txt.gameObject.name.ToLower();
+                if (lowerName.Contains("description") || lowerName.Contains("desc") || lowerName.Contains("task"))
+                {
+                    descText = txt;
+                    break;
+                }
+            }
+            if (descText == null && textComponents.Count > 1) descText = textComponents[1];
+            if (descText == null && textComponents.Count > 0) descText = textComponents[0];
+
+            if (descText != null)
+            {
+                string displayName = task.taskData.taskDescription;
+                if (task.taskData.requiredCharacter != TaskData.CharacterName.None)
+                {
+                    if (task.taskData.requiredCharacter == TaskData.CharacterName.All && InteractionManager.Instance != null)
+                    {
+                        int total = InteractionManager.Instance.sets.Count;
+                        int current = task.completedByCharacters.Count;
+                        displayName = $"[ALL {current}/{total}]: {displayName}";
+                    }
+                    else
+                    {
+                        displayName = $"{task.taskData.requiredCharacter}: {displayName}";
+                    }
+                }
+                SetTextValue(descText, displayName);
             }
         }
     }
@@ -374,7 +387,7 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
 
         GameObject entry = Instantiate(taskEntryPrefab, taskListContainer);
-        _activeTaskEntries[task] = entry; // Track this entry
+        _activeTaskEntries[task] = entry;
         
         entry.SetActive(true);
         entry.transform.localPosition = Vector3.zero;
@@ -451,7 +464,7 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         
         if (toggle != null)
         {
-            toggle.isOn = false; // Always start unchecked
+            toggle.isOn = false;
             toggle.interactable = false;
             Image[] toggleImgs = toggle.GetComponentsInChildren<Image>();
             foreach(var timg in toggleImgs) timg.raycastTarget = false;
@@ -496,7 +509,16 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         string displayName = task.taskData.taskDescription;
         if (task.taskData.requiredCharacter != TaskData.CharacterName.None)
         {
-            displayName = $"{task.taskData.requiredCharacter}: {displayName}";
+            if (task.taskData.requiredCharacter == TaskData.CharacterName.All && InteractionManager.Instance != null)
+            {
+                int total = InteractionManager.Instance.sets.Count;
+                int current = task.completedByCharacters.Count;
+                displayName = $"[ALL {current}/{total}]: {displayName}";
+            }
+            else
+            {
+                displayName = $"{task.taskData.requiredCharacter}: {displayName}";
+            }
         }
         SetTextValue(descText, displayName);
         if (descText != null) descText.raycastTarget = false;
@@ -516,14 +538,12 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             backgroundImage.color = new Color(0.5f, 1f, 0.5f, 0.3f);
         }
         
-        // Toggle the checkmark
         Toggle toggle = entry.GetComponentInChildren<Toggle>();
         if (toggle != null)
         {
             toggle.isOn = true;
         }
-
-        // Apply strikethrough to text
+        
         List<Graphic> textComponents = new List<Graphic>();
         textComponents.AddRange(entry.GetComponentsInChildren<TextMeshProUGUI>(true));
         textComponents.AddRange(entry.GetComponentsInChildren<Text>(true));
@@ -535,12 +555,11 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         Canvas.ForceUpdateCanvases();
     }
-
+    
     private IEnumerator RemoveTaskEntryAfterDelay(TaskInstance taskInstance, GameObject entry)
     {
         yield return new WaitForSeconds(completionDisplayTime);
-
-        // Entry may have been destroyed by RefreshTaskList or another update
+        
         if (entry == null)
         {
             _activeTaskEntries.Remove(taskInstance);
@@ -556,7 +575,7 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         while (elapsed < fadeTime)
         {
-            if (entry == null) yield break; // destroyed mid-fade
+            if (entry == null) yield break;
 
             elapsed += Time.deltaTime;
             canvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsed / fadeTime);
@@ -574,10 +593,9 @@ public class TaskUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             LayoutRebuilder.ForceRebuildLayoutImmediate(containerRT);
         }
     }
-
+    
     private void RefreshTaskList()
     {
-        // Clear everything
         foreach (Transform child in taskListContainer)
         {
             Destroy(child.gameObject);

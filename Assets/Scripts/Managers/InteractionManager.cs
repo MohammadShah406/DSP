@@ -48,11 +48,8 @@ public class InteractionManager : MonoBehaviour
         {
             _mainCam = Camera.main;
         }
-        if (TaskManager.Instance != null)
-        {
-            TaskManager.Instance.OnTasksUpdated += UpdateInteractablesFromTasks;
-            UpdateInteractablesFromTasks(); // Initial update
-        }
+        TaskManager.Instance.OnTasksUpdated += UpdateInteractablesFromTasks;
+        UpdateInteractablesFromTasks(); // Initial update
     }
 
     void Update()
@@ -227,7 +224,17 @@ public class InteractionManager : MonoBehaviour
         List<Transform> characters = new List<Transform>();
         
         // Priority 1: Check requiredCharacter field
-        if (taskInstance.taskData.requiredCharacter != TaskData.CharacterName.None)
+        if (taskInstance.taskData.requiredCharacter == TaskData.CharacterName.All)
+        {
+            foreach (var set in sets)
+            {
+                if (set.character != null)
+                {
+                    characters.Add(set.character);
+                }
+            }
+        }
+        else if (taskInstance.taskData.requiredCharacter != TaskData.CharacterName.None)
         {
             Transform character = FindCharacterByName(taskInstance.taskData.requiredCharacter.ToString());
             if (character != null)
@@ -269,9 +276,6 @@ public class InteractionManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (TaskManager.Instance != null)
-        {
-            TaskManager.Instance.OnTasksUpdated -= UpdateInteractablesFromTasks;
-        }
+        TaskManager.Instance.OnTasksUpdated -= UpdateInteractablesFromTasks;
     }
 }

@@ -13,6 +13,9 @@ public class TimeManager : MonoBehaviour
 
     [Tooltip("In-game minutes per real-time second.")]
     [SerializeField, Range(0.1f, 120f)] private float gameMinutesPerSecond = 1f;
+    public float GameMinutesPerSecond => gameMinutesPerSecond;
+    public float MinuteAccumulator => minuteAccumulator;
+    public bool IsPaused => isPaused;
     [SerializeField] private bool isPaused = false;
     private int lastAutoPauseDay = 0;
 

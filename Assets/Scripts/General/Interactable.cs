@@ -175,14 +175,14 @@ public class Interactable : MonoBehaviour
         }
 
         Debug.Log($"[Interactable] {name} interaction complete. Notifying TaskManager...");
-        if (TaskManager.Instance != null)
+        string charName = "";
+        if (interactedBy != null)
         {
-            TaskManager.Instance.CompleteTaskByRequirement(name);
+            var stats = interactedBy.GetComponent<CharacterStats>();
+            if (stats != null) charName = stats.characterName;
+            else charName = interactedBy.name;
         }
-        else
-        {
-            Debug.LogError("[Interactable] TaskManager.Instance is null! Cannot complete task.");
-        }
+        TaskManager.Instance.CompleteTaskByRequirement(name, charName);
         
         ApplyEffect();
 

@@ -22,11 +22,9 @@ namespace UIscripts
         protected override void Awake()
         {
             base.Awake();
-            // Initialize gradient if it's null
             if (gradient == null)
             {
                 gradient = new Gradient();
-                // Set default colors
                 GradientColorKey[] colorKeys = new GradientColorKey[2];
                 colorKeys[0] = new GradientColorKey(Color.white, 0f);
                 colorKeys[1] = new GradientColorKey(Color.black, 1f);
@@ -38,7 +36,7 @@ namespace UIscripts
                 gradient.SetKeys(colorKeys, alphaKeys);
             }
         }
-
+        
         public override void ModifyMesh(VertexHelper vh)
         {
             if (!IsActive() || vh == null || gradient == null)

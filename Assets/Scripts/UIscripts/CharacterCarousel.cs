@@ -14,7 +14,7 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
     public float horizontalSpacing = 200f;
 
     [Header("References")]
-    public RectTransform container; // The parent transform for character items
+    public RectTransform container;
     public GameObject characterItemPrefab;
     //public GameObject nullCharacterPrefab;
 
@@ -31,7 +31,6 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     void Start()
     {
-        // Get characters from GameManager
         if (GameManager.Instance != null)
         {
             _characters = GameManager.Instance.GetCharacterComponents();
@@ -42,7 +41,7 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
                 _currentIndex = 0;
             }
             
-            UpdateLayout(true); // Immediate snap on start
+            UpdateLayout(true);
         }
         else
         {
@@ -53,8 +52,7 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
     void Update()
     {
         if (!_isMouseOver) return;
-
-        // Detect Mouse Scroll
+        
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         bool nextPressed = (InputManager.Instance != null && InputManager.Instance.NextCharacterInput);
         bool prevPressed = (InputManager.Instance != null && InputManager.Instance.PreviousCharacterInput);
@@ -65,7 +63,7 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
             else if (scroll < 0 || nextPressed) MoveNext();
         }
     }
-
+    
     void SetupCarousel()
     {
         if (_characters == null || _characters.Count == 0) return;
@@ -75,14 +73,12 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
         {
             GameObject go = Instantiate(characterItemPrefab, container);
             
-            // Try to set the icon if characterIcon exists and there is an Image component
             Image img = go.GetComponentInChildren<Image>();
             if (img != null && character.characterIcon != null)
             {
                 img.sprite = character.characterIcon;
             }
             
-            // Add CanvasGroup if missing to support alpha fading
             if (go.GetComponent<CanvasGroup>() == null)
             {
                 go.AddComponent<CanvasGroup>();
@@ -91,12 +87,11 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
             _spawnedItems.Add(go.GetComponent<RectTransform>());
         }
     }
-
+    
     public void MoveNext()
     {
         if (_characters == null) return;
         
-        // Cycle: -1 (null) -> 0 -> 1 -> ... -> count-1 -> -1
         _currentIndex++;
         if (_currentIndex >= _characters.Count)
         {
@@ -106,12 +101,11 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
         StartCoroutine(TransitionLayout());
         UpdateCameraFocus();
     }
-
+    
     public void MovePrev()
     {
         if (_characters == null) return;
         
-        // Cycle backwards: -1 (null) -> count-1 -> ... -> 1 -> 0 -> -1
         _currentIndex--;
         if (_currentIndex < 0)
         {
@@ -121,7 +115,7 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
         StartCoroutine(TransitionLayout());
         UpdateCameraFocus();
     }
-
+    
     private void UpdateCameraFocus()
     {
         if (_suppressCameraUpdate) return;
@@ -135,13 +129,11 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
         // }
         else if (_currentIndex >= 0 && _currentIndex < _characters.Count)
         {
-            // Focus on the selected character
             CharacterStats selectedChar = _characters[_currentIndex];
             if (selectedChar != null)
             {
                 CameraBehaviour.Instance.SetFocussed(selectedChar.gameObject);
                 
-                // Update UI Manager stats display
                 if (UIManager.Instance != null)
                 {
                     UIManager.Instance.UpdateCharacterStatsDisplay(selectedChar);
@@ -156,7 +148,6 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
         float elapsed = 0;
         float duration = 1f / transitionSpeed;
 
-        // Store starting states
         int totalItems = _spawnedItems.Count;
         Vector3[] startPos = new Vector3[totalItems];
         Vector3[] startScale = new Vector3[totalItems];
@@ -184,7 +175,6 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
             elapsed += Time.deltaTime;
             float t = Mathf.SmoothStep(0, 1, elapsed / duration);
 
-            // Lerp character items
             for (int i = 0; i < _spawnedItems.Count; i++)
             {
                 TargetState target = GetTargetStateForCharacter(i);
@@ -210,10 +200,9 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
             yield return null;
         }
 
-        UpdateLayout(true); // Final snap
+        UpdateLayout(true);
         _isTransitioning = false;
-
-        // Inform UIManager about the change
+        
         if (UIManager.Instance != null && _characters != null)
         {
             if (_currentIndex >= 0 && _currentIndex < _characters.Count)
@@ -241,7 +230,6 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
             CanvasGroup cg = _spawnedItems[i].GetComponent<CanvasGroup>();
             if (cg != null) cg.alpha = target.Alpha;
 
-            // Handle sorting order (Center item on top)
             if (i == _currentIndex) _spawnedItems[i].SetAsLastSibling();
         }
         
@@ -258,14 +246,14 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
         // }
         
     }
-
+    
     private TargetState GetTargetStateForCharacter(int characterIndex)
     {
         TargetState state = new TargetState();
         
        
             int offset = characterIndex - _currentIndex;
-            int count = characterIndex;
+            int count = _characters.Count;
             
             if (offset > count / 2) offset -= count;
             if (offset < -count / 2) offset += count;
@@ -318,12 +306,12 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
             return _characters[_currentIndex];
         return null;
     }
-
+    
     public void SetCurrentCharacter(CharacterStats character)
     {
         if (_characters == null) return;
 
-        _suppressCameraUpdate = true; // Prevent circular updates
+        _suppressCameraUpdate = true;
 
         int newIndex = (character == null) ? -1 : _characters.IndexOf(character);
         

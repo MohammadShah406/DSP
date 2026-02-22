@@ -67,8 +67,6 @@ public class CharacterStats : MonoBehaviour
 
     private void UpdateHealth(int hours, int minutes, int days)
     {
-        // Formula: Health = Health + (Avg - Base) * M
-        // Avg = average of h,e,n (hygiene, energy, nutrition)
         float avg = (Nutrition + Hygiene + Energy) / 3f;
         
         Health += Mathf.RoundToInt((avg - healthBase) * healthMultiplier);
@@ -81,9 +79,7 @@ public class CharacterStats : MonoBehaviour
         TimeManager.Instance.HourChanged -= ApplyHourlyDecay;
         TimeManager.Instance.HourChanged -= UpdateHealth;
     }
-
-    // Helpers to update stats with clamping to 0..100
-    // Properties that notify when changed
+    
     public int Health
     {
         get => health;
@@ -187,8 +183,7 @@ public class CharacterStats : MonoBehaviour
             }
         }
     }
-
-    // Helpers now use properties
+    
     private int ApplyGrowth(PrimaryAttribute attr, int change)
     {
         if (change > 0 && primaryAttribute == attr)
