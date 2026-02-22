@@ -1,0 +1,11 @@
+Model Information:
+* title:	jailShower_head
+* source:	https://sketchfab.com/3d-models/jailshower-head-63fea296974e41fabd84277225f591d8
+* author:	dronelord (https://sketchfab.com/dronelord)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "jailShower_head" (https://sketchfab.com/3d-models/jailshower-head-63fea296974e41fabd84277225f591d8) by dronelord (https://sketchfab.com/dronelord) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
