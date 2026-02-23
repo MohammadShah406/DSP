@@ -4988,7 +4988,7 @@ GameObject:
   - component: {fileID: 1399491476850481362}
   - component: {fileID: 1399491476850481363}
   m_Layer: 0
-  m_Name: Buff_03a
+  m_Name: Attribute Increase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
