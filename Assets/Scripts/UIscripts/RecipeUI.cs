@@ -2,17 +2,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CraftingUI : MonoBehaviour
+public class RecipeUI : MonoBehaviour
 {
     [Header("UI Mode Settings")]
     public TextMeshProUGUI titleText;
-    public string craftingTitle = "Crafting Station";
-    public string cookingTitle = "Cooking Station";
     
     [Header("Action Button Settings")]
     public TextMeshProUGUI actionButtonText;
-    public string craftButtonText = "Craft";
-    public string cookButtonText = "Cook";
 
     [Header("Recipe List")]
     public Transform recipeContainer;
@@ -35,10 +31,10 @@ public class CraftingUI : MonoBehaviour
         _currentMode = mode;
         
         if (titleText != null)
-            titleText.text = (mode == RecipeType.Crafting) ? craftingTitle : cookingTitle;
+            titleText.text = (mode == RecipeType.Crafting) ? "Crafting Station" : "Cooking Station";
             
         if (actionButtonText != null)
-            actionButtonText.text = (mode == RecipeType.Crafting) ? craftButtonText : cookButtonText;
+            actionButtonText.text = (mode == RecipeType.Crafting) ? "Craft" : "Cook";
         
         if (detailsPanel != null)
             detailsPanel.SetActive(false);

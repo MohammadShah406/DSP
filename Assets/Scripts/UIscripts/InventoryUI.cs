@@ -23,7 +23,7 @@ public class InventoryUI : MonoBehaviour
     public Image detailItemIcon;
     public TextMeshProUGUI detailItemQuantityText;
     public TextMeshProUGUI detailItemDescriptionText;
-    public Button PlaceButton;
+    public Button placeButton;
     private Dictionary<string, InventoryItemUI> _activeItems = new Dictionary<string, InventoryItemUI>();
     private Stack<InventoryItemUI> _itemPool = new Stack<InventoryItemUI>();
     private List<string> _keysToProcess = new List<string>();
@@ -43,22 +43,15 @@ public class InventoryUI : MonoBehaviour
     }
     
     private void Start()
-    {
-        
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnResourcesChanged += UpdateInventoryDisplay;
-            GameManager.Instance.OnResourceChanged += OnResourceChanged;
-        }
+    { 
+        GameManager.Instance.OnResourcesChanged += UpdateInventoryDisplay; 
+        GameManager.Instance.OnResourceChanged += OnResourceChanged;
     }
     
     private void OnDestroy()
     {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnResourcesChanged -= UpdateInventoryDisplay;
-            GameManager.Instance.OnResourceChanged -= OnResourceChanged;
-        }
+        GameManager.Instance.OnResourcesChanged -= UpdateInventoryDisplay; 
+        GameManager.Instance.OnResourceChanged -= OnResourceChanged;
     }
     
     
@@ -70,13 +63,10 @@ public class InventoryUI : MonoBehaviour
     
     public void Toggle()
     {
-        if (UIManager.Instance != null)
-        {
-            if (UIManager.Instance.CurrentState == UIManager.UIState.Inventory)
-                UIManager.Instance.OnInventoryClosed();
-            else
-                UIManager.Instance.OnInventoryOpened();
-        }
+        if (UIManager.Instance.CurrentState == UIManager.UIState.Inventory) 
+            UIManager.Instance.OnInventoryClosed();
+        else 
+            UIManager.Instance.OnInventoryOpened();
     }
     
     public void OnOpened()
@@ -110,7 +100,6 @@ public class InventoryUI : MonoBehaviour
         }
         else
         {
-            // New item to show
             InventoryItemUI newItem = GetFromPool();
             ItemData data = GameManager.Instance.GetItemData(resourceName);
             newItem.Setup(data, quantity);
@@ -218,10 +207,10 @@ public class InventoryUI : MonoBehaviour
         detailItemIcon.enabled = true;
         detailItemQuantityText.text = $"Quantity: {quantity}";
         detailItemDescriptionText.text = data.description;
-        PlaceButton.gameObject.SetActive(data.itemType == ItemType.Placement);
+        placeButton.gameObject.SetActive(data.itemType == ItemType.Placement);
         
-        PlaceButton.onClick.RemoveAllListeners();
-        PlaceButton.onClick.AddListener(() => PlaceItem(data));
+        placeButton.onClick.RemoveAllListeners();
+        placeButton.onClick.AddListener(() => PlaceItem(data));
     }
 
     public void PlaceItem(ItemData data)

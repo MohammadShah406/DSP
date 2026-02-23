@@ -18,8 +18,7 @@ public class UIManager : MonoBehaviour
     public GameObject dayEndUI;
     public GameObject gameEndUI;
     public GameObject settingsUI;
-    public CraftingUI craftingUI;
-    public CraftingUI cookingUI;
+    public GameObject recipeUI;
     
 
     [Header("HUD Elements")]
@@ -230,29 +229,21 @@ public class UIManager : MonoBehaviour
         statsPanel.SetActive(_currentState == UIState.CharacterStats);
         topStatsHUD.SetActive(_currentState == UIState.CharacterStats);
         settingsUI.SetActive(_currentState == UIState.Settings);
-        
-        if (craftingUI != null)
+        bool isRecipeUI = _currentState == UIState.Crafting || _currentState == UIState.Cooking;
+        recipeUI.SetActive(isRecipeUI);
+        if (isRecipeUI)
         {
-            bool isCrafting = _currentState == UIState.Crafting;
-            craftingUI.gameObject.SetActive(isCrafting);
-            if (isCrafting) craftingUI.Setup(RecipeType.Crafting);
-        }
-        if (cookingUI != null)
-        {
-            bool isCooking = _currentState == UIState.Cooking;
-            cookingUI.gameObject.SetActive(isCooking);
-            if (isCooking) cookingUI.Setup(RecipeType.Cooking);
+            var craftingUI = recipeUI.GetComponent<RecipeUI>();
+            if (craftingUI != null)
+            {
+                craftingUI.Setup(_currentState == UIState.Crafting ? RecipeType.Crafting : RecipeType.Cooking);
+            }
         }
 
         if (inventoryUI != null && inventoryUI.inventoryPanel != null)
         {
             bool isInventory = _currentState == UIState.Inventory;
-            
-            if (isInventory && !inventoryUI.gameObject.activeSelf)
-            {
-                inventoryUI.gameObject.SetActive(true);
-            }
-
+            inventoryUI.gameObject.SetActive(true);
             inventoryUI.inventoryPanel.SetActive(isInventory);
             
             if (isInventory && oldState != UIState.Inventory)
@@ -266,12 +257,9 @@ public class UIManager : MonoBehaviour
         }
         
         bool hideMainHUD = (_currentState == UIState.Pause || _currentState == UIState.Settings);
-        if (mainHUD != null)
-        {
-            mainHUD.SetActive(!hideMainHUD);
-        }
-        Time.timeScale = (_currentState == UIState.Pause || _currentState == UIState.Settings) ? 0f : 1f;
+        mainHUD.SetActive(!hideMainHUD);
         IsPaused = (_currentState == UIState.Pause);
+        Time.timeScale = (_currentState == UIState.Pause || _currentState == UIState.Settings) ? 0f : 1f;
     }
     
     private void LerpSliders()

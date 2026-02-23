@@ -844,7 +844,6 @@ GameObject:
   - component: {fileID: 610334377466393543}
   - component: {fileID: 4665022651199794338}
   - component: {fileID: 4893061081567784785}
-  - component: {fileID: 4323599434618718801}
   - component: {fileID: 8111341945711126366}
   m_Layer: 5
   m_Name: RecipieUI
@@ -913,20 +912,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4323599434618718801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 601083002484840320}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75236952ac6240347b19456be7d75911, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activeRecipes: []
-  recipesDataBase: []
 --- !u!114 &8111341945711126366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4567,8 +4552,7 @@ MonoBehaviour:
   dayEndUI: {fileID: 0}
   gameEndUI: {fileID: 6223584281835852246}
   settingsUI: {fileID: 5288170754688373784}
-  craftingUI: {fileID: 8111341945711126366}
-  cookingUI: {fileID: 8111341945711126366}
+  recipeUI: {fileID: 0}
   timeText: {fileID: 7528227739924509286}
   dayText: {fileID: 6599579431957046737}
   hopeSlider: {fileID: 4476935832600423113}
@@ -6725,7 +6709,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4323599434618718801}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RecipeManager, Assembly-CSharp
         m_MethodName: Craft
         m_Mode: 2

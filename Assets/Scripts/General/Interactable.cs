@@ -29,6 +29,8 @@ public class Interactable : MonoBehaviour
     public bool interactOnce = false;
     public bool isInteracted = false;
 
+    public UnityEvent onInteractOnce;
+    
     [System.Serializable]
     public class AtrributeList
     {
@@ -123,6 +125,7 @@ public class Interactable : MonoBehaviour
     public void OnInteract()
     {
         Debug.Log($"{name} was interacted with!");
+        onInteractOnce?.Invoke();
         CallInteractEvent();
     }
 
@@ -132,6 +135,7 @@ public class Interactable : MonoBehaviour
         Debug.Log($"{name} was interacted with!");
         Debug.Log($"{character.name} interacted with {name}!");
         DoInteractionAnimation();
+        onInteractOnce?.Invoke();
         CallInteractEvent();
     }
 
