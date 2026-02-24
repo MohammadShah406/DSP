@@ -16,15 +16,12 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [Header("References")]
     public RectTransform container;
     public GameObject characterItemPrefab;
-    //public GameObject nullCharacterPrefab;
 
     private List<CharacterStats> _characters;
     private readonly List<RectTransform> _spawnedItems = new List<RectTransform>();
-    //private RectTransform _nullItem;
     private int _currentIndex = -1;
     private bool _isTransitioning = false;
     private bool _isMouseOver = false;
-    private bool _suppressCameraUpdate = false;
 
     public void OnPointerEnter(PointerEventData eventData) => _isMouseOver = true;
     public void OnPointerExit(PointerEventData eventData) => _isMouseOver = false;
@@ -35,13 +32,14 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
         {
             _characters = GameManager.Instance.GetCharacterComponents();
             SetupCarousel();
-            
+
             if (UIManager.Instance != null && UIManager.Instance.CurrentState != UIManager.UIState.CharacterStats)
             {
                 _currentIndex = 0;
             }
-            
+
             UpdateLayout(true);
+            FocusCameraOnCurrent();
         }
         else
         {
@@ -52,33 +50,38 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
     void Update()
     {
         if (!_isMouseOver) return;
-        
+
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         bool nextPressed = (InputManager.Instance != null && InputManager.Instance.NextCharacterInput);
         bool prevPressed = (InputManager.Instance != null && InputManager.Instance.PreviousCharacterInput);
 
         if (!_isTransitioning)
         {
-            if (scroll > 0 || prevPressed) MovePrev();
-            else if (scroll < 0 || nextPressed) MoveNext();
+            if (scroll > 0 || prevPressed)
+            {
+                MovePrev();
+            }
+            else if (scroll < 0 || nextPressed)
+            {
+                MoveNext();
+            }
         }
     }
-    
+
     void SetupCarousel()
     {
         if (_characters == null || _characters.Count == 0) return;
-        
-        
+
         foreach (var character in _characters)
         {
             GameObject go = Instantiate(characterItemPrefab, container);
-            
+
             Image img = go.GetComponentInChildren<Image>();
             if (img != null && character.characterIcon != null)
             {
                 img.sprite = character.characterIcon;
             }
-            
+
             if (go.GetComponent<CanvasGroup>() == null)
             {
                 go.AddComponent<CanvasGroup>();
@@ -87,247 +90,133 @@ public class CharacterCarousel : MonoBehaviour, IPointerEnterHandler, IPointerEx
             _spawnedItems.Add(go.GetComponent<RectTransform>());
         }
     }
-    
+
     public void MoveNext()
     {
-        if (_characters == null) return;
-        
-        _currentIndex++;
-        if (_currentIndex >= _characters.Count)
-        {
-            _currentIndex = 0;
-        }
-
-        StartCoroutine(TransitionLayout());
-        UpdateCameraFocus();
+        if (_characters == null || _characters.Count == 0) return;
+        _currentIndex = (_currentIndex + 1) % _characters.Count;
+        UpdateLayout(false);
+        FocusCameraOnCurrent();
     }
-    
+
     public void MovePrev()
     {
-        if (_characters == null) return;
-        
-        _currentIndex--;
-        if (_currentIndex < 0)
-        {
-            _currentIndex = _characters.Count - 1;
-        }
-
-        StartCoroutine(TransitionLayout());
-        UpdateCameraFocus();
+        if (_characters == null || _characters.Count == 0) return;
+        _currentIndex = (_currentIndex - 1 + _characters.Count) % _characters.Count;
+        UpdateLayout(false);
+        FocusCameraOnCurrent();
     }
-    
-    private void UpdateCameraFocus()
+
+    public void SetCurrentCharacter(CharacterStats character)
     {
-        if (_suppressCameraUpdate) return;
+        if (_characters == null || _characters.Count == 0)
+            return;
 
-        if (CameraBehaviour.Instance == null) return;
-
-        // if (_currentIndex == -1)
-        // {
-        //     // Deselect character in camera
-        //     CameraBehaviour.Instance.DeselectCharacter();
-        // }
-        else if (_currentIndex >= 0 && _currentIndex < _characters.Count)
+        int idx = character == null ? -1 : _characters.IndexOf(character);
+        if (idx != -1 && idx != _currentIndex)
         {
-            CharacterStats selectedChar = _characters[_currentIndex];
-            if (selectedChar != null)
+            _currentIndex = idx;
+            UpdateLayout(false);
+            FocusCameraOnCurrent();
+        }
+        else if (character == null)
+        {
+            // Optionally, deselect all or reset carousel visuals here if needed
+        }
+    }
+
+    void FocusCameraOnCurrent()
+    {
+        if (_currentIndex >= 0 && _currentIndex < _characters.Count)
+        {
+            var character = _characters[_currentIndex];
+            if (character != null && CameraBehaviour.Instance != null)
             {
-                CameraBehaviour.Instance.SetFocussed(selectedChar.gameObject);
-                
-                if (UIManager.Instance != null)
-                {
-                    UIManager.Instance.UpdateCharacterStatsDisplay(selectedChar);
-                }
+                CameraBehaviour.Instance.SetFocussed(character.gameObject);
             }
         }
     }
-    
+
     IEnumerator TransitionLayout()
     {
         _isTransitioning = true;
-        float elapsed = 0;
-        float duration = 1f / transitionSpeed;
-
-        int totalItems = _spawnedItems.Count;
-        Vector3[] startPos = new Vector3[totalItems];
-        Vector3[] startScale = new Vector3[totalItems];
-        float[] startAlpha = new float[totalItems];
+        float t = 0f;
+        const float duration = 0.2f;
+        List<Vector3> startPositions = new List<Vector3>();
+        List<Vector3> endPositions = new List<Vector3>();
+        List<float> startScales = new List<float>();
+        List<float> endScales = new List<float>();
+        List<float> startAlphas = new List<float>();
+        List<float> endAlphas = new List<float>();
 
         for (int i = 0; i < _spawnedItems.Count; i++)
         {
-            startPos[i] = _spawnedItems[i].anchoredPosition;
-            startScale[i] = _spawnedItems[i].localScale;
-            CanvasGroup cg = _spawnedItems[i].GetComponent<CanvasGroup>();
-            startAlpha[i] = cg != null ? cg.alpha : 1f;
+            var item = _spawnedItems[i];
+            startPositions.Add(item.anchoredPosition);
+            startScales.Add(item.localScale.x);
+            startAlphas.Add(item.GetComponent<CanvasGroup>().alpha);
+
+            int offset = i - _currentIndex;
+            float scale = (offset == 0) ? centerScale : sideScale;
+            float alpha = (offset == 0) ? 1f : sideAlpha;
+            float x = offset * horizontalSpacing;
+
+            endPositions.Add(new Vector3(x, 0, 0));
+            endScales.Add(scale);
+            endAlphas.Add(alpha);
         }
 
-        // if (_nullItem != null)
-        // {
-        //     int nullIndex = _spawnedItems.Count;
-        //     startPos[nullIndex] = _nullItem.anchoredPosition;
-        //     startScale[nullIndex] = _nullItem.localScale;
-        //     CanvasGroup cg = _nullItem.GetComponent<CanvasGroup>();
-        //     startAlpha[nullIndex] = cg != null ? cg.alpha : 1f;
-        // }
-        
-        while (elapsed < duration)
+        while (t < duration)
         {
-            elapsed += Time.deltaTime;
-            float t = Mathf.SmoothStep(0, 1, elapsed / duration);
+            t += Time.deltaTime * transitionSpeed;
+            float lerp = Mathf.Clamp01(t / duration);
 
             for (int i = 0; i < _spawnedItems.Count; i++)
             {
-                TargetState target = GetTargetStateForCharacter(i);
-                _spawnedItems[i].anchoredPosition = Vector3.Lerp(startPos[i], target.Pos, t);
-                _spawnedItems[i].localScale = Vector3.Lerp(startScale[i], target.Scale, t);
-                
-                CanvasGroup cg = _spawnedItems[i].GetComponent<CanvasGroup>();
-                if (cg != null) cg.alpha = Mathf.Lerp(startAlpha[i], target.Alpha, t);
+                var item = _spawnedItems[i];
+                item.anchoredPosition = Vector3.Lerp(startPositions[i], endPositions[i], lerp);
+                float scale = Mathf.Lerp(startScales[i], endScales[i], lerp);
+                item.localScale = new Vector3(scale, scale, 1f);
+                item.GetComponent<CanvasGroup>().alpha = Mathf.Lerp(startAlphas[i], endAlphas[i], lerp);
             }
-
-            // Lerp null item
-            // if (_nullItem != null)
-            // {
-            //     int nullIndex = _spawnedItems.Count;
-            //     TargetState target = GetTargetStateForNull();
-            //     _nullItem.anchoredPosition = Vector3.Lerp(startPos[nullIndex], target.Pos, t);
-            //     _nullItem.localScale = Vector3.Lerp(startScale[nullIndex], target.Scale, t);
-            //     
-            //     CanvasGroup cg = _nullItem.GetComponent<CanvasGroup>();
-            //     if (cg != null) cg.alpha = Mathf.Lerp(startAlpha[nullIndex], target.Alpha, t);
-            // }
 
             yield return null;
         }
 
-        UpdateLayout(true);
-        _isTransitioning = false;
-        
-        if (UIManager.Instance != null && _characters != null)
+        for (int i = 0; i < _spawnedItems.Count; i++)
         {
-            if (_currentIndex >= 0 && _currentIndex < _characters.Count)
-            {
-                UIManager.Instance.UpdateCharacterStatsDisplay(_characters[_currentIndex]);
-            }
-            // else if (_currentIndex == -1)
-            // {
-            //     // Optionally call a clear method if UIManager needs to know
-            //     UIManager.Instance.UpdateCharacterStatsDisplay(null);
-            // }
+            var item = _spawnedItems[i];
+            item.anchoredPosition = endPositions[i];
+            float scale = endScales[i];
+            item.localScale = new Vector3(scale, scale, 1f);
+            item.GetComponent<CanvasGroup>().alpha = endAlphas[i];
         }
+
+        _isTransitioning = false;
     }
 
     void UpdateLayout(bool immediate)
     {
         if (_spawnedItems.Count == 0) return;
 
+        if (!immediate)
+        {
+            StopAllCoroutines();
+            StartCoroutine(TransitionLayout());
+            return;
+        }
+
         for (int i = 0; i < _spawnedItems.Count; i++)
         {
-            TargetState target = GetTargetStateForCharacter(i);
-            _spawnedItems[i].anchoredPosition = target.Pos;
-            _spawnedItems[i].localScale = target.Scale;
-            
-            CanvasGroup cg = _spawnedItems[i].GetComponent<CanvasGroup>();
-            if (cg != null) cg.alpha = target.Alpha;
+            var item = _spawnedItems[i];
+            int offset = i - _currentIndex;
+            float scale = (offset == 0) ? centerScale : sideScale;
+            float alpha = (offset == 0) ? 1f : sideAlpha;
+            float x = offset * horizontalSpacing;
 
-            if (i == _currentIndex) _spawnedItems[i].SetAsLastSibling();
+            item.anchoredPosition = new Vector3(x, 0, 0);
+            item.localScale = new Vector3(scale, scale, 1f);
+            item.GetComponent<CanvasGroup>().alpha = alpha;
         }
-        
-        // if (_nullItem != null)
-        // {
-        //     TargetState target = GetTargetStateForNull();
-        //     _nullItem.anchoredPosition = target.Pos;
-        //     _nullItem.localScale = target.Scale;
-        //     
-        //     CanvasGroup cg = _nullItem.GetComponent<CanvasGroup>();
-        //     if (cg != null) cg.alpha = target.Alpha;
-        //
-        //     if (_currentIndex == -1) _nullItem.SetAsLastSibling();
-        // }
-        
-    }
-    
-    private TargetState GetTargetStateForCharacter(int characterIndex)
-    {
-        TargetState state = new TargetState();
-        
-       
-            int offset = characterIndex - _currentIndex;
-            int count = _characters.Count;
-            
-            if (offset > count / 2) offset -= count;
-            if (offset < -count / 2) offset += count;
-
-            state.Pos = new Vector2(offset * horizontalSpacing, 0);
-            state.Scale = (offset == 0) ?Vector3.one * centerScale : Vector3.one * sideScale;
-            state.Alpha = (offset==0)? 1.0f :sideAlpha;
-        
-        return state;
-    }
-
-    // private TargetState GetTargetStateForNull()
-    // {
-    //     TargetState state = new TargetState();
-    //     
-    //     if (_currentIndex == -1)
-    //     {
-    //         // Null is centered
-    //         state.Pos = Vector2.zero;
-    //         state.Scale = Vector3.one * centerScale;
-    //         state.Alpha = 1.0f;
-    //     }
-    //     else
-    //     {
-    //         // Null is to the left of character 0
-    //         int offset = -1 - _currentIndex;
-    //         int count = _characters.Count + 1;
-    //
-    //         if (offset > count / 2) offset -= count;
-    //         if (offset < -count / 2) offset += count;
-    //
-    //         state.Pos = new Vector2(offset * horizontalSpacing, 0);
-    //         state.Scale = Vector3.one * sideScale;
-    //         state.Alpha = sideAlpha;
-    //     }
-    //     
-    //     return state;
-    // }
-
-    struct TargetState
-    {
-        public Vector2 Pos;
-        public Vector3 Scale;
-        public float Alpha;
-    }
-
-    public CharacterStats GetCurrentCharacter()
-    {
-        if (_characters != null && _currentIndex >= 0 && _currentIndex < _characters.Count)
-            return _characters[_currentIndex];
-        return null;
-    }
-    
-    public void SetCurrentCharacter(CharacterStats character)
-    {
-        if (_characters == null) return;
-
-        _suppressCameraUpdate = true;
-
-        int newIndex = (character == null) ? -1 : _characters.IndexOf(character);
-        
-        if (newIndex != _currentIndex)
-        {
-            _currentIndex = newIndex;
-            if (gameObject.activeInHierarchy)
-            {
-                StartCoroutine(TransitionLayout());
-            }
-            else
-            {
-                UpdateLayout(true);
-            }
-        }
-
-        _suppressCameraUpdate = false;
     }
 }

@@ -2462,6 +2462,11 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &328864509 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2787144488000399694, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
+  m_PrefabInstance: {fileID: 1584489813}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -14613,6 +14618,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 890
       objectReference: {fileID: 0}
+    - target: {fileID: 2991384386906907828, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
+      propertyPath: dayEndUI
+      value: 
+      objectReference: {fileID: 328864509}
     - target: {fileID: 2991384386906907828, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
       propertyPath: recipeUI
       value: 
