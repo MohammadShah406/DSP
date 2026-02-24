@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39935e8c7ce68bd47b06f38df8526923, type: 3}
+  m_Name: Roti & Daal
+  m_EditorClassIdentifier: 
+  recipeName: Roti & Daal
+  type: 1
+  resourcesNeeded:
+  - resourceName: Rice
+    quantity: 2
+  - resourceName: Lental
+    quantity: 1
+  timeToComplete: 0
+  description: 'Simple flatbread served with lentil curry. The bread fills the belly
+    while the curry warms the soul. '
+  outputItem: Roti & Daal
+  outputAmount: 1
