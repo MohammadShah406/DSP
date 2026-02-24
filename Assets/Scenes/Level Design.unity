@@ -6660,19 +6660,19 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 699993134}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: b4732b7dbdf3c95448bf4302156ee5b3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -25.381802
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b4732b7dbdf3c95448bf4302156ee5b3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.5900009
+      value: -0.8778
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b4732b7dbdf3c95448bf4302156ee5b3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10.935322
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b4732b7dbdf3c95448bf4302156ee5b3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -6731,22 +6731,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 13060fdd22b27d4468ff98dbc066da35, type: 2}
     - target: {fileID: 5866666021909216657, guid: b4732b7dbdf3c95448bf4302156ee5b3, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: b4732b7dbdf3c95448bf4302156ee5b3, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: f4f007742c64e6646acd20cb2d2124ff, type: 2}
     - target: {fileID: 5866666021909216657, guid: b4732b7dbdf3c95448bf4302156ee5b3, type: 3}
+      propertyPath: m_CullingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: b4732b7dbdf3c95448bf4302156ee5b3, type: 3}
       propertyPath: m_WarningMessage
-      value: "\nBinding warning: Some generic clip(s) animate transforms that are
-        already bound by a Humanoid avatar. These transforms can only be changed
-        by Humanoid clips.\n\tTransform 'handthumb2.R'\n\tTransform 'spine1'\n\tTransform
-        'handmiddle3.R'\n\tTransform 'handmiddle3.L'\n\tTransform 'handpinky2.R'\n\tTransform
-        'handthumb3.R'\n\tTransform 'leg.L'\n\tTransform 'spine'\n\tTransform 'hand.L'\n\tTransform
-        'neck'\n\tand more ...\n\tFrom animation clip 'SlouchedStandingIdle'\n\tFrom
-        animation clip 'SlouchedRun'\n\tFrom animation clip 'SlouchedWalk'\n\tFrom
-        animation clip 'Cooking'\n\tFrom animation clip 'Harvesting'\n\tFrom animation
-        clip 'Scavenging'\n\tFrom animation clip 'Watering'\n\tFrom animation clip
-        'Painting'\n\tFrom animation clip 'SleepIdle'\n\tFrom animation clip 'NormalStandingTalking'\n\tand
-        more ..."
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: b4732b7dbdf3c95448bf4302156ee5b3, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6761708314861323176, guid: b4732b7dbdf3c95448bf4302156ee5b3, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -6769,6 +6771,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4732b7dbdf3c95448bf4302156ee5b3, type: 3}
+--- !u!4 &337379971 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b4732b7dbdf3c95448bf4302156ee5b3, type: 3}
+  m_PrefabInstance: {fileID: 337379970}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &339219214
 GameObject:
   m_ObjectHideFlags: 1
@@ -13005,6 +13012,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 698481588}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &699993134 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6776940356617251633, guid: 5a211864e25480e468f97ca5ff722ab6, type: 3}
+  m_PrefabInstance: {fileID: 2044440105}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &711564468
 GameObject:
   m_ObjectHideFlags: 0
@@ -38089,6 +38101,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9191769436076632343, guid: 5a211864e25480e468f97ca5ff722ab6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -38101,6 +38117,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9189594261343119261, guid: 5a211864e25480e468f97ca5ff722ab6, type: 3}
       insertIndex: 2
       addedObject: {fileID: 2100643537}
+    - targetCorrespondingSourceObject: {fileID: 6776940356617251633, guid: 5a211864e25480e468f97ca5ff722ab6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 337379971}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5398726095515053841, guid: 5a211864e25480e468f97ca5ff722ab6, type: 3}
       insertIndex: -1
@@ -79970,4 +79989,3 @@ SceneRoots:
   - {fileID: 980882493}
   - {fileID: 290114068}
   - {fileID: 7299862918080717927}
-  - {fileID: 337379970}
