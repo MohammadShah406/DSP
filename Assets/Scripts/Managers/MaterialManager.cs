@@ -137,15 +137,11 @@ public class MaterialManager : MonoBehaviour
             {
                 upgradedAll = true;
                 UpgradeAllMaterials();
-
-                UpgradeAllBashirMaterials();
-                UpgradeAllSahilMaterials();
-                UpgradeAllAishaMaterials();
             }
         }
     }
 
-    private void UpgradeAllBashirMaterials()
+    public void UpgradeAllBashirMaterials()
     {
         for (int i = 0; i < bashirObjectsToUpgrade.Count; i++)
         {
@@ -153,7 +149,7 @@ public class MaterialManager : MonoBehaviour
         }
     }
 
-    private void UpgradeAllSahilMaterials()
+    public void UpgradeAllSahilMaterials()
     {
         for (int i = 0; i < sahilObjectsToUpgrade.Count; i++)
         {
@@ -161,7 +157,7 @@ public class MaterialManager : MonoBehaviour
         }
     }
 
-    private void UpgradeAllAishaMaterials()
+    public void UpgradeAllAishaMaterials()
     {
         for (int i = 0; i < aishaObjectsToUpgrade.Count; i++)
         {
