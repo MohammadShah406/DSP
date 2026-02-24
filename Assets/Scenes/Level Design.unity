@@ -10497,6 +10497,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2031278910998419538, guid: eb642aab0d1ddab44bc89d4e8805f70f, type: 3}
   m_PrefabInstance: {fileID: 3069717353242345106}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &547686630 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2787144488000399694, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
+  m_PrefabInstance: {fileID: 1584489813}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &550481246
 GameObject:
   m_ObjectHideFlags: 0
@@ -27831,6 +27836,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: -17
       objectReference: {fileID: 0}
+    - target: {fileID: 2991384386906907828, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
+      propertyPath: dayEndUI
+      value: 
+      objectReference: {fileID: 547686630}
     - target: {fileID: 2991384386906907828, guid: 9ca9b36a6a3f36740ba5f59229fcfa53, type: 3}
       propertyPath: recipeUI
       value: 
@@ -47396,7 +47405,7 @@ GameObject:
   - component: {fileID: 8315716068794841362}
   m_Layer: 0
   m_Name: KitchenWall
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60750,7 +60759,7 @@ GameObject:
   - component: {fileID: 7004738771079809594}
   m_Layer: 0
   m_Name: LivingroomWall
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62842,7 +62851,7 @@ GameObject:
   - component: {fileID: 8931692380521231246}
   m_Layer: 0
   m_Name: BedroomWall
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -66785,7 +66794,7 @@ GameObject:
   - component: {fileID: 6386479473953860132}
   m_Layer: 0
   m_Name: BathroomWall
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
