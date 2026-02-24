@@ -360,7 +360,7 @@ public class CameraBehaviour : MonoBehaviour
         RecenterInstantly();
     }
 
-    private void StopFollowing(bool keepSelection)
+    public void StopFollowing(bool keepSelection)
     {
         isFollowing = false;
         if (!keepSelection)
@@ -487,7 +487,7 @@ public class CameraBehaviour : MonoBehaviour
         {
             if(isManual == false)
             {
-                DeselectCharacter();
+                //DeselectCharacter();
                 isManual = true;
             }
             isDragging = true;
@@ -733,7 +733,14 @@ public class CameraBehaviour : MonoBehaviour
         if (vcam == null) return;
         if (followProxy == null) return;
 
-        vcam.Follow = isFollowing? followProxy: null;
+        if (!isManual)
+        {
+            vcam.Follow = followProxy;
+        }
+        else
+        {
+            vcam.Follow = defaultTarget; // Use a static/dummy target for manual mode
+        }
     }
 
 
