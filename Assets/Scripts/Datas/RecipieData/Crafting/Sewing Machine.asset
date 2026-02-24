@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39935e8c7ce68bd47b06f38df8526923, type: 3}
+  m_Name: Sewing Machine
+  m_EditorClassIdentifier: 
+  recipeName: Sewing Machine
+  type: 0
+  resourcesNeeded:
+  - resourceName: Wood
+    quantity: 2
+  - resourceName: Metal
+    quantity: 5
+  timeToComplete: 0
+  description: A manual machine operated by a foot pedal. It needs patience, but
+    allows to craft and repair clothes faster than by hand.
+  outputItem: Sewing Machine
+  outputAmount: 1

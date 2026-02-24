@@ -733,7 +733,7 @@ public class CameraBehaviour : MonoBehaviour
         if (vcam == null) return;
         if (followProxy == null) return;
 
-        vcam.Follow = followProxy;
+        vcam.Follow = isFollowing? followProxy: null;
     }
 
 
