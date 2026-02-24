@@ -101,6 +101,7 @@ public class CharacterStats : MonoBehaviour
             if (stability != value)
             {
                 stability = Mathf.Clamp(value, 0, MaxStatValue);
+                PrimaryAttributeThresholdReached();
                 OnAnyStatChanged?.Invoke(this);
             }
         }
@@ -114,6 +115,7 @@ public class CharacterStats : MonoBehaviour
             if (learning != value)
             {
                 learning = Mathf.Clamp(value, 0, MaxStatValue);
+                PrimaryAttributeThresholdReached();
                 OnAnyStatChanged?.Invoke(this);
             }
         }
@@ -127,6 +129,7 @@ public class CharacterStats : MonoBehaviour
             if (workReadiness != value)
             {
                 workReadiness = Mathf.Clamp(value, 0, MaxStatValue);
+                PrimaryAttributeThresholdReached();
                 OnAnyStatChanged?.Invoke(this);
             }
         }
@@ -140,6 +143,7 @@ public class CharacterStats : MonoBehaviour
             if (trust != value)
             {
                 trust = Mathf.Clamp(value, 0, MaxStatValue);
+                PrimaryAttributeThresholdReached();
                 OnAnyStatChanged?.Invoke(this);
             }
         }
@@ -201,5 +205,58 @@ public class CharacterStats : MonoBehaviour
     public void ChangeNutrition(int change) => Nutrition += ApplyGrowth(PrimaryAttribute.Nutrition, change);
     public void ChangeHygiene(int change) => Hygiene += ApplyGrowth(PrimaryAttribute.Hygiene, change);
     public void ChangeEnergy(int change) => Energy += ApplyGrowth(PrimaryAttribute.Energy, change);
+
+    public void PrimaryAttributeThresholdReached()
+    {
+        if (primaryAttribute == PrimaryAttribute.Stability)
+        {
+            if (stability >= 80)
+            {
+                if (name == "Bashir")
+                    MaterialManager.instance.UpgradeAllBashirMaterials();
+                else if (name == "Sahil")
+                    MaterialManager.instance.UpgradeAllSahilMaterials();
+                else if (name == "Aisha")
+                    MaterialManager.instance.UpgradeAllAishaMaterials();
+            }
+        }
+        else if (primaryAttribute == PrimaryAttribute.Learning)
+        {
+            if (learning >= 80)
+            {
+                if (name == "Bashir")
+                    MaterialManager.instance.UpgradeAllBashirMaterials();
+                else if (name == "Sahil")
+                    MaterialManager.instance.UpgradeAllSahilMaterials();
+                else if (name == "Aisha")
+                    MaterialManager.instance.UpgradeAllAishaMaterials();
+            }
+        }
+        else if (primaryAttribute == PrimaryAttribute.WorkReadiness)
+        {
+            if (workReadiness >= 80)
+            {
+                if (name == "Bashir")
+                    MaterialManager.instance.UpgradeAllBashirMaterials();
+                else if (name == "Sahil")
+                    MaterialManager.instance.UpgradeAllSahilMaterials();
+                else if (name == "Aisha")
+                    MaterialManager.instance.UpgradeAllAishaMaterials();
+            }
+        }
+
+        else if (primaryAttribute == PrimaryAttribute.Trust)
+        {
+            if (trust >= 80)
+            {
+                if (name == "Bashir")
+                    MaterialManager.instance.UpgradeAllBashirMaterials();
+                else if (name == "Sahil")
+                    MaterialManager.instance.UpgradeAllSahilMaterials();
+                else if (name == "Aisha")
+                    MaterialManager.instance.UpgradeAllAishaMaterials();
+            }
+        }
+    }
 
 }

@@ -74,6 +74,189 @@ MonoBehaviour:
   - name: Roof Top
     material:
     - {fileID: 2100000, guid: 76a26d1f8b43b654dacbdf801eb7ba75, type: 2}
+  - name: Art Canvas
+    material:
+    - {fileID: 2100000, guid: b1c6591e46738f64a816116382ef7b4f, type: 2}
+  oldBashirMaterialsSettings:
+  - name: 
+    material:
+    - {fileID: 2100000, guid: ea3e0d03e97075349b76192591ca1a03, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: ea3e0d03e97075349b76192591ca1a03, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: ea3e0d03e97075349b76192591ca1a03, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: ea3e0d03e97075349b76192591ca1a03, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: ea3e0d03e97075349b76192591ca1a03, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: ea3e0d03e97075349b76192591ca1a03, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: ea3e0d03e97075349b76192591ca1a03, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: ea3e0d03e97075349b76192591ca1a03, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: ea3e0d03e97075349b76192591ca1a03, type: 2}
+  upgradedBashirMaterialsSettings:
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 12130836cf5e9a445bc6c28e2e18b0b0, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 12130836cf5e9a445bc6c28e2e18b0b0, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 12130836cf5e9a445bc6c28e2e18b0b0, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 12130836cf5e9a445bc6c28e2e18b0b0, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 12130836cf5e9a445bc6c28e2e18b0b0, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 12130836cf5e9a445bc6c28e2e18b0b0, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 12130836cf5e9a445bc6c28e2e18b0b0, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 12130836cf5e9a445bc6c28e2e18b0b0, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 12130836cf5e9a445bc6c28e2e18b0b0, type: 2}
+  oldSahilMaterialSettings:
+  - name: 
+    material:
+    - {fileID: 2100000, guid: cfa81b738ae775f4d99a383bf6877a86, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: cfa81b738ae775f4d99a383bf6877a86, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: cfa81b738ae775f4d99a383bf6877a86, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: cfa81b738ae775f4d99a383bf6877a86, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: cfa81b738ae775f4d99a383bf6877a86, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: cfa81b738ae775f4d99a383bf6877a86, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: cfa81b738ae775f4d99a383bf6877a86, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: cfa81b738ae775f4d99a383bf6877a86, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: cfa81b738ae775f4d99a383bf6877a86, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: cfa81b738ae775f4d99a383bf6877a86, type: 2}
+  upgradedSahilMaterialSettings:
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 9af9a2cdfe196584ab6fbabbe603b429, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 9af9a2cdfe196584ab6fbabbe603b429, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 9af9a2cdfe196584ab6fbabbe603b429, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 9af9a2cdfe196584ab6fbabbe603b429, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 9af9a2cdfe196584ab6fbabbe603b429, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 9af9a2cdfe196584ab6fbabbe603b429, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 9af9a2cdfe196584ab6fbabbe603b429, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 9af9a2cdfe196584ab6fbabbe603b429, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 9af9a2cdfe196584ab6fbabbe603b429, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 9af9a2cdfe196584ab6fbabbe603b429, type: 2}
+  oldAishaMaterialSettings:
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 77d582a577d932b4dadec391e5271f48, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 2a370343d7d4ff44da5856a8c876c833, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 3a6581ce81fb64545b0247cd1fcd2006, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 3a6581ce81fb64545b0247cd1fcd2006, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 854baf1c7935da9469a2df081ca34872, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 3a6581ce81fb64545b0247cd1fcd2006, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: e27eac1a1f0c94449a83aa0ae62f74f2, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: e27eac1a1f0c94449a83aa0ae62f74f2, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 55328ebf69c6ed2499bd42e08cc1faeb, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 13060fdd22b27d4468ff98dbc066da35, type: 2}
+  upgradedAishaMaterialSettings:
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 3db211862dae6844bbef8b1617114d98, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 583923ae6ab6ef04e8167d17ad2371d1, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 3db211862dae6844bbef8b1617114d98, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 3db211862dae6844bbef8b1617114d98, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: b5a968a301c73234a99fd98dc384be54, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 3db211862dae6844bbef8b1617114d98, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: e72af993b581ade428a597b79039f892, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: e72af993b581ade428a597b79039f892, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 97b3a0950ec786c47814f40fb4ea7f77, type: 2}
+  - name: 
+    material:
+    - {fileID: 2100000, guid: 4dcda975352a3384781080b953d56f0f, type: 2}
   objectsToUpgrade:
   - {fileID: 0}
   - {fileID: 0}
@@ -81,4 +264,38 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  bashirObjectsToUpgrade:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  sahilObjectsToUpgrade:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  aishaObjectsToUpgrade:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  upgradedAll: 0
   upgradeAll: 0
