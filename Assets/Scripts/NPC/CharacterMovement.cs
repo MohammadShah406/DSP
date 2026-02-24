@@ -37,7 +37,10 @@ public class CharacterMovement : MonoBehaviour
     [Header("Animator")]
     [SerializeField] private Animator animator;
 
-    [SerializeField]private bool isInteracting = false;
+    [Header("Particle Effect")]
+    [SerializeField] private ParticleSystem completionParticle;
+
+    [SerializeField] private bool isInteracting = false;
 
     void Awake()
     {
@@ -204,9 +207,7 @@ public class CharacterMovement : MonoBehaviour
             transform.rotation = t.GetChild(0).rotation;
         }
 
-
         isInteracting = true;
-
     }
     private void HandleFallbackHorizontalMove()
     {
@@ -335,12 +336,20 @@ public class CharacterMovement : MonoBehaviour
             currentInteractable = null;
         }
 
+        // Spawn a detached clone so it plays to completion regardless of future task changes
+        if (completionParticle != null)
+        {
+            ParticleSystem clone = Instantiate(completionParticle, completionParticle.transform.position, completionParticle.transform.rotation);
+            clone.transform.SetParent(null); // detach from character hierarchy
+            clone.Play();
+            Destroy(clone.gameObject, clone.main.duration + clone.main.startLifetime.constantMax);
+        }
+
         // reset interaction state
         isInteracting = false;
 
         // ensure locomotion resumes cleanly
         animator.SetFloat("Speed", 0f);
-
     }
 
     private void HandleInteraction(Interactable interactable)
