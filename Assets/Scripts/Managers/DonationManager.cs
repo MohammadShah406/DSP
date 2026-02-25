@@ -28,7 +28,6 @@ public class DonationManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            //LoadFiredDonations();
         }
         else
         {
@@ -103,46 +102,59 @@ public class DonationManager : MonoBehaviour
         // Ensure we have donations configured
         if (allDonationsItemData == null || allDonationsItemData.Count == 0 || allDonationsResource == null || allDonationsResource.Count == 0)
         {
-            Debug.LogWarning("DonationManager: No donations configured.");
             return;
         }
 
-        // Day 1 @ 16:00 -> Donation 1
-        // Day 2 @ 10:00 -> Donation 2
+        // Instead of exact minutes, we should check if the current time is AT or AFTER the expected time
+        // and if it hasn't been added to TempInventory yet AND hasn't been collected (fired) yet.
+        
+        CheckAndPrepareDonation(d, h, m, index: 0, expDay: 1, expHour: 16, expMinute: 0);
+        CheckAndPrepareDonation(d, h, m, index: 1, expDay: 2, expHour: 12, expMinute: 0);
+        CheckAndPrepareDonation(d, h, m, index: 2, expDay: 2, expHour: 15, expMinute: 0);
+    }
 
-        Debug.Log($"DonationManager: Checking donations for Day {d}, Hour {h}, Minute {m}");
+    private void CheckAndPrepareDonation(int curDay, int curHour, int curMin, int index, int expDay, int expHour, int expMinute)
+    {
+        // 1. If we already have this in Temp inventory (uncollected), skip
+        if (index < allDonationsResource.Count && allDonationsResource[index] != null)
+        {
+            var res = allDonationsResource[index];
+            if (TempInventoryResourceData.Exists(r => r.resourceName == res.resourceName)) return;
+        }
+        else return;
 
-        TriggerOnce(d, h, m, donationIndex: 0, expectedDay: 1, expectedHour: 16, expectedMinute: 0);
-        TriggerOnce(d, h, m, donationIndex: 1, expectedDay: 2, expectedHour: 12, expectedMinute: 0);
-        TriggerOnce(d, h, m, donationIndex: 2, expectedDay: 2, expectedHour: 15, expectedMinute: 0);
+        // 2. If it was already collected (fired), skip
+        string collectionKey = $"collected_{allDonationsResource[index].resourceName}_{index}";
+        if (fired.Contains(collectionKey)) return;
 
+        // 3. Check if time has passed
+        bool timePassed = false;
+        if (curDay > expDay) timePassed = true;
+        else if (curDay == expDay)
+        {
+            if (curHour > expHour) timePassed = true;
+            else if (curHour == expHour && curMin >= expMinute) timePassed = true;
+        }
+
+        if (timePassed)
+        {
+            if (index < allDonationsItemData.Count && allDonationsItemData[index] != null)
+            {
+                TempInventoryItemData.Add(allDonationsItemData[index]);
+                TempInventoryResourceData.Add(allDonationsResource[index]);
+            }
+        }
     }
 
     public void TryCheckDonations()
     {
-        TryAddDonationToInventory();    
-    }
-
-    /// <summary>
-    /// Triggers a donation only once at the specified time
-    /// </summary>
-    private void TriggerOnce(int currentDay, int currentHour, int currentMinute,
-                             int donationIndex, int expectedDay, int expectedHour, int expectedMinute)
-    {
-        if (currentDay != expectedDay || currentHour != expectedHour || currentMinute != expectedMinute)
-        { 
-            Debug.Log($"DonationManager: Not time for donation #{donationIndex + 1} yet. Current time: Day {currentDay}, {currentHour:00}:{currentMinute:00}. Expected time: Day {expectedDay}, {expectedHour:00}:{expectedMinute:00}");
-            return;
-        }
-
-        if(TempInventoryItemData.Count > donationIndex)
+        // Before adding to inventory, re-check current time just in case
+        if (TimeManager.Instance != null)
         {
-            Debug.Log($"DonationManager: Donation #{donationIndex + 1} already triggered.");
-            return;
+            CheckCurrentDonations(TimeManager.Instance.days, TimeManager.Instance.hours, TimeManager.Instance.minutes);
         }
-
-        TempInventoryItemData.Add(allDonationsItemData[donationIndex]);
-        TempInventoryResourceData.Add(allDonationsResource[donationIndex]);
+        
+        TryAddDonationToInventory();    
     }
     private string GetDonationKey(int donationIndex)
     {
@@ -151,36 +163,60 @@ public class DonationManager : MonoBehaviour
 
     public void TryAddDonationToInventory()
     {
+        // Use a list to store items to show in a single UI window if possible,
+        // or just trigger them one by one as it was doing.
+        List<ResourceData> itemsCollectedThisTime = new List<ResourceData>();
 
-        for (int donationIndex = 0; donationIndex < TempInventoryItemData.Count; donationIndex++)
+        for (int i = 0; i < TempInventoryResourceData.Count; i++)
         {
-            string donationKey = GetDonationKey(donationIndex);
-            if (fired.Contains(donationKey)) continue;
-
-            Debug.Log($"DonationManager: Triggering donation #{donationIndex}");
+            var resToCollect = TempInventoryResourceData[i];
+            
+            // Check if this specific resource was already collected (fired)
+            // We use a key based on the resource name and its index to be unique
+            string collectionKey = $"collected_{resToCollect.resourceName}_{i}";
+            if (fired.Contains(collectionKey)) continue;
 
             // Mark as fired
-            fired.Add(donationKey);
-            PlayerPrefs.SetInt(donationKey, 1);
+            fired.Add(collectionKey);
+            PlayerPrefs.SetInt(collectionKey, 1);
             PlayerPrefs.Save();
 
-            if (donationIndex >= 0 && donationIndex < allDonationsItemData.Count && allDonationsItemData[donationIndex] != null)
+            // Find matching ItemData
+            ItemData matchingItem = allDonationsItemData.Find(item => item != null && item.itemName == resToCollect.resourceName);
+
+            if (matchingItem != null)
             {
-                Debug.Log($"Get a donation! Donation #{donationIndex + 1} added to inventory.");
-                // Add the donation item to the inventory
-                GameManager.Instance.itemDatabase.Add(allDonationsItemData[donationIndex]);
-                GameManager.Instance.resources.Add(allDonationsResource[donationIndex]);
+                // Add to inventory
+                GameManager.Instance.itemDatabase.Add(matchingItem);
+                GameManager.Instance.AddResource(resToCollect.resourceName, resToCollect.quantity);
+                
+                itemsCollectedThisTime.Add(resToCollect);
+            }
+        }
+
+        if (itemsCollectedThisTime.Count > 0)
+        {
+            // Show UI
+            /*
+            if (UIManager.Instance != null && UIManager.Instance.ScavengeUI != null)
+            {
+                var scavUI = UIManager.Instance.ScavengeUI.GetComponent<ScavengerUI>();
+                if (scavUI != null)
+                {
+                    scavUI.Setup(itemsCollectedThisTime, true);
+                }
+            }
+            */
+
+            // Toggle DonationUI instead
+            if (UIManager.Instance != null && UIManager.Instance.donationUI != null)
+            {
+                UIManager.Instance.donationUI.SetActive(true);
             }
 
             if (AudioPlayer.Instance != null && AudioLibrary.Instance != null)
             {
                 AudioPlayer.Instance.Play(AudioLibrary.Instance.GetSfx("donationreceived"));
-            }
-
-
-            else
-            {
-                Debug.LogWarning($"Donation index {donationIndex} is missing in allDonations list.");
             }
         }
     }
@@ -191,27 +227,17 @@ public class DonationManager : MonoBehaviour
     private void LoadFiredDonations()
     {
         fired.Clear();
+        Debug.Log("DonationManager: Loading fired donation keys.");
 
-        Debug.Log("DonationManager: Loading fired donation keys from PlayerPrefs.");
-
-        // iterate through all donations and check their keys
-        for (int i = 0; i < allDonationsItemData.Count; i++)
+        for (int i = 0; i < allDonationsResource.Count; i++)
         {
-            TryLoadKey(i, 1, 16, 0);
-            TryLoadKey(i, 2, 10, 0);
-        }
-    }
-
-    /// <summary>
-    /// Tries to load a donation key from PlayerPrefs
-    /// </summary>
-    private void TryLoadKey(int index, int day, int hour, int minute)
-    {
-        string key = GetDonationKey(index);
-        if (PlayerPrefs.GetInt(key, 0) == 1)
-        {
-            fired.Add(key);
-            Debug.Log($"DonationManager: Loaded fired donation key: {key}");
+            string resName = allDonationsResource[i].resourceName;
+            string collectionKey = $"collected_{resName}_{i}";
+            if (PlayerPrefs.GetInt(collectionKey, 0) == 1)
+            {
+                fired.Add(collectionKey);
+                Debug.Log($"DonationManager: Loaded fired donation key: {collectionKey}");
+            }
         }
     }
 

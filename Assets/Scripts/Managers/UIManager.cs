@@ -19,6 +19,8 @@ public class UIManager : MonoBehaviour
     public GameObject gameEndUI;
     public GameObject settingsUI;
     public GameObject recipeUI;
+    // public GameObject ScavengeUI; // Commented out system
+    public GameObject donationUI;
     
 
     [Header("HUD Elements")]

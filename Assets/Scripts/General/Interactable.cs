@@ -190,9 +190,49 @@ public class Interactable : MonoBehaviour
         
         ApplyEffect();
 
-        if(gameObject.tag == "Donation" )
+        // 1. Scavenge Interaction: Traditional container-based logic
+        if (interactionType == InteractionType.Scavenge)
         {
-            Debug.Log("[Interactable] Checking for donation completion...");
+            var container = GetComponent<ResourceContainer>();
+            if (container != null)
+            {
+                var scavenged = container.TakeAll();
+                if (scavenged.Count > 0)
+                {
+                    foreach (var item in scavenged)
+                    {
+                        GameManager.Instance.AddResource(item.resourceName, item.quantity);
+                    }
+
+                    // Commented out ScavengeUI system
+                    /*
+                    if (UIManager.Instance != null && UIManager.Instance.ScavengeUI != null)
+                    {
+                        var scavUI = UIManager.Instance.ScavengeUI.GetComponent<ScavengerUI>();
+                        if (scavUI != null)
+                        {
+                            bool isDonation = gameObject.CompareTag("Donation");
+                            scavUI.Setup(scavenged, isDonation);
+                        }
+                    }
+                    */
+
+                    // Toggle DonationUI instead for all scavenge results
+                    if (UIManager.Instance != null && UIManager.Instance.donationUI != null)
+                    {
+                        UIManager.Instance.donationUI.SetActive(true);
+                    }
+                }
+                else
+                {
+                    Debug.Log($"[Interactable] {name} is empty.");
+                }
+            }
+        }
+
+        // 2. Donation Specific Logic (Physical box click)
+        if(gameObject.CompareTag("Donation"))
+        {
             if (DonationManager.Instance != null)
             {
                 DonationManager.Instance.TryCheckDonations();
@@ -209,7 +249,7 @@ public class Interactable : MonoBehaviour
         }
         else if (gameObject.name == "Art Canvas")
         {
-            MaterialManager.instance.UpgradeMaterials(6);
+            MaterialManager.instance.UpgradeMaterials(5);
         }
     }
 
